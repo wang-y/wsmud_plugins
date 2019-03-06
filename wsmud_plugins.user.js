@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.144
+// @version      0.0.31.157
 // @date         01/07/2018
-// @modified     03/02/2019
+// @modified     06/03/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
+// @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAP0ElEQVR42u2cCZiN5RvGzZgpe0hobF2JsiSaoqlIJdlTRpsQklSoLNmzZmklUnYmbUOrBllatJCyU9krUqSQ3Tue//t7zOv6nNnPnDNm+s+5rvc648x3vu977/d+7ud+nvcbuXLlvHJeOa+cV84re79EJMSOsP/YCAkUOKH/4YUPzegJ/h9eoX6j6z3LqVOndMTHxwdtnDx5Uk6cOBHUazDcXBh+McnFpxecQIKwb98++eyzz2TJkiUSGxsrw4cPl3feeUcefPBBeeSRR+STTz6RdevWyW+//SbHjx8PGkhHjhwBoFDvnNMKUJgDKFDgMNk5c+bICy+8IJ07d5bWrVvLp59+qp+NGzdOGjZsKN27d9efH374YRk/frxs3bpVfvjhB/nrr78UqG+++Ua2bNkSkPvhBUDr16+P9s45PQCFZBQgY4xO6NVXX5WRI0fKK6+8Ik899ZSOm2++Wbp27Sq9e/eWl156STp27ChdunSRli1bSu3atZVVffv2lYkTJ8q8efNk0aJFegzMW716tfzzzz8ZZhDh/OOPP45JmGu6AVIN8heY7777TkaPHi3vvfeejB07Vp588kkZPHiwTJ8+XQEjlAgpAOjZs6fUrVtX7r77bqlXr57UqlVL+vXrpwDxvQ8++EB/16JFC3nsscekf//+MmbMGPnqq68yHO4WoKkJc003QGH+AEQ4jBgxQm699Va59957pUePHho6TKp9+/by8ssv6/s999wjt99+uzRu3FiaNm0qlSpVkquuukpuuukmfa9Ro4YOgLvrrrv0+KuvvloeeOABPQdAcW4W4sMPP/SLQQC0du3aaQlzDT5AaMT9998vTZo0kXLlyunEp06dqmFUv359ufLKK/UzJs2EBw4cKM8995wMHTpUnn32WXnmmWdUe9AoQGHAOo6tWbOmVKxYUcMMZnLOmJgYefTRR6VTp06qZUzYD4CmZwpAX375pQrv448/riFy2223KYMaNWqkg88IEcBYuHChZrJ///1X39GTgwcP6r+PHTumn61cuZKblyFDhuh56tSpo8yqUKGCXHPNNdK8eXNlEwwkXAlbwpdzpAegNWvWzAg6QAgn4vrQQw/pRFq1aqUhU7ZsWRVjstJrr70mc+fOlV9++UUOHTokO3bskP37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
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://game.wsmud.com/*
@@ -44,6 +45,7 @@
             ws, ws_on_message;
         unsafeWindow.WebSocket = function (uri) {
             ws = new _ws(uri);
+            document.getElementsByClassName("signinfo")[0].innerHTML = "<HIR>武神传说SS插件正常运行！ QQ群 367657589</HIR>"
         };
         unsafeWindow.WebSocket.prototype = {
             CONNECTING: _ws.CONNECTING,
@@ -108,6 +110,8 @@
         };
     } else {
         console.log("插件不可运行,请打开'https://greasyfork.org/zh-CN/forum/discussion/41547/x',按照操作步骤进行操作,Plugins are not functioning properly.plase open https://greasyfork.org/zh-CN/forum/discussion/41547/x");
+        document.getElementsByClassName("signinfo")[0].innerHTML = "<HIR>武神传说SS插件没有正常运行！请查看console输出 QQ群 367657589</HIR>"
+
     }
     var L = {
         msg: function (msg) {
@@ -156,141 +160,169 @@
             place: "扬州城-醉仙楼"
         },
         "包子": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "鸡腿": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "面条": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "扬州炒饭": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "米酒": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "花雕酒": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "女儿红": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "醉仙酿": {
-            "id": null, "type": "hig",
+            "id": null,
+            "type": "hig",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         "神仙醉": {
-            "id": null, "type": "hiy",
+            "id": null,
+            "type": "hiy",
             "sales": "店小二",
             place: "扬州城-醉仙楼"
         },
         //扬州城-杂货铺
         "布衣": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "钢刀": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "木棍": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "英雄巾": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "布鞋": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "铁戒指": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "簪子": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "长鞭": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "钓鱼竿": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
         "鱼饵": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "杂货铺老板 杨永福",
             place: "扬州城-杂货铺"
         },
 
         //扬州城-打铁铺
         "铁剑": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "钢刀": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "铁棍": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "铁杖": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
         "铁镐": {
-            "id": null, "type": "wht",
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
-        }, "飞镖": {
-            "id": null, "type": "wht",
+        },
+        "飞镖": {
+            "id": null,
+            "type": "wht",
             "sales": "铁匠铺老板 铁匠",
             place: "扬州城-打铁铺"
         },
 
         //扬州城-药铺
         "金创药": {
-            "id": null, "type": "hig",
+            "id": null,
+            "type": "hig",
             "sales": "药铺老板 平一指",
             place: "扬州城-药铺"
         },
         "引气丹": {
-            "id": null, "type": "hig",
+            "id": null,
+            "type": "hig",
             "sales": "药铺老板 平一指",
             place: "扬州城-药铺"
         },
@@ -356,7 +388,7 @@
         "少林派-方丈楼": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north",
         "少林派-戒律院": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go east",
         "少林派-达摩院": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go west",
-        "少林派-竹林": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go north",
+        "少林派-竹林": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north",
         "少林派-藏经阁": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go west",
         "少林派-达摩洞": "jh fam 2 start;go north;go north;go northwest;go northeast;go north;go north;go north;go north;go north",
         "华山派-镇岳宫": "jh fam 3 start;",
@@ -973,7 +1005,6 @@
 
                 }, 500);
                 KEY.do_command("showcombat");
-                WG.Send("taskover zz1");
             }, 1000);
         },
         updete_goods_id: function () {
@@ -1151,6 +1182,16 @@
             var w = $(".room-name").html();
             return w.indexOf(p) == -1 ? false : true;
         },
+
+        getIdByName: function (n) {
+            for (let i = 0; i < roomData.length; i++) {
+                if (roomData[i].name && roomData[i].name.indexOf(n) >= 0) {
+                    return roomData[i].id;
+                }
+            }
+            return null;
+        },
+
         smhook: undefined,
         sm: function () {
             if (!WG.smhook) {
@@ -1205,6 +1246,7 @@
                         WG.sm_state = 2;
                     } else {
                         WG.updete_npc_id();
+                        WG.sm_state = 0;
                     }
                     setTimeout(WG.sm, 300);
                     break;
@@ -1357,17 +1399,32 @@
                 window.setTimeout(WG.check_yamen_task, 1000);
             }
         },
+        zb_next: 0,
+
         check_zb_npc: function () {
             var lists = $(".room_items .room-item");
+            var found = false;
+
             for (var npc of lists) {
                 if (npc.innerText.indexOf(zb_npc) != -1) {
+                    found = true;
                     WG.Send("kill " + $(npc).attr("itemid"));
                     messageAppend("找到" + zb_npc + "，自动击杀！！！");
+                    WG.zb_next = 0;
                     return;
                 }
             }
-            window.setTimeout(WG.check_zb_npc, 1000);
+            var fj = needfind[zb_place];
+            if (!found && needfind[zb_place] != undefined && WG.zb_next < fj.length) {
+                messageAppend("寻找附近");
+                WG.Send(fj[WG.zb_next]);
+                WG.zb_next++;
+            }
+            if (!found) {
+                window.setTimeout(WG.check_zb_npc, 1000);
+            }
         },
+
 
         kill_all: function () {
 
@@ -1714,13 +1771,13 @@
             this.fbnum += 1;
             messageAppend("第" + this.fbnum + "次");
             WG.Send("cr yz/lw/shangu;cr over");
-            if (this.needGrove == this.fbnum) {
+            if (this.needGrove <= this.fbnum) {
                 WG.Send("taskover signin");
                 messageAppend("<hiy>" + this.fbnum + "次副本小树林秒进秒退已完成</hiy>");
                 WG.remove_hook(Helper.daily_hook);
                 Helper.daily_hook = undefined;
                 this.timer_close();
-                WG.zdwk();
+                //WG.zdwk();
                 this.needGrove = 0;
                 this.fbnum = 0;
             }
@@ -1914,7 +1971,7 @@
                 // }
                 var listener = this.hooks[i];
                 if (listener.types == data.type || (listener.types instanceof Array && $
-                    .inArray(data.type, listener.types) >= 0)) {
+                        .inArray(data.type, listener.types) >= 0)) {
                     listener.fn(data);
                 }
             }
@@ -2770,8 +2827,7 @@
                                                             messageAppend("当前层数" + data.count + ",已触发" + v.name, 1);
                                                             WG.SendCmd(v.send);
                                                         }
-                                                    }
-                                                    else {
+                                                    } else {
                                                         messageAppend("已触发" + v.name, 1);
                                                         WG.SendCmd(v.send);
                                                     }
@@ -2808,14 +2864,10 @@
                                                 WG.SendCmd(v.send);
                                             }
                                         }
-                                    } else if (item == "谣言" && data.ch == "rumor") {
-                                        for (var keyworditem of keywords) {
-                                            if (data.content.indexOf(keyworditem) >= 0) {
-                                                messageAppend("已触发" + v.name, 1);
-                                                WG.SendCmd(v.send);
-                                            }
-                                        }
-                                    } else if (item == "系统" && data.ch == 'sys') {
+                                    } else if ((item == "谣言" && data.ch == "rumor") ||
+                                        (item == "系统" && data.ch == 'sys') ||
+                                        (item == "门派" && data.ch == 'fam') ||
+                                        (item == "帮派" && data.ch == 'pty')) {
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
                                                 messageAppend("已触发" + v.name, 1);
@@ -2823,6 +2875,14 @@
                                             }
                                         }
                                     }
+                                    // else if (item == "系统" && data.ch == 'sys') {
+                                    //     for (var keyworditem of keywords) {
+                                    //         if (data.content.indexOf(keyworditem) >= 0) {
+                                    //             messageAppend("已触发" + v.name, 1);
+                                    //             WG.SendCmd(v.send);
+                                    //         }
+                                    //     }
+                                    // }
                                 }
                                 break;
 
@@ -2873,7 +2933,7 @@
                                 let item = G.items.get(G.id);
                                 if (v.ishave == "0") {
                                     //查找id
-                                    if (!v.senduser) { }
+                                    if (!v.senduser) {}
                                     let pid = Helper.find_item(v.senduser);
                                     item = G.items.get(pid);
                                 }
@@ -2917,7 +2977,10 @@
         },
         daily_hook: undefined,
         oneKeyDaily: async function () {
+            messageAppend("执行请安.", 1);
+            await Helper.oneKeyQA();
             messageAppend("本脚本会自动执行师门及自动进退小树林,请确保精力足够再执行", 1);
+            var fbnums = 0;
             Helper.daily_hook = WG.add_hook("dialog", async function (data) {
                 if (data.dialog == "tasks") {
                     if (data.items) {
@@ -2936,26 +2999,49 @@
                             let n = str1[0].match("：([^%]+)/20")[1];
                             let n1 = str1[1].match("：([^%]+)/20")[1];
                             n = 20 - parseInt(n);
-                            n1 = 20 - parseInt(n1);
-                            messageAppend("还需要" + n + "次师门任务," + n1 + "次副本,才可签到");
+                            fbnums = 20 - parseInt(n1);
+                            messageAppend("还需要" + n + "次师门任务," + fbnums + "次副本,才可签到");
                             if (n != 0) {
-                                $(".sm_button").click();
-                            }
-                            await WG.sleep(2000);
-                            while ($(".sm_button").text().indexOf("停止") >= 0) {
-                                await WG.sleep(2000);
+                                //$(".sm_button").click();
+                                WG.sm_state = 0;
+                                setTimeout(WG.sm, 200);
+                            } else {
+                                WG.sm_state = -1;
                             }
 
-                            WG.grove_auto(n1);
-
-                            // WG.remove_hook(Helper.daily_hook);
-                            // Helper.daily_hook = undefined;
+                            //WG.remove_hook(Helper.daily_hook);
+                            //Helper.daily_hook = undefined;
                         }
 
                     }
                 }
             });
+
+            KEY.do_command("tasks");
+            KEY.do_command("tasks");
+
+            await WG.sleep(2000);
+            while (WG.sm_state >= 0) {
+                await WG.sleep(2000);
+            }
+
+            WG.grove_auto(fbnums);
+
+            // var sxplace = sm_array[family].sxplace;
+            // var sx = sm_array[family].sx;
+            // if (sxplace.indexOf("-") == 0) {
+            //     WG.Send(sxplace.replace('-', ''));
+            // } else {
+            //     WG.go(sxplace);
+            // }
+            // await WG.sleep(1000);
+            // WG.SendCmd("ask2 $findPlayerByName(\"" + sx + "\")");
+            // await WG.sleep(1000);
+
+        },
+        oneKeyQA: async function () {
             WG.Send("stopstate");
+            WG.sm_state = 0;
             var sxplace = sm_array[family].sxplace;
             var sx = sm_array[family].sx;
             if (sxplace.indexOf("-") == 0) {
@@ -2966,26 +3052,34 @@
             await WG.sleep(1000);
             WG.SendCmd("ask2 $findPlayerByName(\"" + sx + "\")");
             await WG.sleep(1000);
-            KEY.do_command("tasks");
-            KEY.do_command("tasks");
+
         },
         sd_hook: undefined,
         oneKeySD: function () {
             var n = 0;
             messageAppend("本脚本自动执行购买扫荡符,进行追捕扫荡,请确保元宝足够\n注意! 超过上限会自动放弃", 1);
             Helper.sd_hook = WG.add_hook(["dialog", "text"], async function (data) {
+                var id = 0;
+                var loop = 2;
                 if (data.type == 'text' && data.msg) {
+                    id = WG.getIdByName("程药发");
                     if (data.msg.indexOf("无法快速完") >= 0) {
-                        WG.SendCmd("ask1 $pname(\"程药发\")");
+                        WG.Send("ask1 " + id);
                         await WG.sleep(200);
-                        WG.SendCmd("ask2 $pname(\"程药发\")");
+                        WG.Send("ask2 " + id);
                         await WG.sleep(200);
-                        WG.SendCmd("ask3 $pname(\"程药发\")");
-                        messageAppend("追捕已完成", 1);
-                        await WG.sleep(5000);
-                        WG.zdwk();
-                        WG.remove_hook(Helper.sd_hook);
-                        Helper.sd_hook = undefined;
+                        while (loop) {
+                            loop--;
+                            console.log("ask3 " + id);
+                            WG.Send("ask3 " + id);
+                            await WG.sleep(1000);
+                        }
+
+                        //messageAppend("追捕已完成", 1);
+                        //WG.Send("ask3 " + id);
+                        //WG.zdwk();
+                        //WG.remove_hook(Helper.sd_hook);
+                        //Helper.sd_hook = undefined;
                     }
                     //<hig>你的追捕任务完成了，目前完成20/20个，已连续完成40个。</hig>
                     if (data.msg.indexOf("追捕任务完成了") >= 0) {
@@ -3000,11 +3094,18 @@
                         }
                     }
                     if (data.msg.indexOf("你的扫荡符不够。") >= 0) {
-                        messageAppend("还需要" + n + "次扫荡,自动购入" + n + "张扫荡符");
+                        id = WG.getIdByName("程药发");
 
+                        messageAppend("还需要" + n + "次扫荡,自动购入" + n + "张扫荡符");
                         WG.Send("shop 0 " + n);
-                        await WG.sleep(2000);
-                        WG.SendCmd("ask3 $pname(\"程药发\")");
+                        await WG.sleep(1000);
+                        while (loop) {
+                            loop--;
+                            console.log("ask3 " + id);
+                            WG.Send("ask3 " + id);
+                            await WG.sleep(1000);
+                        }
+
                     }
                 }
                 if (data.dialog == "tasks") {
@@ -3018,13 +3119,16 @@
                         n = 20 - parseInt(n);
                         if (n == 0) {
                             messageAppend("追捕已完成", 1);
-                            WG.zdwk();
+                            //WG.zdwk();
                             WG.remove_hook(Helper.sd_hook);
                             Helper.sd_hook = undefined;
                             return;
                         } else {
-                            WG.go("扬州城-衙门正厅");
-                            await WG.sleep(2000);
+                            do {
+                                WG.go("扬州城-衙门正厅");
+                                await WG.sleep(1000);
+                            }
+                            while (!WG.getIdByName("程药发"))
                             WG.SendCmd("ask3 $pname(\"程药发\")");
                         }
 
@@ -3377,7 +3481,8 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, yamen: async function (idx = 0, n, cmds) {
+        },
+        yamen: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.go_yamen_task();
             await WG.sleep(1000);
@@ -3386,9 +3491,12 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, boss: async function (idx = 0, n, cmds) {
+        },
+        boss: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            Helper.kksBoss({ content: "听说xxx出现在逍遥派-青草坪一带。" });
+            Helper.kksBoss({
+                content: "听说xxx出现在逍遥派-青草坪一带。"
+            });
             await WG.sleep(1000);
             while (Helper.ksboss) {
                 await WG.sleep(1000);
@@ -3405,7 +3513,8 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, startpfm: async function (idx = 0, n, cmds) {
+        },
+        startpfm: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             if (!G.auto_preform) {
                 G.auto_preform = true;
@@ -3414,7 +3523,8 @@
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, stopautopfm: async function (idx = 0, n, cmds) {
+        },
+        stopautopfm: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             var dellist = n.split(",");
             for (let p of dellist) {
@@ -3425,7 +3535,8 @@
             console.log("当前自动施法黑名单为:" + blackpfm);
             await WG.sleep(100);
             WG.SendCmd(cmds);
-        }, startautopfm: async function (idx = 0, n, cmds) {
+        },
+        startautopfm: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             let dellist = n.split(",");
             for (var i = 0; i < blackpfm.length; i++) {
@@ -3799,13 +3910,18 @@
                     G.skills = data.skills;
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
-                        if (data.distime) { }
+                        if (data.distime) {}
                         G.cds.set(data.id, true);
                         var _id = data.id;
                         setTimeout(function () {
                             G.cds.set(_id, false);
                             //技能cd时间到
-                            let pfmtimeTips = { data: JSON.stringify({ type: "enapfm", id: _id }) };
+                            let pfmtimeTips = {
+                                data: JSON.stringify({
+                                    type: "enapfm",
+                                    id: _id
+                                })
+                            };
                             WG.receive_message(pfmtimeTips);
                         }, data.distime);
                     }
@@ -3828,7 +3944,10 @@
                     }
                 } else if (data.type == "status") {
                     if (data.count != undefined) {
-                        G.status.set(data.id, { "sid": data.sid, "count": data.count });
+                        G.status.set(data.id, {
+                            "sid": data.sid,
+                            "count": data.count
+                        });
                     }
                 }
             });
@@ -3956,21 +4075,26 @@
             return res;
         },
         shareJson: function (usernaem, json) {
-            $.post(S.serverUrl + "/sharejk", { username: usernaem, json: JSON.stringify(json) }, (res) => {
+            $.post(S.serverUrl + "/sharejk", {
+                username: usernaem,
+                json: JSON.stringify(json)
+            }, (res) => {
                 if (res && res.code == 0) {
                     GM_setClipboard(res.shareid);
-                    messageAppend("复制成功" + res.msg, res.shareid);
+                    messageAppend("复制成功" + res.msg + ":" + res.shareid);
                 } else {
-                    messageAppend("失败了"+res.msg);
+                    messageAppend("失败了" + res.msg);
                 }
             })
         },
         getShareJson: function (id, callback) {
-            $.post(S.serverUrl + "/getjk", { shareid: id }, (res) => {
+            $.post(S.serverUrl + "/getjk", {
+                shareid: id
+            }, (res) => {
                 if (res && res.code == 0) {
                     callback(res);
                 } else {
-                   messageAppend("失败了" + res.msg);
+                    messageAppend("失败了" + res.msg);
                 }
             });
 
