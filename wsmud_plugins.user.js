@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.157
+// @version      0.0.31.169
 // @date         01/07/2018
 // @modified     06/03/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -23,13 +23,16 @@
 
 (function () {
     'use strict';
-    var updateinfo = "🍋增加一键分享监控及自命令功能\nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
+    var updateinfo = "🍋增加副本暂停自动boss功能 \n修复门派自动识别\nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
 
     Array.prototype.baoremove = function (dx) {
         if (isNaN(dx) || dx > this.length) {
             return false;
         }
         this.splice(dx, 1);
+    }
+    String.prototype.replaceAll = function (s1, s2) {
+        return this.replace(new RegExp(s1, "gm"), s2);
     }
 
     if (WebSocket) {
@@ -110,7 +113,7 @@
         };
     } else {
         console.log("插件不可运行,请打开'https://greasyfork.org/zh-CN/forum/discussion/41547/x',按照操作步骤进行操作,Plugins are not functioning properly.plase open https://greasyfork.org/zh-CN/forum/discussion/41547/x");
-        document.getElementsByClassName("signinfo")[0].innerHTML = "<HIR>武神传说SS插件没有正常运行！请查看console输出 QQ群 367657589</HIR>"
+        document.getElementsByClassName("signinfo")[0].innerHTML = "<HIR>武神传说SS插件没有正常运行！请使用CTRL+F5刷新 QQ群 367657589</HIR>"
 
     }
     var L = {
@@ -341,6 +344,9 @@
     };
     var place = {
         "住房": "jh fam 0 start;go west;go west;go north;go enter",
+        "住房-卧室": "jh fam 0 start;go west;go west;go north;go enter;go north",
+        "住房-小花园": "jh fam 0 start;go west;go west;go north;go enter;go northeast",
+        "住房-炼药房": "jh fam 0 start;go west;go west;go north;go enter;go southwest",
         "练功房": "jh fam 0 start;go west;go west;go north;go enter;go west",
         "仓库": "jh fam 0 start;go north;go west;store",
         "扬州城-广场": "jh fam 0 start",
@@ -355,6 +361,12 @@
         "扬州城-擂台": "jh fam 0 start;go west;go south",
         "扬州城-当铺": "jh fam 0 start;go south;go east",
         "扬州城-帮派": "jh fam 0 start;go south;go south;go east",
+        "帮会-大门": "jh fam 0 start;go south;go south;go east;go east",
+        "帮会-大院": "jh fam 0 start;go south;go south;go east;go east;go east",
+        "帮会-练功房": "jh fam 0 start;go south;go south;go east;go east;go east;go north",
+        "帮会-聚义堂": "jh fam 0 start;go south;go south;go east;go east;go east;go east",
+        "帮会-仓库": "jh fam 0 start;go south;go south;go east;go east;go east;go east;go north",
+        "帮会-炼药房": "jh fam 0 start;go south;go south;go east;go east;go east;go south",
         "扬州城-扬州武馆": "jh fam 0 start;go south;go south;go west",
         "扬州城-武庙": "jh fam 0 start;go north;go north;go west",
         "武当派-广场": "jh fam 1 start;",
@@ -761,19 +773,31 @@
     }
     var log_line = 0;
 
-    function messageAppend(m, t = 0) {
-        100 < log_line && (log_line = 0, $(".WG_log pre").empty());
-        var ap = m + "\n";
-        if (t == 1) {
-            ap = "<hiy>" + ap + "</hiy>";
-        } else if (t == 2) {
-            ap = "<hig>" + ap + "</hig>";
-        } else if (t == 3) {
-            ap = "<hiw>" + ap + "</hiw>";
+    function messageAppend(m, t = 0, area = 0) {
+        if (area) {
+            var ap = m + "\n";
+            if (t == 1) {
+                ap = "<hiy>" + ap + "</hiy>";
+            } else if (t == 2) {
+                ap = "<hig>" + ap + "</hig>";
+            } else if (t == 3) {
+                ap = "<hiw>" + ap + "</hiw>";
+            }
+            $('.content-message pre').append(ap)
+        } else {
+            100 < log_line && (log_line = 0, $(".WG_log pre").empty());
+            var ap = m + "\n";
+            if (t == 1) {
+                ap = "<hiy>" + ap + "</hiy>";
+            } else if (t == 2) {
+                ap = "<hig>" + ap + "</hig>";
+            } else if (t == 3) {
+                ap = "<hiw>" + ap + "</hiw>";
+            }
+            $(".WG_log pre").append(ap);
+            log_line++;
+            $(".WG_log")[0].scrollTop = 99999;
         }
-        $(".WG_log pre").append(ap);
-        log_line++;
-        $(".WG_log")[0].scrollTop = 99999;
     }
     var sm_array = {
         '武当': {
@@ -783,8 +807,8 @@
             sx: "首席弟子"
         },
         '华山': {
-            place: "华山派-客厅",
-            npc: "华山派掌门 君子剑 岳不群",
+            place: "华山派-镇岳宫",
+            npc: "市井豪杰 高根明",
             sxplace: "华山派-练武场",
             sx: "首席弟子"
         },
@@ -806,7 +830,7 @@
             sxplace: "丐帮-破庙密室",
             sx: "首席弟子"
         },
-        '峨嵋': {
+        '峨眉': {
             place: "峨嵋派-大殿",
             npc: "峨眉派第四代弟子 静心",
             sxplace: "峨嵋派-广场",
@@ -1449,7 +1473,7 @@
             WG.Send("sell all");
         },
         packup_listener: null,
-        sell_all: function () {
+        sell_all: function (store = 1, fenjie = 1, drop = 1) {
             if (WG.packup_listener) {
                 messageAppend("<hio>包裹整理</hio>运行中");
                 messageAppend("<hio>包裹整理</hio>手动结束");
@@ -1485,7 +1509,7 @@
                     for (var i = 0; i < data.items.length; i++) {
                         //仓库
                         if (store_list.length != 0) {
-                            if (WG.inArray(data.items[i].name, store_list)) {
+                            if (WG.inArray(data.items[i].name, store_list) && store) {
                                 if (data.items[i].can_eq) {
                                     //装备物品，不能叠加，计算总数
                                     let store = null;
@@ -1518,7 +1542,7 @@
                             }
                         }
                         //丢弃
-                        if (WG.inArray(data.items[i].name, drop_list)) {
+                        if (WG.inArray(data.items[i].name, drop_list) && drop) {
                             if (data.items[i].count == 1) {
                                 dropcmds.push("drop " + data.items[i].id);
                             } else {
@@ -1529,7 +1553,7 @@
 
                         }
                         //分解
-                        if (fenjie_list.length && WG.inArray(data.items[i].name, fenjie_list) && data.items[i].name.indexOf("★") == -1) {
+                        if (fenjie_list.length && WG.inArray(data.items[i].name, fenjie_list) && data.items[i].name.indexOf("★") == -1 && fenjie) {
                             cmds.push("fenjie " + data.items[i].id);
                             cmds.push("$wait 200");
                             messageAppend("<hio>包裹整理</hio>" + data.items[i].name + "分解");
@@ -1956,7 +1980,6 @@
         },
         remove_hook: function (hookindex) {
             var that = this;
-            console.log("remove_hook");
             for (var i = 0; i < that.hooks.length; i++) {
                 if (that.hooks[i].index == hookindex) {
                     that.hooks.baoremove(i);
@@ -2894,7 +2917,12 @@
                                 for (var keyworditem of keywords) {
                                     if (data.name.indexOf(keyworditem) >= 0) {
                                         messageAppend("已触发" + v.name, 1);
-                                        WG.SendCmd(v.send);
+                                        if (data.id) {
+                                            let p = v.send.replace("{id}", data.id);
+                                            WG.SendCmd(p);
+                                        } else {
+                                            WG.SendCmd(v.send);
+                                        }
                                     }
                                 }
                                 break;
@@ -2977,9 +3005,7 @@
         },
         daily_hook: undefined,
         oneKeyDaily: async function () {
-            messageAppend("执行请安.", 1);
-            await Helper.oneKeyQA();
-            messageAppend("本脚本会自动执行师门及自动进退小树林,请确保精力足够再执行", 1);
+            messageAppend("本脚本会自动执行师门及自动进退小树林,请确保精力足够再执行,请不要点击任务菜单", 1);
             var fbnums = 0;
             Helper.daily_hook = WG.add_hook("dialog", async function (data) {
                 if (data.dialog == "tasks") {
@@ -2989,8 +3015,12 @@
                         if (dailystate == 3) {
                             messageAppend("日常已完成", 1);
                             //WG.zdwk();
-                            WG.remove_hook(Helper.daily_hook);
-                            Helper.daily_hook = undefined;
+                            setTimeout(() => {
+                                WG.remove_hook(Helper.daily_hook);
+                                Helper.daily_hook = undefined;
+                            }, 1);
+
+                            return;
                         } else {
                             let str = dailylog;
                             str = str.replace(/<(?!\/?p\b)[^>]+>/ig, '');
@@ -3049,21 +3079,23 @@
             } else {
                 WG.go(sxplace);
             }
-            await WG.sleep(1000);
-            WG.SendCmd("ask2 $findPlayerByName(\"" + sx + "\")");
+            await WG.sleep(2000);
+            WG.SendCmd("select $findPlayerByName(\"" + sx + "\");$wait 200;ask2 $findPlayerByName(\"" + sx + "\")");
             await WG.sleep(1000);
 
         },
         sd_hook: undefined,
         oneKeySD: function () {
             var n = 0;
-            messageAppend("本脚本自动执行购买扫荡符,进行追捕扫荡,请确保元宝足够\n注意! 超过上限会自动放弃", 1);
+            messageAppend("本脚本自动执行购买扫荡符,进行追捕扫荡,请确保元宝足够，请不要点击任务菜单\n注意! 超过上限会自动放弃", 1);
             Helper.sd_hook = WG.add_hook(["dialog", "text"], async function (data) {
                 var id = 0;
                 var loop = 2;
                 if (data.type == 'text' && data.msg) {
                     id = WG.getIdByName("程药发");
                     if (data.msg.indexOf("无法快速完") >= 0) {
+                        WG.Send("select " + id);
+                        await WG.sleep(200);
                         WG.Send("ask1 " + id);
                         await WG.sleep(200);
                         WG.Send("ask2 " + id);
@@ -3071,6 +3103,7 @@
                         while (loop) {
                             loop--;
                             console.log("ask3 " + id);
+
                             WG.Send("ask3 " + id);
                             await WG.sleep(1000);
                         }
@@ -3221,9 +3254,13 @@
             } else {
                 cmds = cmds.split(";");
             }
-            let p = cmds[0].split(" ")[0];
+            let p = cmds[0].split("$")[0];
             cmds = T.recmd(0, cmds);
-            n = n.replace("-", " ");
+            p = p.replaceAll("-", " ");
+            if (p[p.length - 1] == " ") {
+
+                p = p.substring(0, p.length - 1)
+            }
             console.log("findPlayerByName" + n);
 
             for (let i = 0; i < roomData.length; i++) {
@@ -3458,9 +3495,11 @@
         daily: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             await Helper.oneKeyyj();
+            messageAppend("执行请安.", 1);
+            await Helper.oneKeyQA();
             Helper.oneKeyDaily();
-            await WG.sleep(1000);
-            while (Helper.daily_hook) {
+            await WG.sleep(2000);
+            while (Helper.daily_hook != undefined) {
                 await WG.sleep(1000);
             }
             await WG.sleep(1000);
@@ -3549,6 +3588,42 @@
             console.log("当前自动施法黑名单为:" + blackpfm);
             await WG.sleep(100);
             WG.SendCmd(cmds);
+        },
+        store: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            await WG.sell_all(1, 0, 0);
+            while (WG.packup_listener) {
+                await WG.sleep(200);
+            }
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
+        },
+        fenjie: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            await WG.sell_all(0, 1, 0);
+            while (WG.packup_listener) {
+                await WG.sleep(200);
+            }
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
+        },
+        drop: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            await WG.sell_all(0, 0, 1);
+            while (WG.packup_listener) {
+                await WG.sleep(200);
+            }
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
+        },
+        sellall: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            await WG.sell_all(1, 1, 1);
+            while (WG.packup_listener) {
+                await WG.sleep(200);
+            }
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
         }
 
     };
@@ -3621,7 +3696,7 @@
             <option value="武当">武当</option>
             <option value="华山">华山</option>
             <option value="少林">少林</option>
-            <option value="峨嵋">峨嵋</option>
+            <option value="峨眉">峨眉</option>
             <option value="逍遥">逍遥</option>
             <option value="丐帮">丐帮</option>
             <option value="武馆">武馆</option>
@@ -3671,7 +3746,7 @@
             <option value="已开启"> 已开启 </option>
         </select>
     </span>
-    <span><label for="unautopfm"> 自动施法黑名单(使用半角逗号分隔)： </label>
+    <span><label for="unautopfm"> 自动施法黑名单(填技能代码，使用半角逗号分隔)： </label>
         <textarea class="settingbox hide zdy-box" id="unauto_pfm" name="unauto_pfm" style="display: inline-block;">  </textarea>
     </span>
 
@@ -3833,6 +3908,16 @@
                         G.in_fight = false;
                         WG.auto_preform("stop");
                     }
+                    if (data.name.indexOf("副本区域") >= 0) {
+                        WG.stopAllAuto();
+                        messageAppend("进入副本，暂停自动喜宴及boss", 1, 1);
+                    } else {
+                        if (stopauto) {
+                            WG.reSetAllAuto();
+                            messageAppend("退出副本，恢复自动喜宴及boss", 1, 1);
+                        }
+                    }
+
 
                 } else if (data.type == "items") {
                     G.items = new Map();
@@ -3987,6 +4072,15 @@
                     if (!G.level) {
                         G.level = data.level;
                         console.log("欢迎" + G.level);
+                    }
+                    if (!G.family) {
+                        G.family = data.family.replaceAll('派', '');
+                        console.log(G.family);
+                        if (G.family == "无门无") {
+                            G.family = "武馆";
+                        }
+                        family = G.family;
+                        GM_setValue(role + "_family", G.family);
                     }
                 }
             });
@@ -4191,6 +4285,12 @@
                             name: "一键日常",
                             callback: function (key, opt) {
                                 Helper.oneKeyDaily();
+                            },
+                        },
+                        "一键请安": {
+                            name: "一键请安",
+                            callback: function (key, opt) {
+                                Helper.oneKeyQA();
                             },
                         },
                         "一键扫荡": {
