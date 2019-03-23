@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.200
+// @version      0.0.31.214
 // @date         01/07/2018
 // @modified     06/03/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -39,7 +39,7 @@
 
         function show_msg(msg) {
             ws_on_message({
-                type:"text",
+                type: "text",
                 data: msg
             });
         }
@@ -156,11 +156,11 @@
 
                 if (no_queue) {
                     for (var i = 0; i < cmd.length; i++) {
-                        if(G.cmd_echo){
-                           ws_on_message({
-                               type:"text",
-                               data: "<hiy>"+cmd[i]+"</hiy>"
-                           });
+                        if (G.cmd_echo) {
+                            ws_on_message({
+                                type: "text",
+                                data: "<hiy>" + cmd[i] + "</hiy>"
+                            });
                         }
                         switch (cmd[i]) {
                             case 'sm':
@@ -558,6 +558,10 @@
     var family = null;
     //师门自动放弃
     var sm_loser = null;
+    //师门自动牌子
+    var sm_price = null;
+    //师门自动取
+    var sm_getstore = null;
     //
     var wudao_pfm = "1";
     //boss战斗前等待(ms)
@@ -962,6 +966,7 @@
     var WG = {
         sm_state: -1,
         sm_item: null,
+        sm_store: null,
         init: function () {
             $("li[command=SelectRole]").on("click", function () {
                 WG.login();
@@ -1203,7 +1208,7 @@
                     WG.update_store_hook = undefined;
                 }
             });
-            WG.SendCmd("$to 扬州城-钱庄;look3 1");
+            WG.SendCmd("$to 扬州城-广场;$to 扬州城-钱庄;look3 1");
         },
         Send: async function (cmd) {
             if (WebSocket) {
@@ -1333,19 +1338,17 @@
                     //前往师门接收任务
                     WG.go(sm_array[family].place);
                     WG.sm_state = 1;
-                    setTimeout(WG.sm, 700);
+                    setTimeout(WG.sm, 500);
                     break;
                 case 1:
                     //接受任务
                     var lists = $(".room_items .room-item");
                     var id = null;
-
                     for (var npc of lists) {
                         if (npc.lastElementChild.innerText.indexOf("[") >= 0) {
                             if (npc.lastElementChild.lastElementChild.lastElementChild.lastElementChild == null) {
                                 if (npc.lastElementChild.firstChild.nodeType == 3 &&
                                     npc.lastElementChild.firstChild.nextSibling.tagName == "SPAN") {
-
                                     if (npc.lastElementChild.innerText.split('[')[0] == sm_array[family].npc)
                                         id = $(npc).attr("itemid");
                                 }
@@ -1375,7 +1378,7 @@
                     var item = $("span[cmd$='giveup']:last").parent().prev();
                     if (item.length == 0) {
                         WG.sm_state = 0;
-                        setTimeout(WG.sm, 1000);
+                        setTimeout(WG.sm, 500);
                         return;
                     };
                     var itemName = item.html();
@@ -1389,7 +1392,7 @@
                                 tmpObj.click();
                                 messageAppend("自动上交" + item);
                                 WG.sm_state = 0;
-                                setTimeout(WG.sm, 100);
+                                setTimeout(WG.sm, 50);
                                 return;
                             }
                             tmpObj = tmpObj.prev();
@@ -1397,22 +1400,80 @@
                     }
                     //不能上交自动购买
                     WG.sm_item = goods[itemName];
-                    if (WG.sm_item != undefined && item.indexOf(WG.sm_item.type) >= 0) {
+                    if (item != undefined && WG.inArray(item, store_list) && sm_getstore == '已开启') {
+                        messageAppend("自动仓库取" + item);
+                        WG.sm_store = item;
+                        WG.sm_state = 4;
+                        setTimeout(WG.sm, 500);
+                    }
+                    else if (WG.sm_item != undefined && item.indexOf(WG.sm_item.type) >= 0) {
                         WG.go(WG.sm_item.place);
                         messageAppend("自动购买" + item);
                         WG.sm_state = 3;
-                        setTimeout(WG.sm, 1000);
-                    } else {
-                        messageAppend("无法购买" + item);
-                        if (mysm_loser == '已停止') {
-                            WG.sm_state = -1;
-                            $(".sm_button").text("师门(Q)");
+                        setTimeout(WG.sm, 500);
+                    }
+                    else {
+                        if (sm_price == "已开启") {
+                            let pz = [{}, {}, {}, {}, {}]
+                            tmpObj = $("span[cmd$='giveup']:last").prev();
+                            for (let i = 0; i < 6; i++) {
+                                if (tmpObj.children().html()) {
+                                    if (tmpObj.html().indexOf('放弃') == -1 &&
+                                        tmpObj.html().indexOf('令牌') >= 0) {
+                                        if (tmpObj.html().indexOf('hig') >= 0) {
+                                            pz[0] = tmpObj;
+                                        }
+                                        if (tmpObj.html().indexOf('hic') >= 0) {
+                                            pz[1] = tmpObj;
+                                        }
+                                        if (tmpObj.html().indexOf('hiy') >= 0) {
+                                            pz[2] = tmpObj;
+                                        }
+                                        if (tmpObj.html().indexOf('hiz') >= 0) {
+                                            pz[3] = tmpObj;
+                                        }
+                                        if (tmpObj.html().indexOf('hio') >= 0) {
+                                            pz[4] = tmpObj;
+                                        }
+                                    }
+                                }
+                            }
+                            let _p = false;
+                            for (let p of pz) {
+                                if (p.html != undefined) {
+                                    p.click();
+                                    messageAppend("自动上交牌子");
+                                    WG.sm_state = 0;
+                                    _p = true;
+                                    setTimeout(WG.sm, 350);
+                                    return;
+                                }
+                            }
+                            if (!_p) {
+                                messageAppend("没有牌子并且无法购买" + item);
+                                if (mysm_loser == '已停止') {
+                                    WG.sm_state = -1;
+                                    $(".sm_button").text("师门(Q)");
+                                } else {
+                                    $("span[cmd$='giveup']:last").click();
+                                    messageAppend("放弃任务");
+                                    WG.sm_state = 0;
+                                    setTimeout(WG.sm, 100);
+                                    return;
+                                }
+                            }
                         } else {
-                            $("span[cmd$='giveup']:last").click();
-                            messageAppend("放弃任务");
-                            WG.sm_state = 0;
-                            setTimeout(WG.sm, 100);
-                            return;
+                            messageAppend("无法购买" + item);
+                            if (mysm_loser == '已停止') {
+                                WG.sm_state = -1;
+                                $(".sm_button").text("师门(Q)");
+                            } else {
+                                $("span[cmd$='giveup']:last").click();
+                                messageAppend("放弃任务");
+                                WG.sm_state = 0;
+                                setTimeout(WG.sm, 100);
+                                return;
+                            }
                         }
                     }
                     break;
@@ -1421,7 +1482,36 @@
                     if (WG.buy(WG.sm_item)) {
                         WG.sm_state = 0;
                     }
-                    setTimeout(WG.sm, 1000);
+                    setTimeout(WG.sm, 500);
+                    break;
+                case 4:
+                    WG.go("扬州城-钱庄");
+                    WG.qu(WG.sm_store, (res) => {
+                        if (res) {
+                            WG.sm_state = 0;
+                            setTimeout(WG.sm, 500);
+                        } else {
+                            messageAppend("无法取" + WG.sm_store);
+                            if (WG.sm_item != undefined && WG.sm_store.indexOf(WG.sm_item.type) >= 0) {
+                                WG.go(WG.sm_item.place);
+                                messageAppend("自动购买" + WG.sm_store);
+                                WG.sm_state = 3;
+                                setTimeout(WG.sm, 500);
+                                return ;
+                            } else {
+                                if (mysm_loser == '已停止') {
+                                    WG.sm_state = -1;
+                                    $(".sm_button").text("师门(Q)");
+                                } else {
+                                    $("span[cmd$='giveup']:last").click();
+                                    messageAppend("放弃任务");
+                                    WG.sm_state = 0;
+                                    setTimeout(WG.sm, 300);
+                                    return;
+                                }
+                            }
+                        }
+                    });
                     break;
                 default:
                     break;
@@ -1434,7 +1524,7 @@
             } else {
                 WG.sm_state = 0;
                 $(".sm_button").text("停止(Q)");
-                setTimeout(WG.sm, 200);
+                setTimeout(WG.sm, 550);
             }
         },
         buy: function (good) {
@@ -1446,6 +1536,21 @@
             WG.Send("list " + tmp);
             WG.Send("buy 1 " + good.id + " from " + tmp);
             return true;
+        },
+        qu: function (good, callback) {
+            setTimeout(() => {
+                let storestatus = false;
+                $(".obj-item").each(function () {
+                    if ($(this).html().indexOf(good) != -1) {
+                        storestatus = true;
+                        var id = $(this).attr("obj")
+                        WG.Send("qu 1 " + id);
+                        return;
+                    }
+                })
+                callback(storestatus);
+            }, 1000);
+
         },
         Give: function (items) {
             var tmp = npcs["店小二"];
@@ -1742,7 +1847,7 @@
                         }
                     }
                     if (data.type == 'text' && data.msg == '你要看什么？') {
-                        let id = WG.find_item("铁匠");
+                        let id = WG.getIdByName('铁匠');
                         if (id) {
                             tiejiang_id = id;
                             WG.Send('list ' + id);
@@ -1966,6 +2071,16 @@
                 sm_loser = $('#sm_loser').val();
                 GM_setValue(role + "_sm_loser", sm_loser);
             });
+            $('#sm_price').val(sm_price);
+            $('#sm_price').focusout(function () {
+                sm_price = $('#sm_price').val();
+                GM_setValue(role + "_sm_price", sm_price);
+            });
+            $('#sm_getstore').val(sm_getstore);
+            $('#sm_getstore').focusout(function () {
+                sm_getstore = $('#sm_getstore').val();
+                GM_setValue(role + "_sm_getstore", sm_getstore);
+            });
             $('#ks_pfm').val(ks_pfm);
             $('#ks_pfm').focusout(function () {
                 ks_pfm = $('#ks_pfm').val();
@@ -2126,7 +2241,7 @@
                 // }
                 var listener = this.hooks[i];
                 if (listener.types == data.type || (listener.types instanceof Array && $
-                        .inArray(data.type, listener.types) >= 0)) {
+                    .inArray(data.type, listener.types) >= 0)) {
                     listener.fn(data);
                 }
             }
@@ -2693,7 +2808,9 @@
         },
         zml_edit: function (info = "") {
             zml = GM_getValue(role + "_zml", zml);
-            if (info != "") { Helper.zml_showp();}
+            if (info != "") {
+                Helper.zml_showp();
+            }
             messageClear();
             L.msg(info);
             var edithtml = UI.zmlsetting;
@@ -3110,7 +3227,7 @@
                                 let item = G.items.get(G.id);
                                 if (v.ishave == "0") {
                                     //查找id
-                                    if (!v.senduser) {}
+                                    if (!v.senduser) { }
                                     let pid = Helper.find_item(v.senduser);
                                     item = G.items.get(pid);
                                 }
@@ -3182,6 +3299,7 @@
                             messageAppend("还需要" + n + "次师门任务," + fbnums + "次副本,才可签到");
                             if (n != 0) {
                                 //$(".sm_button").click();
+                                $(".sm_button").text("停止(Q)");
                                 WG.sm_state = 0;
                                 setTimeout(WG.sm, 200);
                             } else {
@@ -3363,8 +3481,11 @@
             _config.autoeq = GM_getValue(role + "_auto_eq", autoeq);
             _config.wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
             _config.sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+            _config.sm_price = GM_getValue(role + "_sm_price", sm_price);
+            _config.sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
             _config.unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
             _config.auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
+            _config.zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
             _config.blacklist = GM_getValue(role + "_blacklist", blacklist);
             _config.getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
             _config.zml = GM_getValue(role + "_zml", zml);
@@ -3397,8 +3518,11 @@
                     GM_setValue(role + "_auto_eq", _config.autoeq);
                     GM_setValue(role + "_wudao_pfm", _config.wudao_pfm);
                     GM_setValue(role + "_sm_loser", _config.sm_loser);
+                    GM_setValue(role + "_sm_price", _config.sm_price);
+                    GM_setValue(role + "_sm_getstore", _config.sm_getstore);
                     GM_setValue(role + "_unauto_pfm", _config.unauto_pfm);
                     GM_setValue(role + "_auto_pfmswitch", _config.auto_pfmswitch);
+                    GM_setValue(role + "_zmlshowsetting", _config.zmlshowsetting);
                     GM_setValue(role + "_blacklist", _config.blacklist);
                     GM_setValue(role + "_getitemShow", _config.getitemShow);
                     GM_setValue(role + "_zml", _config.zml);
@@ -3414,7 +3538,7 @@
                     GM_setValue(role + "_statehml", _config.statehml);
 
                     GI.configInit();
-                   
+
                     WG.setting();
                     Helper.ztjk_func();
                     Helper.zml_showp();
@@ -3661,33 +3785,28 @@
             cmds = T.recmd(idx, cmds);
             let _flag = true;
             let pfmnum = 0;
-            if (G.in_fight) {
-                while (_flag) {
-                    if (!G.gcd && !G.cds.get(n)) {
-                        WG.Send("perform " + n);
-                        await WG.sleep(300);
-                        pfmnum++;
-                        console.log(G.cds.get(n));
-                        if (G.cds.get(n)) {
-                            _flag = false;
-                            await WG.sleep(10);
-                            WG.SendCmd(cmds);
-                        }
-                        if (!G.in_fight) {
-                            _flag = false;
-                            await WG.sleep(10);
-                            WG.SendCmd(cmds);
-                        }
-                        if (pfmnum >= 5) {
-                            _flag = false;
-                            await WG.sleep(10);
-                            WG.SendCmd(cmds);
-                        }
+
+            while (_flag) {
+                if (!G.gcd && !G.cds.get(n)) {
+                    WG.Send("perform " + n);
+                    pfmnum++;
+                    if (G.cds.get(n)) {
+                        _flag = false;
+                        WG.SendCmd(cmds);
                     }
-                    await WG.sleep(100);
+                    if (!G.in_fight) {
+                        _flag = false;
+                        WG.SendCmd(cmds);
+                    }
+                    if (pfmnum >= 1) {
+                        _flag = false;
+                        WG.SendCmd(cmds);
+                    }
                 }
+                pfmnum++;
+                await WG.sleep(350);
             }
-            WG.SendCmd(cmds);
+
         },
         startjk: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
@@ -3977,6 +4096,16 @@
             <option value="已开启">已开启</option>
         </select>
     </span>
+    <span><label for="sm_price">师门自动牌子： </label><select id="sm_price" style="width:80px">
+            <option value="已停止">已停止</option>
+            <option value="已开启">已开启</option>
+        </select>
+    </span>
+    <span><label for="sm_getstore">师门自动仓库取： </label><select id="sm_getstore" style="width:80px">
+            <option value="已停止">已停止</option>
+            <option value="已开启">已开启</option>
+        </select>
+    </span>
     <span> <label for="zmlshowsetting"> 自命令显示位置： </label><select id="zmlshowsetting" style="width:80px">
         <option value="0"> 物品栏 </option>
         <option value="1"> 技能栏下方 </option>
@@ -4210,7 +4339,6 @@
     //GlobalInit
     var GI = {
         init: function () {
-
             WG.add_hook("items", function (data) {
                 Helper.saveRoomstate(data);
             });
@@ -4232,7 +4360,7 @@
                         G.in_fight = false;
                         WG.auto_preform("stop");
                     }
-      
+
 
                 } else if (data.type == "items") {
                     G.items = new Map();
@@ -4310,7 +4438,7 @@
                     G.skills = data.skills;
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
-                        if (data.distime) {}
+                        if (data.distime) { }
                         G.cds.set(data.id, true);
                         var _id = data.id;
                         setTimeout(function () {
@@ -4478,6 +4606,12 @@
                         messageAppend(data.msg);
                     }
                 }
+                if (data.msg.indexOf("还没准备好") >= 0) {
+                    WG.auto_preform('stop');
+                    setTimeout(() => {
+                        WG.auto_preform();
+                    }, 200);
+                }
             });
         },
         configInit: function () {
@@ -4493,10 +4627,12 @@
             }
             wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
             sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+            sm_price = GM_getValue(role + "_sm_price", sm_price);
+            sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
             unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
             auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
             blacklist = GM_getValue(role + "_blacklist", blacklist);
-            if(!blacklist instanceof Array){
+            if (!blacklist instanceof Array) {
                 blacklist = blacklist.split(",");
             }
             getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
@@ -4625,7 +4761,7 @@
                 }
                 parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
                 $(".channel")[0].scrollTop = 99999;
-            }, 120 * 1000);
+            }, 320 * 1000);
         }, 2000);
         KEY.init();
         WG.init();
@@ -4635,6 +4771,7 @@
         unsafeWindow.L = L;
         unsafeWindow.messageClear = messageClear;
         unsafeWindow.messageAppend = messageAppend;
+        unsafeWindow.send_cmd = send_cmd;
         $('.room-name').on('click', (e) => {
             e.preventDefault();
             $('.container').contextMenu({
@@ -4785,7 +4922,7 @@
                 "手动喜宴": {
                     name: "手动喜宴",
                     callback: function (key, opt) {
-                    console.log("当前自动状态:"+stopauto);
+                        console.log("当前自动状态:" + stopauto);
                         Helper.xiyan();
                     },
                 },
