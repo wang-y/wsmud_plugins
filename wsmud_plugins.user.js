@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.289
+// @version      0.0.31.290
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4002,7 +4002,7 @@
                     autoKsBoss = WG.switchReversal($(this));
                     GM_setValue(role + "_autoKsBoss", autoKsBoss);
                 });
-                $('#auto_eq').click(function () {
+                $('#auto_eq').change(function () {
                     autoeq = $('#auto_eq').val();
                     GM_setValue(role + "_auto_eq", autoeq);
 
