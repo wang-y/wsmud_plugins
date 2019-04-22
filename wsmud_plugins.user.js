@@ -3556,11 +3556,14 @@
                                     if (data.name.indexOf(keyworditem) >= 0) {
                                         messageAppend("已触发" + v.name, 1);
                                         WG.SendCmd(v.send);
+                                        return;
                                     }
                                     for (let roomItem of roomData) {
-                                        if (roomItem.indexOf(keyworditem) >= 0) {
+                                        if(roomItem==0){return;}
+                                        if (roomItem.name.indexOf(keyworditem) >= 0 &&roomItem.p==undefined) {
                                             messageAppend("已触发" + v.name, 1);
                                             WG.SendCmd(v.send);
+                                            return;
                                         }
                                     }
                                 }
