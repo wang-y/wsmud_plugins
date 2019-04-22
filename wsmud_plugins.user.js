@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.292
+// @version      0.0.31.293
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3557,6 +3557,12 @@
                                         messageAppend("已触发" + v.name, 1);
                                         WG.SendCmd(v.send);
                                     }
+                                    for (let roomItem of roomData) {
+                                        if (roomItem.indexOf(keyworditem) >= 0) {
+                                            messageAppend("已触发" + v.name, 1);
+                                            WG.SendCmd(v.send);
+                                        }
+                                    }
                                 }
                                 break;
                             case "dialog":
@@ -3586,7 +3592,7 @@
                                 let item = G.items.get(G.id);
                                 if (v.ishave == "0") {
                                     //查找id
-                                    if (!v.senduser) {}
+                                    if (!v.senduser) { }
                                     let pid = WG.find_item(v.senduser);
                                     item = G.items.get(pid);
                                 }
@@ -3623,6 +3629,7 @@
                                 break;
                         }
                     }
+
                 });
 
             });
@@ -3764,7 +3771,7 @@
                         WG.remove_hook(WG.sd_hook);
                         WG.sd_hook = undefined;
                     }
-                    if (data.msg.indexOf("你的追捕任务已经完成了") >= 0 ) {
+                    if (data.msg.indexOf("你的追捕任务已经完成了") >= 0) {
                         messageAppend("追捕已完成", 1);
                         WG.remove_hook(WG.sd_hook);
                         WG.sd_hook = undefined;
@@ -4258,7 +4265,7 @@
                 }
                 GM_setValue(role + "_zdy_btnlist", zdy_btnlist);
             }
-            if (inzdy_btn){
+            if (inzdy_btn) {
                 WG.zdy_btnshow();
             }
         },
@@ -4269,9 +4276,9 @@
                 $('.WG_button').remove();
                 $(".WG_log").after(html);
                 let keyitem = ["Q", "W", "E", "R", "T", "Y"];
-            
-                for(let i = 0 ; i<keyitem.length;i++){
-                    $(`#keyin${keyitem[i]}`).on('click',function(){
+
+                for (let i = 0; i < keyitem.length; i++) {
+                    $(`#keyin${keyitem[i]}`).on('click', function () {
                         WG.zdybtnfunc(i);
                     });
                 }
@@ -4323,7 +4330,7 @@
                 // }
                 var listener = this.hooks[i];
                 if (listener.types == data.type || (listener.types instanceof Array && $
-                        .inArray(data.type, listener.types) >= 0)) {
+                    .inArray(data.type, listener.types) >= 0)) {
                     listener.fn(data);
                 }
             }
@@ -5154,8 +5161,8 @@
             </div>
             
             <h3>自定义按钮</h3>`
-            +UI.zdyBtnsetui()+
-           ` <h3>系统</h3>
+                + UI.zdyBtnsetui() +
+                ` <h3>系统</h3>
             `
         },
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id ="zml_name" style='width:80px' type="text" name="zml_name" value=""></span></div> <div class="setting-item">   <label for="zml_type"> 自命令类型： </label><select id="zml_type" style="width:80px"> <option value="0"> 插件原生 </option> <option value="1"> Raidjs流程 </option> <option value="2"> JS原生 </option> </select> </div> <div class="setting-item"> <label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></div> <div class="setting-item"><textarea class="settingbox hide zdy-box"style="display: inline-block;"id='zml_info'></textarea></div> <div class="item-commands"><span class="getSharezml"> 查询分享 </span> <span class="editadd"> 保存 </span> <span class="editdel"> 删除 </span> </div> <div class="item-commands" id="zml_show"></div> </div> `,
@@ -5444,7 +5451,7 @@
                     G.skills = data.skills;
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
-                        if (data.distime) {}
+                        if (data.distime) { }
                         G.cds.set(data.id, true);
                         var _id = data.id;
                         setTimeout(function () {
