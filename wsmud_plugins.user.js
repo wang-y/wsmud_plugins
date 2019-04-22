@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.288
+// @version      0.0.31.289
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4264,6 +4264,13 @@
                 var html = UI.zdybtnui();
                 $('.WG_button').remove();
                 $(".WG_log").after(html);
+                let keyitem = ["Q", "W", "E", "R", "T", "Y"];
+            
+                for(let i = 0 ; i<keyitem.length;i++){
+                    $(`#keyin${keyitem[i]}`).on('click',function(){
+                        WG.zdybtnfunc(i);
+                    });
+                }
                 $(".auto_perform").on("click", WG.auto_preform_switch);
                 $(".cmd_echo").on("click", WG.cmd_echo_button);
             } else if (type == 'off') {
@@ -4965,7 +4972,7 @@
             let keyitem = ["Q", "W", "E", "R", "T", "Y"];
             let i = 0;
             for (let item of zdy_btnlist) {
-                ui = ui + ` <span class='zdy-item'>${item.name}(${keyitem[i]})</span>`;
+                ui = ui + ` <span class='zdy-item' id = 'keyin${keyitem[i]}'>${item.name}(${keyitem[i]})</span>`;
                 i = i + 1;
             }
             return ui + `<span class="zdy-item auto_perform" style="float:right;"> 自动攻击 </span>
