@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.293
+// @version      0.0.31.294
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1205,14 +1205,6 @@
                 background-size:100% 100%;
                 -moz-background-size:100% 100%;} `);
             }
-            $(".sm_button").on("click", WG.sm_button);
-            $(".go_yamen_task").on("click", WG.go_yamen_task);
-            $(".kill_all").on("click", WG.kill_all);
-            $(".get_all").on("click", WG.get_all);
-            $(".sell_all").on("click", WG.clean_all);
-            $(".zdwk").on("click", WG.zdwk);
-            $(".auto_perform").on("click", WG.auto_preform_switch);
-            $(".cmd_echo").on("click", WG.cmd_echo_button);
 
 
             setTimeout(() => {
@@ -4270,6 +4262,8 @@
             }
             if (inzdy_btn) {
                 WG.zdy_btnshow();
+            }else{
+                WG.zdy_btnshow('off');
             }
         },
         zdy_btnshow: function (type = 'on') {
