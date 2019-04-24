@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.294
+// @version      0.0.31.295
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1210,7 +1210,6 @@
             setTimeout(() => {
                 role = role;
                 var logintext = '';
-                document.title = role + "-MUD游戏-武神传说";
                 L.msg(`欢迎使用 ${welcome} 版本号${GM_info.script.version}`);
                 KEY.do_command("showtool");
                 KEY.do_command("pack");
@@ -1270,6 +1269,10 @@
                     };
                     WG.receive_message(timeTips);
                 }, 1000);
+                //标题监听
+                document.addEventListener('visibilitychange', function () {
+                    document.hidden ? newtext() : clearTimeout(timerId), document.title = oldTitle;
+                });
             }, 1000);
         },
         update_goods_id: function () {
@@ -4357,6 +4360,13 @@
 
             if (silence == "开") {
                 if (data.type == 'state') {
+                    let title =  "-MUD游戏-武神传说";
+                    let state = data.state;
+                    if (data.state == null) {
+                        state = '空闲'
+                    }
+                    document.title = `${role}<${state}> ${title}`;
+                    oldTitle = document.title;
                     if (data.silence == undefined) {
                         if (data.desc != []) {
                             data.desc = [];
@@ -4368,6 +4378,7 @@
                             return;
                         }
                     }
+
                 }
                 if (data.type == 'text') {
                     let pdata = data.msg;
@@ -5156,7 +5167,7 @@
                 <div class="setting-item" >
                 <div class="item-commands"><span class="backup_btn">备份到云</span><span class="load_btn">加载云配置</span></div>
             </div>
-            
+
             <h3>自定义按钮</h3>`
                 + UI.zdyBtnsetui() +
                 ` <h3>系统</h3>
@@ -5834,6 +5845,19 @@
         }
 
     };
+    var timerId;
+    var oldTitle;
+    function newtext() {
+        clearTimeout(timerId)
+        var text = document.title;
+        if(text=='undefined'){
+           return;
+        }
+        document.title = text.substring(1, text.length) + text.substring(0, 1)
+        text = document.title.substring(0, text.length)
+        timerId = setTimeout(function(){newtext()}, 500)
+    }
+
     $(document).ready(function () {
         $('head').append('<link href="https://s1.pstatp.com/cdn/expire-1-y/jquery-contextmenu/2.6.3/jquery.contextMenu.min.css" rel="stylesheet">');
         $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
@@ -5873,6 +5897,7 @@
                 y: 1
             });
         });
+
         $.contextMenu({
             selector: '.container',
             items: {
