@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.296
+// @version      0.0.31.297
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5657,8 +5657,8 @@
                     if (data.msg.indexOf("恭喜你得到") >= 0 ||
                         (data.msg.indexOf("获得") >= 0 &&
                             data.msg.indexOf("经验") == -1) ||
-                        data.msg.indexOf("你找到") >= 0 ||
-                        data.msg.indexOf("你从") >= 0 ||
+                        data.msg.indexOf("你找到") == 0 ||
+                        data.msg.indexOf("你从") == 0 ||
                         data.msg.indexOf("得到") >= 0) {
                         messageAppend(data.msg);
                     }
