@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.297
+// @version      0.0.31.298
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4403,6 +4403,7 @@
                     data.k = 'knva';
                     let p = deepCopy(msg);
                     p.data = JSON.stringify(data);
+                    WG.run_hook(data.type, data);
                     ws_on_message.apply(this, [p]);
                     return;
                 }
@@ -4413,6 +4414,7 @@
                 data.k = 'knva';
                 let p = deepCopy(msg);
                 p.data = JSON.stringify(data);
+                WG.run_hook(data.type, data);
                 ws_on_message.apply(this, [p]);
                 return;
             }
@@ -4423,6 +4425,7 @@
                 data.k = 'knva';
                 let p = deepCopy(msg);
                 p.data = JSON.stringify(data);
+                WG.run_hook(data.type, data);
                 ws_on_message.apply(this, [p]);
                 return;
             }
