@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.299
+// @version      0.0.32.01
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -133,14 +133,14 @@
                         window.open("https://greasyfork.org/zh-CN/scripts/375851-wsmud-raid ", '_blank').location;
                     }
                 }
-                if(text.indexOf('drop')==0){
-                    var itemids =  text.split(' ');
-                    var itemid = itemids[itemids.length-1];
-                    WG.getItemNameByid(itemid,function(name){
-                        if(lock_list.indexOf(name)>=0){
+                if (text.indexOf('drop') == 0) {
+                    var itemids = text.split(' ');
+                    var itemid = itemids[itemids.length - 1];
+                    WG.getItemNameByid(itemid, function (name) {
+                        if (lock_list.indexOf(name) >= 0) {
                             messageAppend(`已锁物品${name},无法丢弃`);
                             return;
-                        }else{
+                        } else {
                             ws.send(text);
                         }
                     })
@@ -630,6 +630,12 @@
         1: [],
         2: [],
         3: []
+    };
+    //{'unarmed':'','force':'','dodge':'','sword':'','blade':'','club':'','staff':'','whip':'','parry':''}
+    var skilllist = {
+        1: {},
+        2: {},
+        3: {}
     };
     //自动施法黑名单
     var unauto_pfm = '';
@@ -2069,7 +2075,7 @@
                         }
                         //丢弃
                         if (WG.inArray(data.items[i].name, drop_list) && drop && (data.items[i].name.indexOf("★") == -1 || data.items[i].name.indexOf("☆") == -1)) {
-                            if (lock_list.indexOf(data.items[i].name)>=0){continue;}
+                            if (lock_list.indexOf(data.items[i].name) >= 0) { continue; }
                             if (data.items[i].count == 1) {
                                 dropcmds.push("drop " + data.items[i].id);
                             } else {
@@ -2116,10 +2122,10 @@
                 messageAppend("<hio>命令代码显示</hio>");
             }
         },
-        getItemNameByid:(id,callback)=>{
-            packData.forEach(function(item){
-                if(item!=0){
-                    if(item.id==id){
+        getItemNameByid: (id, callback) => {
+            packData.forEach(function (item) {
+                if (item != 0) {
+                    if (item.id == id) {
                         callback(item.name);
                         return;
                     }
@@ -2160,7 +2166,7 @@
         },
         dellock: (itemname) => {
             lock_list.remove(itemname);
-            zdy_item_lock  = lock_list.join(',');
+            zdy_item_lock = lock_list.join(',');
             GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
 
             $('#lock_info').val(zdy_item_lock);
@@ -2184,15 +2190,15 @@
             $('#store_fenjie_info').val(zdy_item_fenjie);
         },
         adddrop: (itemname) => {
-            if (itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0){
+            if (itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0) {
                 messageAppend("高级物品,不添加整理时丢弃" + itemname);
                 return;
             }
-                if (zdy_item_drop == "") {
-                    zdy_item_drop = itemname;
-                } else {
-                    zdy_item_drop = zdy_item_drop + "," + itemname;
-                }
+            if (zdy_item_drop == "") {
+                zdy_item_drop = itemname;
+            } else {
+                zdy_item_drop = zdy_item_drop + "," + itemname;
+            }
             GM_setValue(role + "_zdy_item_drop", zdy_item_drop);
             if (zdy_item_drop) {
                 drop_list = zdy_item_drop.split(",");
@@ -2909,45 +2915,93 @@
         saveRoomstate(data) {
             roomData = data.items;
         },
-
+        haspack: function (name, callback) {
+            WG.Send('pack');
+            for (let item of packData) {
+                if (item.name.indexOf(name) >= 0) {
+                    callback(item.id);
+                    return;
+                }
+            }
+            callback('');
+        },
         eqx: null,
-        eqhelper(type) {
+        eqhelper(type, enaskill = 0) {
             if (type == undefined || type == 0 || type > eqlist.length) {
                 return;
             }
             if (eqlist == null || eqlist[type] == "") {
                 messageAppend("套装未保存,保存当前装备作为套装" + type + "!", 1);
-                this.eqx = WG.add_hook("dialog", (data) => {
+                WG.eqx = WG.add_hook("dialog", (data) => {
                     if (data.dialog == "pack" && data.eqs != undefined) {
                         eqlist[type] = data.eqs;
                         GM_setValue(role + "_eqlist", eqlist);
                         messageAppend("套装" + type + "保存成功!", 1);
-                        WG.remove_hook(this.eqx);
+                        WG.remove_hook(WG.eqx);
+                    }
+                    if (data.dialog == 'skills' && data.items != null) {
+                        var nowskill = { 'throwing': '', 'unarmed': '', 'force': '', 'dodge': '', 'sword': '', 'blade': '', 'club': '', 'staff': '', 'whip': '', 'parry': '' };
+                        for (let item of data.items) {
+                            if (nowskill[item.id] != null) {
+                                if (item.enable_skill == null) {
+                                    nowskill[item.id] = 'none';
+                                } else {
+                                    nowskill[item.id] = item.enable_skill;
+                                }
+                            }
+                        }
+                        skilllist[type] = nowskill;
+                        GM_setValue(role + "_skilllist", skilllist);
+                        messageAppend("技能" + type + "保存成功!", 1);
                     }
                 });
+                WG.Send("cha");
                 WG.Send("pack");
             } else {
+                if (WG.eqx != null) {
+                    WG.remove_hook(WG.eqx);
+                    WG.eqx = null;
+                }
                 eqlist = GM_getValue(role + "_eqlist", eqlist);
-                let p_cmds = "";
-                for (let i = 1; i < eqlist[type].length; i++) {
-                    if (eqlist[type][i] != null) {
-
-                        p_cmds += ("$wait 20;eq " + eqlist[type][i].id + ";");
+                skilllist = GM_getValue(role + "_skilllist", skilllist);
+                var p_cmds = "";
+                if (enaskill === 0) {
+                    for (let i = 1; i < eqlist[type].length; i++) {
+                        if (eqlist[type][i] != null) {
+                            p_cmds += ("$wait 20;eq " + eqlist[type][i].id + ";");
+                        }
+                    }
+                    if (eqlist[type][0] != null) {
+                        p_cmds += ("$wait 40;eq " + eqlist[type][0].id + ";");
                     }
                 }
-
-                if (eqlist[type][0] != null) {
-                    p_cmds += ("$wait 40;eq " + eqlist[type][0].id + ";");
+                if (enaskill === 1) {
+                    for (var key in skilllist[type]) {
+                        p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
+                    }
                 }
+                p_cmds = p_cmds + '$wait 40;look3 1';
+
+                WG.eqx = WG.add_hook('text', function (data) {
+                    if (data.type == 'text') {
+
+                        if (data.msg.indexOf('没有这个玩家') >= 0) {
+                            messageAppend("套装或技能装备成功" + type + "!", 1);
+                            WG.remove_hook(WG.eqx);
+                        }
+                    }
+                });
                 WG.SendCmd(p_cmds);
-                messageAppend("套装装备成功" + type + "!", 1);
             }
         },
         eqhelperdel: function (type) {
             eqlist = GM_getValue(role + "_eqlist", eqlist);
+            skilllist = GM_getValue(role + "_skilllist", skilllist);
             eqlist[type] = [];
+            skilllist[type] = {};
             GM_setValue(role + "_eqlist", eqlist);
-            messageAppend("清除套装" + type + "设置成功!", 1);
+            GM_setValue(role + "_skilllist", skilllist);
+            messageAppend("清除套装 技能" + type + "设置成功!", 1);
         },
         uneqall: function () {
             this.eqx = WG.add_hook("dialog", (data) => {
@@ -3944,6 +3998,7 @@
             _config.ks_pfm = GM_getValue(role + "_ks_pfm", ks_pfm);
             _config.ks_wait = GM_getValue(role + "_ks_wait", ks_wait);
             _config.eqlist = GM_getValue(role + "_eqlist", eqlist);
+            _config.skilllist = GM_getValue(role + "_skilllist", skilllist);
             _config.autoeq = GM_getValue(role + "_auto_eq", autoeq);
             _config.wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
             _config.sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
@@ -3988,6 +4043,7 @@
                     GM_setValue(role + "_ks_pfm", _config.ks_pfm);
                     GM_setValue(role + "_ks_wait", _config.ks_wait);
                     GM_setValue(role + "_eqlist", _config.eqlist);
+                    GM_setValue(role + "_skilllist", _config.skilllist);
                     GM_setValue(role + "_auto_eq", _config.autoeq);
                     GM_setValue(role + "_wudao_pfm", _config.wudao_pfm);
                     GM_setValue(role + "_sm_loser", _config.sm_loser);
@@ -5311,9 +5367,9 @@
         itemui: function (itemname) {
             let ui = `<div class="item-commands ">
             <span class = "addstore" cmd='$addstore ${itemname}'> 添加到存仓 </span>`;
-            if(lock_list.indexOf(itemname)>=0){
+            if (lock_list.indexOf(itemname) >= 0) {
                 ui = ui + `<span class = "dellock" cmd='$dellock ${itemname}'> 移除物品锁 </span>`;
-            }else{
+            } else {
                 ui = ui + `<span class = "addlock" cmd='$addlock ${itemname}'> 添加物品锁 </span>`;
             }
             if (itemname.indexOf("★") >= 0 || itemname.indexOf("☆") >= 0 || itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0) {
@@ -5321,10 +5377,10 @@
 
             } else {
                 ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span>`;
-                if (lock_list.indexOf(itemname)==-1){
+                if (lock_list.indexOf(itemname) == -1) {
                     ui = ui + `<span class = "adddrop" cmd='$adddrop ${itemname}'> 添加到丢弃 </span>`;
                 }
-                ui = ui +`</div>`;
+                ui = ui + `</div>`;
             }
             return ui;
         },
@@ -5817,6 +5873,7 @@
             ks_pfm = GM_getValue(role + "_ks_pfm", ks_pfm);
             ks_wait = GM_getValue(role + "_ks_wait", ks_wait);
             eqlist = GM_getValue(role + "_eqlist", eqlist);
+            skilllist = GM_getValue(role + "_skilllist", skilllist);
             autoeq = GM_getValue(role + "_auto_eq", autoeq);
             if (family == null) {
                 family = $('.role-list .select').text().substr(0, 2)
@@ -6062,9 +6119,15 @@
                     name: "换装设置",
                     "items": {
                         "xx0": {
-                            name: "套装1设定或装备",
+                            name: "套装1设或装",
                             callback: function (key, opt) {
                                 WG.eqhelper(1);
+                            },
+                        },
+                        "xxx0": {
+                            name: "技能1设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(1, 1);
                             },
                         },
                         "xx1": {
@@ -6074,9 +6137,14 @@
                             },
                         },
                         "yy0": {
-                            name: "套装2设定或装备",
+                            name: "套装2设或装",
                             callback: function (key, opt) {
                                 WG.eqhelper(2);
+                            },
+                        }, "yyy1": {
+                            name: "技能2设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(2, 1);
                             },
                         },
                         "yy1": {
@@ -6086,9 +6154,14 @@
                             },
                         },
                         "zz0": {
-                            name: "套装3设定或装备",
+                            name: "套装3设或备",
                             callback: function (key, opt) {
                                 WG.eqhelper(3);
+                            },
+                        }, "zzz1": {
+                            name: "技能3设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(3, 1);
                             },
                         },
                         "zz1": {
