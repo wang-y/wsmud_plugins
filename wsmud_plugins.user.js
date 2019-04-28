@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.31.298
+// @version      0.0.31.299
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -28,6 +28,12 @@
             return false;
         }
         this.splice(dx, 1);
+    };
+    Array.prototype.remove = function (val) {
+        var index = this.indexOf(val);
+        if (index > -1) {
+            this.splice(index, 1);
+        }
     };
     String.prototype.replaceAll = function (s1, s2) {
         return this.replace(new RegExp(s1, "gm"), s2);
@@ -126,6 +132,19 @@
                         messageAppend("插件未安装,请访问 https://greasyfork.org/zh-CN/scripts/375851-wsmud-raid 下载并安装");
                         window.open("https://greasyfork.org/zh-CN/scripts/375851-wsmud-raid ", '_blank').location;
                     }
+                }
+                if(text.indexOf('drop')==0){
+                    var itemids =  text.split(' ');
+                    var itemid = itemids[itemids.length-1];
+                    WG.getItemNameByid(itemid,function(name){
+                        if(lock_list.indexOf(name)>=0){
+                            messageAppend(`已锁物品${name},无法丢弃`);
+                            return;
+                        }else{
+                            ws.send(text);
+                        }
+                    })
+                    return;
                 }
                 switch (text) {
                     case 'sm':
@@ -247,6 +266,7 @@
     var packData = [];
     var eqData = [];
     var store_list = [];
+    var lock_list = [];
     var needfind = {
         "武当派-林间小径": ["go south"],
         "峨眉派-走廊": ["go north", "go south;go south", "go north;go east;go east"],
@@ -621,6 +641,8 @@
     var zml = [];
     //自定义存取
     var zdy_item_store = '';
+    //自定义锁
+    var zdy_item_lock = '';
     //自定义丢弃
     var zdy_item_drop = '';
     //自定义分解
@@ -2047,6 +2069,7 @@
                         }
                         //丢弃
                         if (WG.inArray(data.items[i].name, drop_list) && drop && (data.items[i].name.indexOf("★") == -1 || data.items[i].name.indexOf("☆") == -1)) {
+                            if (lock_list.indexOf(data.items[i].name)>=0){continue;}
                             if (data.items[i].count == 1) {
                                 dropcmds.push("drop " + data.items[i].id);
                             } else {
@@ -2093,6 +2116,16 @@
                 messageAppend("<hio>命令代码显示</hio>");
             }
         },
+        getItemNameByid:(id,callback)=>{
+            packData.forEach(function(item){
+                if(item!=0){
+                    if(item.id==id){
+                        callback(item.name);
+                        return;
+                    }
+                }
+            })
+        },
         addstore: (itemname) => {
             if (zdy_item_store == "") {
                 zdy_item_store = itemname;
@@ -2104,10 +2137,35 @@
             $('#store_info').val(zdy_item_store);
 
             if (zdy_item_store) {
-                store_list = store_list.concat(zdy_item_store.split(","));
+                store_list = zdy_item_store.split(",");
             }
 
             messageAppend("添加存仓成功" + itemname);
+        },
+        addlock: (itemname) => {
+            if (zdy_item_lock == "") {
+                zdy_item_lock = itemname;
+            } else {
+                zdy_item_lock = zdy_item_lock + "," + itemname;
+            }
+            GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
+
+            $('#lock_info').val(zdy_item_lock);
+
+            if (zdy_item_lock) {
+                lock_list = zdy_item_lock.split(",");
+            }
+
+            messageAppend("添加物品锁成功" + itemname);
+        },
+        dellock: (itemname) => {
+            lock_list.remove(itemname);
+            zdy_item_lock  = lock_list.join(',');
+            GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
+
+            $('#lock_info').val(zdy_item_lock);
+
+            messageAppend("解锁物品锁成功" + itemname);
         },
         addfenjieid: (itemname) => {
             if (zdy_item_fenjie == "") {
@@ -2119,21 +2177,25 @@
 
 
             if (zdy_item_fenjie) {
-                fenjie_list = fenjie_list.concat(zdy_item_fenjie.split(","));
+                fenjie_list = zdy_item_fenjie.split(",");
             }
             messageAppend("添加分解成功" + itemname);
 
             $('#store_fenjie_info').val(zdy_item_fenjie);
         },
         adddrop: (itemname) => {
-            if (zdy_item_drop == "") {
-                zdy_item_drop = itemname;
-            } else {
-                zdy_item_drop = zdy_item_drop + "," + itemname;
+            if (itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0){
+                messageAppend("高级物品,不添加整理时丢弃" + itemname);
+                return;
             }
+                if (zdy_item_drop == "") {
+                    zdy_item_drop = itemname;
+                } else {
+                    zdy_item_drop = zdy_item_drop + "," + itemname;
+                }
             GM_setValue(role + "_zdy_item_drop", zdy_item_drop);
             if (zdy_item_drop) {
-                drop_list = drop_list.concat(zdy_item_drop.split(","));
+                drop_list = zdy_item_drop.split(",");
             }
             messageAppend("添加丢弃成功" + itemname);
 
@@ -3551,8 +3613,8 @@
                                         return;
                                     }
                                     for (let roomItem of roomData) {
-                                        if(roomItem==0){return;}
-                                        if (roomItem.name.indexOf(keyworditem) >= 0 &&roomItem.p==undefined) {
+                                        if (roomItem == 0) { return; }
+                                        if (roomItem.name.indexOf(keyworditem) >= 0 && roomItem.p == undefined) {
                                             messageAppend("已触发" + v.name, 1);
                                             WG.SendCmd(v.send);
                                             return;
@@ -3894,6 +3956,7 @@
             _config.getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
             _config.zml = GM_getValue(role + "_zml", zml);
             _config.zdy_item_store = GM_getValue(role + "_zdy_item_store", zdy_item_store);
+            _config.zdy_item_lock = GM_getValue(role + "_zdy_item_lock", zdy_item_lock);
             _config.zdy_item_drop = GM_getValue(role + "_zdy_item_drop", zdy_item_drop);
             _config.zdy_item_fenjie = GM_getValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
             _config.ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
@@ -3937,6 +4000,7 @@
                     GM_setValue(role + "_getitemShow", _config.getitemShow);
                     GM_setValue(role + "_zml", _config.zml);
                     GM_setValue(role + "_zdy_item_store", _config.zdy_item_store);
+                    GM_setValue(role + "_zdy_item_lock", _config.zdy_item_lock);
                     GM_setValue(role + "_zdy_item_drop", _config.zdy_item_drop);
                     GM_setValue(role + "_zdy_item_fenjie", _config.zdy_item_fenjie);
                     GM_setValue(role + "_ztjk", _config.ztjk_item);
@@ -4052,6 +4116,11 @@
                     zdy_item_store = $('#store_info').val();
                     GM_setValue(role + "_zdy_item_store", zdy_item_store);
                     store_list = zdy_item_store.split(",");
+                });
+                $('#lock_info').change(function () {
+                    zdy_item_lock = $('#lock_info').val();
+                    GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
+                    lock_list = zdy_item_lock.split(",");
                 });
                 $('#store_drop_info').change(function () {
                     zdy_item_drop = $('#store_drop_info').val();
@@ -4178,6 +4247,8 @@
             $('#getitemShow').val(getitemShow);
             $('#unauto_pfm').val(unauto_pfm);
             $('#store_info').val(zdy_item_store);
+
+            $('#lock_info').val(zdy_item_lock);
             $('#store_drop_info').val(zdy_item_drop);
             $('#store_fenjie_info').val(zdy_item_fenjie);
             $('#auto_command').val(auto_command);
@@ -4262,7 +4333,7 @@
             }
             if (inzdy_btn) {
                 WG.zdy_btnshow();
-            }else{
+            } else {
                 WG.zdy_btnshow('off');
             }
         },
@@ -4900,6 +4971,14 @@
             cmds = T.recmd(idx, cmds);
             WG.addstore(n);
             WG.SendCmd(cmds);
+        }, addlock: function (idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.addlock(n);
+            WG.SendCmd(cmds);
+        }, dellock: function (idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.dellock(n);
+            WG.SendCmd(cmds);
         },
         addfenjieid: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
@@ -5125,6 +5204,10 @@
                 <textarea class="settingbox hide zdy-box" id="store_info" style="display: inline-block;">  </textarea>
                     </div>
                 <div class="setting-item" >
+                <label for="lock_info"> 已锁物品名称(使用半角逗号分隔):</label>
+                <textarea class="settingbox hide zdy-box" id="lock_info" style="display: inline-block;">  </textarea>
+                    </div>
+                <div class="setting-item" >
                 <label for="store_drop_info"> 输入自动丢弃的物品名称(使用半角逗号分隔):</label>
                 <textarea class="settingbox hide zdy-box" id="store_drop_info" style="display: inline-block;">  </textarea>
                         </div>
@@ -5228,13 +5311,22 @@
         itemui: function (itemname) {
             let ui = `<div class="item-commands ">
             <span class = "addstore" cmd='$addstore ${itemname}'> 添加到存仓 </span>`;
-            if (itemname.indexOf("★") >= 0 || itemname.indexOf("☆") >= 0) {
-                ui = ui + `</div>`;
-                return ui;
-            } else {
-                ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span><span class = "adddrop" cmd='$adddrop ${itemname}'> 添加到丢弃 </span></div>`;
-                return ui;
+            if(lock_list.indexOf(itemname)>=0){
+                ui = ui + `<span class = "dellock" cmd='$dellock ${itemname}'> 移除物品锁 </span>`;
+            }else{
+                ui = ui + `<span class = "addlock" cmd='$addlock ${itemname}'> 添加物品锁 </span>`;
             }
+            if (itemname.indexOf("★") >= 0 || itemname.indexOf("☆") >= 0 || itemname.indexOf("hio") >= 0 || itemname.indexOf("hir") >= 0 || itemname.indexOf("ord") >= 0) {
+                ui = ui + `</div>`;
+
+            } else {
+                ui = ui + `<span class = "addfenjieid"  cmd='$addfenjieid ${itemname}'> 添加到分解 </span>`;
+                if (lock_list.indexOf(itemname)==-1){
+                    ui = ui + `<span class = "adddrop" cmd='$adddrop ${itemname}'> 添加到丢弃 </span>`;
+                }
+                ui = ui +`</div>`;
+            }
+            return ui;
         },
 
     }
@@ -5747,10 +5839,14 @@
             }
             zml = GM_getValue(role + "_zml", zml);
             zdy_item_store = GM_getValue(role + "_zdy_item_store", zdy_item_store);
+            zdy_item_lock = GM_getValue(role + "_zdy_item_lock", zdy_item_lock);
             zdy_item_drop = GM_getValue(role + "_zdy_item_drop", zdy_item_drop);
             zdy_item_fenjie = GM_getValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
             if (zdy_item_store) {
                 store_list = store_list.concat(zdy_item_store.split(","))
+            }
+            if (zdy_item_lock) {
+                lock_list = lock_list.concat(zdy_item_lock.split(","))
             }
             if (zdy_item_drop) {
                 drop_list = drop_list.concat(zdy_item_drop.split(","))
