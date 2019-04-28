@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.02
+// @version      0.0.32.03
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4701,7 +4701,7 @@
             if (n == "0") {
                 WG.uneqall();
             } else {
-                WG.eqhelper(n,1);
+                WG.eqhelper(n, 1);
             }
             await WG.sleep(100);
             WG.SendCmd(cmds);
@@ -6234,24 +6234,6 @@
                                 WG.go("扬州城-擂台");
                             },
                         },
-                        "mp3": {
-                            name: "帮派",
-                            callback: function (key, opt) {
-                                WG.go("扬州城-帮派");
-                            },
-                        },
-                        "mp4": {
-                            name: "武道",
-                            callback: function (key, opt) {
-                                WG.go("武道塔");
-                            },
-                        },
-                        "mp5": {
-                            name: "矿山",
-                            callback: function (key, opt) {
-                                WG.go("扬州城-矿山");
-                            },
-                        },
                         "mp6": {
                             name: "药铺",
                             callback: function (key, opt) {
@@ -6265,6 +6247,7 @@
                                 WG.Send("liaoshang");
                             },
                         }
+
                     },
                 },
                 "门派传送": {
