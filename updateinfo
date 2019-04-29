@@ -125,7 +125,7 @@ msg发送人 站牌
 ### 自命令使用说明
 目前支持以下自命令
 
-$findPlayerByName 或 $pname
+#### $findPlayerByName 或 $pname
 返回一个房间内指定名称的绝对ID
 
 例如
@@ -139,48 +139,53 @@ $findItem
 例如
 
 drop $findItem("<hic>养精丹</hic>")
-$wait
+
+#### $wait
 等待x 毫秒
 
 例如
 
 $wait 10000
-$killall
+
+#### $killall
 一键叫杀
 
-$getall
+#### $getall
 拾取
 
-$cleanall
+#### $cleanall
 清包
 
-$to
+#### $to
 传送
 
 例如
 
 $to 住房
-$eq
+
+
+#### $eq
 换套装, $eq 0 时为脱所有装备
 
 例如
 
 $eq 1 
-$killw
+
+#### $killw
 击杀完成后才会继续执行命令
 
 例如
 
 $killw 武道塔守护;go up
 
-$eqw
+#### $eqw
 装备物品后才会继续执行命令,注意,此处物品名称 应为完整物品名称,包括强化等级,物品品质代码
 
 例如
 
 $eqw <hiy>铁镐</hiy>;go up
 
-$usezml
+#### $usezml
 使用已经设置好的自命令
 
 语法
@@ -191,7 +196,7 @@ $usezml 自命令名称;
 
 $usezml ifuleu;go up
 
-$waitpfm
+#### $waitpfm
 使用技能,直到使用出来再继续操作
 
 语法
@@ -202,7 +207,7 @@ $waitpfm 技能代码;
 
 $waitpfm unarmed.zhen;test ifuleyou
 
-$startjk 和 $stopjk
+#### $startjk 和 $stopjk
 启动或取消监控
 
 语法
@@ -213,7 +218,7 @@ $startjk 监控名;
 
 $startjk ifuleyou;
 
-$startpfm 和 $stoppfm
+#### $startpfm 和 $stoppfm
 启动或取消自动出招
 
 语法
@@ -224,7 +229,7 @@ $startpfm;
 
 $startpfm;
 
-$startautopfm 和 $stopautopfm
+#### $startautopfm 和 $stopautopfm
 启动或取消指定技能的脚本自动出招
 
 语法
@@ -234,31 +239,45 @@ $startautopfm force.tu,unarmed.zhen;
 例如
 
 $startautopfm force.tu,unarmed.zhen;
-$sm
+
+#### $sm
 师门任务
 
-$yamen
+#### $yamen
 只能单独使用的追捕命令
 
 建议再监控中监控 enapfm 夺魄或者其他秒逃犯的技能 自动触发 $yamen 命令
 
-$zdwk
+#### $zdwk
 自动挖矿 武帝为自动修炼
 
-$stopallauto $startallauto
+#### $stopallauto $startallauto
 本函数仅用于启动OR暂停自动boss及喜宴,若系统自动boss及喜宴未开自动,则无效
 
-$sellall
+#### $sellall
 用于整理背包
 
-$fenjie
+#### $fenjie
 用于分解设置中的分解物品
 
-$store
+#### $store
 用于自动储存物品
 
-$drop
+#### $drop
 用于自动丢弃物品
+
+#### $eqskill
+用于切换技能套装  
+
+#### $cls
+清理log输出
+
+#### $clsSakada
+清空伤害输出统计
+
+
+
+
 
 ### FAQ
 ### 关于如何在自命令中设置自动出招
