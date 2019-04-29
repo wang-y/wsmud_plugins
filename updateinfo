@@ -1,5 +1,6 @@
-脚本需要使用tampermonkey 插件
-如果安装乱码,可以访问 github下载
+### 脚本需要使用tampermonkey 插件
+
+如果安装乱码,可以访问 github https://github.com/knva/wsmud_plugins/raw/master/wsmud_plugins.user.js 下载
 
 第一次使用,请先点击右键,选择,设置,然后初始化ID ,若初始化失败,请重新安装,或者更换浏览器
 
@@ -20,13 +21,15 @@ wsmud_funny 趣味界面插件https://greasyfork.org/zh-CN/scripts/380709-wsmud-
 
 自命令例子:
 用于新手任务
-
+```
  分享码 zml44bbb8dbea398dee545c667bd0837b24
-**语法与%% 语法说明
-** 为获取系统id中的物品id
-例如 
-*养精丹*
+```
 
+### **语法与%% 语法说明
+ ** 为获取系统id中的物品id
+例如 
+```
+*养精丹*
 %% 为获取系统中npc的id
 例如
 %店小二%
@@ -38,6 +41,7 @@ buy 1 *布衣* from %杂货铺老板 杨永福%
 
 buy 1 ur1b35636d6 from 2www35636d6
 你从杨永福购买了一件布衣。
+```
 
 
 状态监控使用说明
@@ -51,22 +55,23 @@ Buff层数为设置buff最高层数,配合action=refresh,仅限于本人监控,�
 血量监控,请使用hp百分比|mp百分比 的方式设置关键字 例如 90|90 就是生命值 90%以下 会触发,内力 90%以下也会触发
 
 血量监控其他人时,请输入其他人的名字,目前仅支持一个人名
-
+```
 例子1: 补无招
 类型 status
 动作 remove
 关键字 weapon
 触发对象 本人
 命令: perform sword.wu
-
-
+```
+```
 例子2: 监控文本
 类型 text
 动作 
 关键字  宝石|玄晶
 触发对象
 命令: 自行填写
-
+```
+```
 例子3: 监控msg
 类型 msg
 动作
@@ -74,35 +79,40 @@ Buff层数为设置buff最高层数,配合action=refresh,仅限于本人监控,�
 触发对象
 msg发送人 站牌
 命令: $zdwk
-
+```
+```
 例子4:监控物品获取
 类型 dialog
 动作
 关键字 养精丹
 触发对象
 命令: use $findItem("<hig>养精丹</hig>");
-
+```
+```
 例子4.1:监控物品获取并使用id
 类型 dialog
 动作
 关键字 布鞋
 触发对象
 命令: drop {id};
-
+```
+```
 例子5: 监控房间
 类型 room
 动作
 关键字 豪宅-练功房
 触发对象
 命令: enable tiannanbu;
-
+```
+```
 例子6: 监控人物刷新
 类型 itemadd
 动作
 关键字 十夫长
 触发对象
 命令: $killall;
-
+```
+```
 例子6.1: 监控人物刷新并使用id
 类型 itemadd
 动作
@@ -110,8 +120,9 @@ msg发送人 站牌
 触发对象
 命令: get all from {id};
 增加 背包监控的物品id替换 使用方法 dialog 监控 执行命令 drop {id}; 即可丢弃获得的物品
+```
 
-自命令使用说明
+### 自命令使用说明
 目前支持以下自命令
 
 $findPlayerByName 或 $pname
