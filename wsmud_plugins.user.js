@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.03
+// @version      0.0.32.04
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5308,7 +5308,7 @@
                 <div class="setting-item" >
                 <div class="item-commands"><span class="backup_btn">备份到云</span><span class="load_btn">加载云配置</span></div>
             </div>
-            
+
             <h3>自定义按钮</h3>`
                 + UI.zdyBtnsetui() +
                 ` <h3>系统</h3>
@@ -6001,7 +6001,7 @@
 
     };
     $(document).ready(function () {
-        $('head').append('<link href="https://s1.pstatp.com/cdn/expire-1-y/jquery-contextmenu/2.6.3/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
         $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
         setTimeout(() => {
