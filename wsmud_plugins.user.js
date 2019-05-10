@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.04
+// @version      0.0.32.05
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4810,15 +4810,15 @@
                 if (!G.gcd && !G.cds.get(n)) {
                     WG.Send("perform " + n);
                     pfmnum++;
-                    if (G.cds.get(n)) {
+                    if (G.cds.get(n) && _flag) {
                         _flag = false;
                         WG.SendCmd(cmds);
                     }
-                    if (!G.in_fight) {
+                    if (!G.in_fight && _flag) {
                         _flag = false;
                         WG.SendCmd(cmds);
                     }
-                    if (pfmnum >= 1) {
+                    if (pfmnum >= 1 && _flag) {
                         _flag = false;
                         WG.SendCmd(cmds);
                     }
