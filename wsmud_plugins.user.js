@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.07
+// @version      0.0.32.08
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5375,6 +5375,7 @@
 
         },
         itemui: function (itemname) {
+            itemname = itemname.toLowerCase();
             let ui = `<div class="item-commands ">
             <span class = "addstore" cmd='$addstore ${itemname}'> 添加到存仓 </span>`;
             if (lock_list.indexOf(itemname) >= 0) {
