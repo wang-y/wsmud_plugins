@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.05
+// @version      0.0.32.06
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5703,11 +5703,11 @@
                     packData.push(item)
                 }
                 if (data.dialog == 'score') {
-                    if (!G.level) {
+                    if (!G.level && (data.level != null)) {
                         G.level = data.level;
                         console.log("欢迎" + G.level);
                     }
-                    if (!G.family) {
+                    if (!G.family && (data.family!=null)) {
                         G.pfamily = data.family;
                         G.family = data.family.replaceAll('派', '');
                         console.log(G.family);
