@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.06
+// @version      0.0.32.07
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1391,7 +1391,7 @@
                     var stores = data.stores;
                     store_list = [];
                     for (let store of stores) {
-                        store_list.push(store.name);
+                        store_list.push(store.name.toLowerCase());
                     }
                     zdy_item_store = store_list.join(',');
                     $('#store_info').val(zdy_item_store);
@@ -1802,7 +1802,7 @@
             setTimeout(() => {
                 let storestatus = false;
                 $(".obj-item").each(function () {
-                    if ($(this).html().indexOf(good) != -1) {
+                    if ($(this).html().toLowerCase().indexOf(good) != -1) {
                         storestatus = true;
                         var id = $(this).attr("obj")
                         WG.Send("qu 1 " + id);
@@ -2021,7 +2021,7 @@
                     for (let i = 0; i < data.stores.length; i++) {
                         let s = null;
                         for (let j = 0; j < stores.length; j++) {
-                            if (stores[j].name == data.stores[i].name) {
+                            if (stores[j].name == data.stores[i].name.toLowerCase()) {
                                 s = stores[j];
                                 break;
                             }
@@ -2041,12 +2041,12 @@
                     for (var i = 0; i < data.items.length; i++) {
                         //仓库
                         if (store_list.length != 0) {
-                            if (WG.inArray(data.items[i].name, store_list) && store) {
+                            if (WG.inArray(data.items[i].name.toLowerCase(), store_list) && store) {
                                 if (data.items[i].can_eq) {
                                     //装备物品，不能叠加，计算总数
                                     let store = null;
                                     for (let j = 0; j < stores.length; j++) {
-                                        if (stores[j].name == data.items[i].name) {
+                                        if (stores[j].name == data.items[i].name.toLowerCase()) {
                                             store = stores[j];
                                             break;
                                         }
@@ -2074,8 +2074,8 @@
                             }
                         }
                         //丢弃
-                        if (WG.inArray(data.items[i].name, drop_list) && drop && (data.items[i].name.indexOf("★") == -1 || data.items[i].name.indexOf("☆") == -1)) {
-                            if (lock_list.indexOf(data.items[i].name) >= 0) { continue; }
+                        if (WG.inArray(data.items[i].name.toLowerCase(), drop_list) && drop && (data.items[i].name.indexOf("★") == -1 || data.items[i].name.indexOf("☆") == -1)) {
+                            if (lock_list.indexOf(data.items[i].name.toLowerCase()) >= 0) { continue; }
                             if (data.items[i].count == 1) {
                                 dropcmds.push("drop " + data.items[i].id);
                             } else {
@@ -2086,7 +2086,7 @@
 
                         }
                         //分解
-                        if (fenjie_list.length && WG.inArray(data.items[i].name, fenjie_list) && data.items[i].name.indexOf("★") == -1 && fenjie) {
+                        if (fenjie_list.length && WG.inArray(data.items[i].name.toLowerCase(), fenjie_list) && data.items[i].name.indexOf("★") == -1 && fenjie) {
                             cmds.push("fenjie " + data.items[i].id);
                             cmds.push("$wait 200");
                             messageAppend("<hio>包裹整理</hio>" + data.items[i].name + "分解");
