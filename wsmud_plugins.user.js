@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.08
+// @version      0.0.32.09
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2001,6 +2001,88 @@
                 WG.go("扬州城-钱庄");
             }
         },
+        sort_all_bag: function () {
+
+            var storeset = [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+            ];
+            if (WG.sort_hook) {
+                messageAppend("<hio>背包排序</hio>运行中");
+                messageAppend("<hio>背包排序</hio>手动结束");
+                WG.remove_hook(WG.sort_hook);
+                WG.sort_hook = undefined;
+                return;
+            }
+            var sortCmd = "";
+            var getandstore = function (set) {
+
+                var cmds = [];
+                for (let s of set) {
+                    cmds.push("store " + s.count + " " + s.id + ";$wait 350;");
+                }
+                set = set.sort(function (a, b) {
+                    return a.name.length - b.name.length;
+                })
+                for (let s of set) {
+                    cmds.push("qu " + s.count + " " + s.id + ";$wait 350;");
+                }
+                return cmds.join("");
+            }
+            WG.sort_hook = WG.add_hook(['dialog', 'text'], (data) => {
+                if (data.type == 'dialog' && data.dialog == 'pack') {
+                    if (data.items == undefined) {
+                        return;
+                    }
+                    for (let store of data.items) {
+                        if (store.name.toLocaleLowerCase().indexOf('wht') >= 0) {
+                            storeset[0].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('hig') >= 0) {
+                            storeset[1].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('hic') >= 0) {
+                            storeset[2].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('hiy') >= 0) {
+                            storeset[3].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('hiz') >= 0) {
+                            storeset[4].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('hio') >= 0) {
+                            storeset[5].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('red') >= 0) {
+                            storeset[6].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('hir') >= 0) {
+                            storeset[7].push(store);
+                        } else if (store.name.toLocaleLowerCase().indexOf('ord') >= 0) {
+                            storeset[8].push(store);
+                        }
+                    }
+                    for (let item of storeset) {
+                        sortCmd += getandstore(item);
+                    }
+                    sortCmd += "look3 1";
+                    WG.SendCmd(sortCmd);
+                } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
+                    messageAppend("<hio>背包排序</hio>完成,执行后请刷新并重新登录");
+                    WG.remove_hook(WG.sort_hook);
+                    WG.sort_hook = undefined;
+                }
+
+            });
+            messageAppend("<hio>背包排序</hio>开始");
+            if (WG.at("扬州城-钱庄")) {
+                WG.Send("pack");
+                KEY.dialog_close();
+                //WG.Send("store");
+            } else {
+                WG.go("扬州城-钱庄");
+            }
+        },
         packup_listener: null,
         sell_all: function (store = 1, fenjie = 1, drop = 1) {
             if (WG.packup_listener) {
@@ -2515,6 +2597,7 @@
             $("#updatestore").off("click");
             $("#cleandps").off('click');
             $("#sortstore").off("click");
+            $("#sortbag").off("click");
             $("#dsrw").off("click");
             $("#zdybtnset").off('click');
             $("#qnjs_btn").on('click', function () {
@@ -2549,6 +2632,9 @@
             });
             $("#sortstore").on("click", function () {
                 WG.sort_all();
+            });
+            $("#sortbag").on("click", function () {
+                WG.sort_all_bag();
             });
             $("#dsrw").on("click", function () {
                 WG.dsj();
@@ -5317,7 +5403,7 @@
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id ="zml_name" style='width:80px' type="text" name="zml_name" value=""></span></div> <div class="setting-item">   <label for="zml_type"> 自命令类型： </label><select id="zml_type" style="width:80px"> <option value="0"> 插件原生 </option> <option value="1"> Raidjs流程 </option> <option value="2"> JS原生 </option> </select> </div> <div class="setting-item"> <label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></div> <div class="setting-item"><textarea class="settingbox hide zdy-box"style="display: inline-block;"id='zml_info'></textarea></div> <div class="item-commands"><span class="getSharezml"> 查询分享 </span> <span class="editadd"> 保存 </span> <span class="editdel"> 删除 </span> </div> <div class="item-commands" id="zml_show"></div> </div> `,
         zmlandztjkui: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="item-commands"> <span class="editzml"> 编辑自命令 </span> </div> <div class="item-commands"> <span class="editztjk"> 编辑自定义监控 </span> <div class="item-commands"> <span class="startzdjk"> 注入所有监控 </span> <span class="stopzdjk"> 暂停所有监控 </span> </div></div> <div class="item-commands" id="zml_show"></div> </div>`,
         ztjksetting: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="setting-item"> <label> 请打开插件首页,查看文档及例子,本人血量状态监控 请按如下规则输入关键字 90|90 这样监控的是hp 90% mp 90% 以下触发</label></div> <div class="setting-item"> <label for="ztjk_name"> 名称:</label><input id ="ztjk_name" style='width:80px' type="text" name="ztjk_name" value=""></div> <div class="setting-item"><label for="ztjk_type"> 类型(type):</label><select style='width:80px' id="ztjk_type"> <option value="status"> 状态(status) </option> <option value="text"> 文本(text) </option> <option value="msg"> 聊天(msg) </option> <option value="die"> 死亡(die) </option> <option value="itemadd"> 人物刷新(itemadd) </option> <option value="room"> 地图名与房间人物(room) </option> <option value="dialog"> 背包监控(dialog) </option> <option value="combat"> 战斗状态(combat) </option> <option value="sc"> 血量状态(sc) </option> <option value="enapfm"> 技能监控(enapfm) </option> <option value="dispfm"> 技能监控(dispfm) </option> </select></div> <div class="setting-item"><span id='actionp' style='display:block'><label for="ztjk_action"> 动作(action):</label><input id ="ztjk_action" style='width:80px' type="text" name="ztjk_action" value=""></span></div> <div class="setting-item"><span><label for="ztjk_keyword"> 关键字(使用半角 | 分割):</label><input id ="ztjk_keyword" style='width:80px' type="text" name="ztjk_keyword" value=""></span></div> <div class="setting-item"><span><label for="ztjk_ishave"> 触发对象: </label><select style='width:80px' id="ztjk_ishave"> <option value="0"> 其他人 </option> <option value="1"> 本人 </option> <option value="2"> 仅NPC </option> </select></span></div> <div class="setting-item"> <span id='senduserp' style='display:block'><label for="ztjk_senduser"> MSG/其他人名称(使用半角 | 分割):</label><input id ="ztjk_senduser" style="width:80px;" type="text" name="ztjk_senduser" value=""></span></div> <div class="setting-item"> <span style='display:block'><label> Buff层数:</label><input id ="ztjk_maxcount" style="width:80px;" type="text" name="ztjk_maxcount" value=""></span></div> <div class="setting-item"><span><label for="ztjk_send"> 输入自定义命令(用半角分号(;)分隔):</label></span></div> <div class="setting-item"> <textarea class="settingbox hide zdy-box"style="display: inline-block;"id='ztjk_send'></textarea></div> <div class="item-commands"><span class="ztjk_sharedfind"> 查询分享 </span> <span class="ztjk_editadd"> 保存 </span> <span class="ztjk_editdel"> 删除 </span></div> <div class="item-commands" id="ztjk_show"></div> <div class="item-commands" id="ztjk_set"></div> </div> `,
-        jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
+        jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='sortbag'>排序背包</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
         qnjsui: ` <div style="width:50%;float:left"> <div class="setting-item"> <span>潜能计算器</span></div> <div class="setting-item"><input type="number" id="c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="qnjs"> </div>`,
         khjsui: `<div style="width:50%;float:left"> <div class="setting-item"><span>开花计算器</span></div> <div class="setting-item"> <input type="number" id="nl" placeholder="当前内力" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="xg" placeholder="先天根骨" style="width:50%"></div> <div class="setting-item"> <input type="number" id="hg" placeholder="后天根骨" style="width:50%"></div> <div class="setting-item"> <input type="button" value="计算" id = "kaihua" style="width:50%" ></div> <div class="setting-item"> <label>人花分值：5000  地花分值：6500  天花分值：8000</label></div> </div>`,
         lyui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank"  href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank"  href="https://suqing.fun/wsmud/yaofang/">https://suqing.fun/wsmud/yaofang/</a> <div class="setting-item">  <span> <label for = "medicine_level"> 级别选择： </label><select style='width:80px' id="medicine_level"> <option value="1">绿色</option> <option value="2">蓝色</option> <option value="3">黄色</option> <option value="4">紫色</option> <option value="5">橙色</option> </select></span></div> <div class="setting-item"> <span><label for="medicint_info"> 输入使用的顺序(使用半角逗号分隔):</label></span></div> <div class="setting-item"><textarea class = "settingbox hide zdy-box" style = "display: inline-block;" id = 'medicint_info'>石楠叶,金银花,金银花,金银花,当归</textarea></div> <div class = "item-commands"> <span class = "startDev"> 开始 </span><span class = "stopDev"> 停止 </span> </div> </div>`,
