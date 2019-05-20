@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.10
+// @version      0.0.32.11
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5156,7 +5156,24 @@
             cmds = T.recmd(idx, cmds);
             messageAppend(n);
             WG.SendCmd(cmds);
+        },
+        tts:function(idx,n,cmds){
+            cmds = T.recmd(idx, cmds);
+            FakerTTS.playtts(n);
+            WG.SendCmd(cmds);
+        },
+        music:function(idx,n,cmds){
+            cmds = T.recmd(idx, cmds);
+            var music = new MusicBox({
+                loop: false, // 循环播放
+                musicText: '3· 2· 3· 6 - 6 6 6 5· 2· - 2· 2· - - 3· 2· 3· 5 - 5 5 3 5 5· - 2· - 2· 2·',  // 绿色
+                autoplay: 4, // 自动弹奏速度
+                type: 'square',  // 音色类型  sine|square|triangle|sawtooth
+                duration: 3  // 键音延长时间
+            }); 
+            WG.SendCmd(cmds);
         }
+        
 
     };
     var ProConsole = {
@@ -6087,6 +6104,18 @@
         }
 
     };
+    var FakerTTS = {
+
+        playurl:function(url){
+            var audio = new Audio(url);
+            audio.play();
+        },
+        playtts:function(text){
+            let url = `https://fanyi.baidu.com/gettts?lan=zh&text=${text}&spd=5&source=web`;
+            FakerTTS.playurl(url);
+        }
+
+    }
     class MusicBox {
         constructor(options) {
             let defaults = {
@@ -6144,11 +6173,13 @@
             }, 1000 / speed);
             return timer
         }
-    }
+    };
+
     $(document).ready(function () {
         $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
         $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
+       
         setTimeout(() => {
             var server = document.createElement('script');
             server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
@@ -6178,6 +6209,7 @@
         unsafeWindow.send_cmd = send_cmd;
         unsafeWindow.roomData = roomData;
         unsafeWindow.MusicBox = MusicBox;
+        unsafeWindow.FakerTTS = FakerTTS;
         $('.room-name').on('click', (e) => {
             e.preventDefault();
             $('.container').contextMenu({
