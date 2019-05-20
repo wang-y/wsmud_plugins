@@ -275,9 +275,24 @@ $startautopfm force.tu,unarmed.zhen;
 #### $clsSakada
 清空伤害输出统计
 
+#### $syso
+打印信息
+
+```
+
+$syso hello
+
+```
+
+#### $music
+播放<<绿色>>的音乐盒
 
 
-
+#### $tts
+播放文本转语音
+```
+$tts 门派战开始
+```
 
 ### FAQ
 ### 关于如何在自命令中设置自动出招
