@@ -3687,7 +3687,12 @@
                                 for (var keyworditem of keywords) {
                                     if (data.msg.indexOf(keyworditem) >= 0) {
                                         messageAppend("已触发" + v.name, 1);
-                                        WG.SendCmd(v.send);
+                                        if (data.msg) {
+                                            let p = v.send.replace("{content}", data.msg);
+                                            WG.SendCmd(p);
+                                        } else {
+                                            WG.SendCmd(v.send);
+                                        }
                                     }
                                 }
                                 break;
@@ -3696,7 +3701,12 @@
                                     for (var keyworditem of keywords) {
                                         if (data.content.indexOf(keyworditem) >= 0) {
                                             messageAppend("已触发" + v.name, 1);
-                                            WG.SendCmd(v.send);
+                                            if (data.content) {
+                                                let p = v.send.replace("{content}", data.content);
+                                                WG.SendCmd(p);
+                                            } else {
+                                                WG.SendCmd(v.send);
+                                            }
                                         }
                                     }
                                     return;
@@ -3707,7 +3717,12 @@
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
                                                 messageAppend("已触发" + v.name, 1);
-                                                WG.SendCmd(v.send);
+                                                if (data.content) {
+                                                    let p = v.send.replace("{content}", data.content);
+                                                    WG.SendCmd(p);
+                                                } else {
+                                                    WG.SendCmd(v.send);
+                                                }
                                             }
                                         }
                                     } else if ((item == "谣言" && data.ch == "rumor") ||
@@ -3717,7 +3732,12 @@
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
                                                 messageAppend("已触发" + v.name, 1);
-                                                WG.SendCmd(v.send);
+                                                if (data.content) {
+                                                    let p = v.send.replace("{content}", data.content);
+                                                    WG.SendCmd(p);
+                                                } else {
+                                                    WG.SendCmd(v.send);
+                                                }
                                             }
                                         }
                                     }
