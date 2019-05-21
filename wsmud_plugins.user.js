@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.11
+// @version      0.0.32.12
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2895,11 +2895,21 @@
                     }
                     WG.findboss(data, boss_name, function (bid) {
                         if (bid != -1) {
-                            next = 999;
+                            next=999;
                             WG.eqhelper(autoeq);
                             setTimeout(() => {
                                 WG.Send("kill " + bid);
                                 //WG.Send("select " + bid);
+                                if(!G.in_fight){
+                                    if(WG.at("逍遥派-地下石室")){
+                                        WG.Send('go up');
+                                        WG.Send("kill " + bid);
+                                    }
+                                    if (WG.at("武当派-林间小径")) {
+                                        WG.Send('go south');
+                                        WG.Send("kill " + bid);
+                                    }
+                                }
                                 next = 0;
                             }, Number(ks_pfm));
                         } else {
@@ -5170,10 +5180,10 @@
                 autoplay: 4, // 自动弹奏速度
                 type: 'square',  // 音色类型  sine|square|triangle|sawtooth
                 duration: 3  // 键音延长时间
-            }); 
+            });
             WG.SendCmd(cmds);
         }
-        
+
 
     };
     var ProConsole = {
@@ -6179,7 +6189,7 @@
         $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
         $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
-       
+
         setTimeout(() => {
             var server = document.createElement('script');
             server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
@@ -6539,10 +6549,10 @@
                 },
                 "调试BOSS": {
                     name: "调试BOSS",
-                    visible: false,
+                    visible: true,
                     callback: function (key, opt) {
                         WG.kksBoss({
-                            content: "听说枯荣大师出现在扬州城-广场一带。"
+                            content: "听说呼符出现在逍遥派-地下石室一带。"
                         });
                     },
                 },
