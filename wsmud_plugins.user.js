@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.12
+// @version      0.0.32.13
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2888,7 +2888,8 @@
             messageAppend("自动前往BOSS地点");
             WG.Send("stopstate");
             WG.go(boss_place);
-            this.ksboss = WG.add_hook(["items", "itemadd", "die"], function (data) {
+            setTimeout(() => {
+            WG.ksboss = WG.add_hook(["items", "itemadd", "die"], function (data) {
                 if (data.type == "items") {
                     if (!WG.at(boss_place)) {
                         return;
@@ -2900,16 +2901,6 @@
                             setTimeout(() => {
                                 WG.Send("kill " + bid);
                                 //WG.Send("select " + bid);
-                                if(!G.in_fight){
-                                    if(WG.at("逍遥派-地下石室")){
-                                        WG.Send('go up');
-                                        WG.Send("kill " + bid);
-                                    }
-                                    if (WG.at("武当派-林间小径")) {
-                                        WG.Send('go south');
-                                        WG.Send("kill " + bid);
-                                    }
-                                }
                                 next = 0;
                             }, Number(ks_pfm));
                         } else {
@@ -2955,6 +2946,7 @@
                 }
                 next = 0;
             }, 1000 * ks_wait);
+        },1000);
         },
         marryhy: undefined,
         xiyan: async function () {
