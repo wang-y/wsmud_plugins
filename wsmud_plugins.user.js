@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.16
+// @version      0.0.32.17
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3684,7 +3684,7 @@
                                     if (data.msg.indexOf(keyworditem) >= 0) {
                                         messageAppend("已触发" + v.name, 1);
                                         if (data.msg) {
-                                            let p = v.send.replace("{content}", data.msg);
+                                            let p = v.send.replace("{content}", data.msg.replaceAll("\n", "").replaceAll(",", ""));
                                             WG.SendCmd(p);
                                         } else {
                                             WG.SendCmd(v.send);
@@ -3698,7 +3698,7 @@
                                         if (data.content.indexOf(keyworditem) >= 0) {
                                             messageAppend("已触发" + v.name, 1);
                                             if (data.content) {
-                                                let p = v.send.replace("{content}", data.content);
+                                                let p = v.send.replace("{content}", data.content.replaceAll("\n", "").replaceAll(",", ""));
                                                 WG.SendCmd(p);
                                             } else {
                                                 WG.SendCmd(v.send);
