@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.14
+// @version      0.0.32.15
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2888,7 +2888,7 @@
             messageAppend("自动前往BOSS地点");
             WG.Send("stopstate");
             WG.go(boss_place);
-            WG.ksboss = WG.add_hook(["items", "itemadd", "die"], function (data) {
+            WG.ksboss = WG.add_hook(["items", "itemadd", "die","room"], function (data) {
                 if (data.type == "items") {
                     if (!WG.at(boss_place)) {
                         return;
@@ -2931,6 +2931,9 @@
                     next = 0;
                     WG.Send('relive');
                     WG.remove_hook(this.index);
+                }
+                if(data.type=='room'){
+                    next = 0;
                 }
             });
             setTimeout(() => {
