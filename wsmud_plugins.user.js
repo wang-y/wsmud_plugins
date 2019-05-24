@@ -3684,7 +3684,7 @@
                                     if (data.msg.indexOf(keyworditem) >= 0) {
                                         messageAppend("已触发" + v.name, 1);
                                         if (data.msg) {
-                                            let p = v.send.replace("{content}", data.msg.replaceAll("\n", "").replaceAll(",", ""));
+                                            let p = v.send.replace("{content}", data.msg.replaceAll("\n", "").replaceAll(",", "").replaceAll(";", ""));
                                             WG.SendCmd(p);
                                         } else {
                                             WG.SendCmd(v.send);
@@ -3698,7 +3698,7 @@
                                         if (data.content.indexOf(keyworditem) >= 0) {
                                             messageAppend("已触发" + v.name, 1);
                                             if (data.content) {
-                                                let p = v.send.replace("{content}", data.content.replaceAll("\n", "").replaceAll(",", ""));
+                                                let p = v.send.replace("{content}", data.content.replaceAll("\n", "").replaceAll(",", "").replaceAll(";", ""));
                                                 WG.SendCmd(p);
                                             } else {
                                                 WG.SendCmd(v.send);
