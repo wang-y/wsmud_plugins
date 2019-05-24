@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.15
+// @version      0.0.32.16
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2933,7 +2933,9 @@
                     WG.remove_hook(this.index);
                 }
                 if(data.type=='room'){
-                    next = 0;
+                    if (next == 999) {
+                        next = 0;
+                    }
                 }
             });
             setTimeout(() => {
@@ -6563,7 +6565,7 @@
                 },
                 "调试BOSS": {
                     name: "调试BOSS",
-                    visible: true,
+                    visible: false,
                     callback: function (key, opt) {
                         WG.kksBoss({
                             content: "听说呼符出现在逍遥派-地下石室一带。"
