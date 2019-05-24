@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.13
+// @version      0.0.32.14
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2888,7 +2888,6 @@
             messageAppend("自动前往BOSS地点");
             WG.Send("stopstate");
             WG.go(boss_place);
-            setTimeout(() => {
             WG.ksboss = WG.add_hook(["items", "itemadd", "die"], function (data) {
                 if (data.type == "items") {
                     if (!WG.at(boss_place)) {
@@ -2896,7 +2895,7 @@
                     }
                     WG.findboss(data, boss_name, function (bid) {
                         if (bid != -1) {
-                            next=999;
+                            next = 999;
                             WG.eqhelper(autoeq);
                             setTimeout(() => {
                                 WG.Send("kill " + bid);
@@ -2946,7 +2945,7 @@
                 }
                 next = 0;
             }, 1000 * ks_wait);
-        },1000);
+
         },
         marryhy: undefined,
         xiyan: async function () {
@@ -5179,12 +5178,12 @@
             messageAppend(n);
             WG.SendCmd(cmds);
         },
-        tts:function(idx,n,cmds){
+        tts: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             FakerTTS.playtts(n);
             WG.SendCmd(cmds);
         },
-        music:function(idx,n,cmds){
+        music: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             var music = new MusicBox({
                 loop: false, // 循环播放
@@ -5833,7 +5832,7 @@
                         G.level = data.level;
                         console.log("欢迎" + G.level);
                     }
-                    if (!G.family && (data.family!=null)) {
+                    if (!G.family && (data.family != null)) {
                         G.pfamily = data.family;
                         G.family = data.family.replaceAll('派', '');
                         console.log(G.family);
@@ -6128,11 +6127,11 @@
     };
     var FakerTTS = {
 
-        playurl:function(url){
+        playurl: function (url) {
             var audio = new Audio(url);
             audio.play();
         },
-        playtts:function(text){
+        playtts: function (text) {
             let url = `https://fanyi.baidu.com/gettts?lan=zh&text=${text}&spd=5&source=web`;
             FakerTTS.playurl(url);
         }
@@ -6150,7 +6149,7 @@
             this.arrFrequency = [262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1967];
             this.arrNotes = ['·1', '·2', '·3', '·4', '·5', '·6', '·7', '1', '2', '3', '4', '5', '6', '7', '1·', '2·', '3·', '4·', '5·', '6·', '7·'];
             this.opts = Object.assign(defaults, options);
-            this.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             this.opts.autoplay && this.playMusic(this.opts.musicText, this.opts.autoplay)
         }
         createSound(freq) {
@@ -6561,7 +6560,7 @@
                 },
                 "调试BOSS": {
                     name: "调试BOSS",
-                    visible: false,
+                    visible: true,
                     callback: function (key, opt) {
                         WG.kksBoss({
                             content: "听说呼符出现在逍遥派-地下石室一带。"
