@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.17
+// @version      0.0.32.18
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5399,7 +5399,7 @@
                 <textarea class="settingbox hide zdy-box" id="store_info" style="display: inline-block;">  </textarea>
                     </div>
                 <div class="setting-item" >
-                <label for="lock_info"> 已锁物品名称(使用半角逗号分隔):</label>
+               <label for="lock_info"> 已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔):</label>
                 <textarea class="settingbox hide zdy-box" id="lock_info" style="display: inline-block;">  </textarea>
                     </div>
                 <div class="setting-item" >
@@ -5415,7 +5415,7 @@
                 <textarea class="settingbox hide zdy-box" id="auto_command" style="display: inline-block;">  </textarea>
                         </div>
                 <div class="setting-item" >
-                <label for="blacklist"> 输入黑名单boss名称(用半角逗号分隔):</label>
+                <label for="blacklist"> 输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔):</label>
                 <textarea class="settingbox hide zdy-box" id="blacklist" style="display: inline-block;">  </textarea>
                     </div>
                 <div class="setting-item" >
