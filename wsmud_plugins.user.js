@@ -1221,6 +1221,7 @@
             `;
             GM_addStyle(css);
             npcs = GM_getValue("npcs", npcs);
+            goods = GM_getValue("goods", goods);
             equip = GM_getValue(role + "_equip", equip);
             //初始化角色配置
             GI.configInit();
@@ -1552,7 +1553,6 @@
             }
             return null;
         },
-
         smhook: undefined,
         ungetStore: false,
         sm: function () {
@@ -1567,7 +1567,6 @@
                         $(".sm_button").text("师门(Q)");
                         WG.remove_hook(WG.smhook);
                         WG.smhook = undefined;
-
                     }
                 });
             }
@@ -1666,7 +1665,6 @@
                             setTimeout(WG.sm, 500);
                             return;
                         }
-
                     }
                     if (WG.sm_item != undefined && item.indexOf(WG.sm_item.type) >= 0) {
                         WG.go(WG.sm_item.place);
