@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.19
+// @version      0.0.32.20
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -654,7 +654,7 @@
     //自定义分解
     var zdy_item_fenjie = '';
     //状态监控 type 类型  ishave  0 =其他任何人 1= 本人  2 仅npc  send 命令数组
-    //[{"name":"","type":"status","action":"remove","keyword":"busy","ishave":"0","send":"","isactive":"1","maxcount":10,"pname":"宋远桥"}]
+    //[{"name":"","type":"status","action":"remove","keyword":"busy","ishave":"0","send":"","isactive":"1","maxcount":10,"pname":"宋远桥","istip":"1"}]
     var ztjk_item = [];
     //欢迎语
     var welcome = '';
@@ -2888,7 +2888,7 @@
             messageAppend("自动前往BOSS地点");
             WG.Send("stopstate");
             WG.go(boss_place);
-            WG.ksboss = WG.add_hook(["items", "itemadd", "die","room"], function (data) {
+            WG.ksboss = WG.add_hook(["items", "itemadd", "die", "room"], function (data) {
                 if (data.type == "items") {
                     if (!WG.at(boss_place)) {
                         return;
@@ -2932,7 +2932,7 @@
                     WG.Send('relive');
                     WG.remove_hook(this.index);
                 }
-                if(data.type=='room'){
+                if (data.type == 'room') {
                     if (next == 999) {
                         next = 0;
                     }
@@ -3538,6 +3538,7 @@
                         $('#ztjk_send').val(v.send);
                         $('#ztjk_senduser').val(v.senduser);
                         $("#ztjk_maxcount").val(v.maxcount);
+                        $("#ztjk_istip").val(v.istip);
                     } else {
                         L.msg("不合法")
                     }
@@ -3553,7 +3554,8 @@
                     send: $('#ztjk_send').val(),
                     senduser: $('#ztjk_senduser').val(),
                     isactive: 1,
-                    maxcount: $('#ztjk_maxcount').val()
+                    maxcount: $('#ztjk_maxcount').val(),
+                    istip: $('#ztjk_istip').val()
                 };
                 let _flag = true;
                 ztjk_item.forEach(function (v, k) {
@@ -3602,6 +3604,11 @@
                     $('#ztjk_send').val(v.send);
                     $('#ztjk_senduser').val(v.senduser);
                     $("#ztjk_maxcount").val(v.maxcount);
+                    if (v.istip==null){
+                        $("#ztjk_istip").val(1);
+                    }else{
+
+                    } $("#ztjk_istip").val(v.istip);
                 });
                 $('.setaction' + k).on('click', function () {
                     if (this.textContent.indexOf("暂停") >= 0) {
@@ -3640,16 +3647,22 @@
                                         for (var keyworditem of keywords) {
                                             if (data.sid.indexOf(keyworditem) >= 0) {
                                                 if (v.ishave == "0" && data.id != G.id) {
-                                                    messageAppend("已触发" + v.name, 1);
+                                                    if(v.istip=="1"){
+                                                            messageAppend("已触发" + v.name, 1);
+                                                            }
                                                     WG.SendCmd(v.send);
                                                 } else if (v.ishave == "1" && data.id == G.id) {
                                                     if (data.count != undefined && v.maxcount) {
                                                         if (parseInt(data.count) < parseInt(v.maxcount)) {
-                                                            messageAppend("已触发" + v.name, 1);
+                                                            if (v.istip != "0") {
+                                                                messageAppend("已触发" + v.name, 1);
+                                                            }
                                                             WG.SendCmd(v.send);
                                                         }
                                                     } else {
-                                                        messageAppend("已触发" + v.name, 1);
+                                                        if (v.istip != "0") {
+                                                            messageAppend("已触发" + v.name, 1);
+                                                        }
                                                         WG.SendCmd(v.send);
                                                     }
                                                 }
@@ -3661,7 +3674,9 @@
                                         for (var keyworditem of keywords) {
                                             if (data.sid.indexOf(keyworditem) >= 0 || data.name.indexOf(keyworditem) >= 0) {
                                                 if (v.ishave == "0" && data.id != G.id) {
-                                                    messageAppend("已触发" + v.name, 1);
+                                                    if (v.istip != "0") {
+                                                        messageAppend("已触发" + v.name, 1);
+                                                    }
                                                     WG.SendCmd(v.send);
                                                 } else if (v.ishave == "1" && data.id == G.id) {
                                                     if (data.count != undefined && v.maxcount) {
@@ -3670,7 +3685,9 @@
                                                             WG.SendCmd(v.send);
                                                         }
                                                     } else {
-                                                        messageAppend("已触发" + v.name, 1);
+                                                        if (v.istip != "0") {
+                                                            messageAppend("已触发" + v.name, 1);
+                                                        }
                                                         WG.SendCmd(v.send);
                                                     }
                                                 }
@@ -3682,7 +3699,9 @@
                             case "text":
                                 for (var keyworditem of keywords) {
                                     if (data.msg.indexOf(keyworditem) >= 0) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         if (data.msg) {
                                             let p = v.send.replace("{content}", data.msg.replaceAll("\n", "").replaceAll(",", "").replaceAll(";", ""));
                                             WG.SendCmd(p);
@@ -3696,7 +3715,9 @@
                                 if (!v.senduser || v.senduser == "" || v.senduser == null) {
                                     for (var keyworditem of keywords) {
                                         if (data.content.indexOf(keyworditem) >= 0) {
-                                            messageAppend("已触发" + v.name, 1);
+                                            if (v.istip != "0") {
+                                                messageAppend("已触发" + v.name, 1);
+                                            }
                                             if (data.content) {
                                                 let p = v.send.replace("{content}", data.content.replaceAll("\n", "").replaceAll(",", "").replaceAll(";", ""));
                                                 WG.SendCmd(p);
@@ -3712,7 +3733,9 @@
                                     if (data.name == item) {
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
-                                                messageAppend("已触发" + v.name, 1);
+                                                if (v.istip != "0") {
+                                                    messageAppend("已触发" + v.name, 1);
+                                                }
                                                 if (data.content) {
                                                     let p = v.send.replace("{content}", data.content);
                                                     WG.SendCmd(p);
@@ -3727,7 +3750,9 @@
                                         (item == "帮派" && data.ch == 'pty')) {
                                         for (var keyworditem of keywords) {
                                             if (data.content.indexOf(keyworditem) >= 0) {
-                                                messageAppend("已触发" + v.name, 1);
+                                                if (v.istip != "0") {
+                                                    messageAppend("已触发" + v.name, 1);
+                                                }
                                                 if (data.content) {
                                                     let p = v.send.replace("{content}", data.content);
                                                     WG.SendCmd(p);
@@ -3749,8 +3774,10 @@
                                 break;
 
                             case "die":
-                                if(data.commands!=null){
-                                    messageAppend("已触发" + v.name, 1);
+                                if (data.commands != null) {
+                                    if (v.istip != "0") {
+                                        messageAppend("已触发" + v.name, 1);
+                                    }
                                     WG.SendCmd(v.send);
                                 }
                                 break;
@@ -3763,7 +3790,9 @@
                                                 break
                                             }
                                         }
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         if (data.id) {
                                             let p = v.send.replace("{id}", data.id);
                                             WG.SendCmd(p);
@@ -3776,14 +3805,18 @@
                             case "room":
                                 for (var keyworditem of keywords) {
                                     if (data.name.indexOf(keyworditem) >= 0) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                         return;
                                     }
                                     for (let roomItem of roomData) {
                                         if (roomItem == 0) { return; }
                                         if (roomItem.name.indexOf(keyworditem) >= 0 && roomItem.p == undefined) {
-                                            messageAppend("已触发" + v.name, 1);
+                                            if (v.istip != "0") {
+                                                messageAppend("已触发" + v.name, 1);
+                                            }
                                             WG.SendCmd(v.send);
                                             return;
                                         }
@@ -3794,8 +3827,9 @@
                                 if (data.dialog && data.dialog == "pack") {
                                     for (var keyworditem of keywords) {
                                         if (data.name && data.name.indexOf(keyworditem) >= 0) {
-                                            messageAppend("已触发" + v.name, 1);
-                                            messageAppend("物品ID" + data.id, 1);
+                                            if (v.istip != "0") {
+                                                messageAppend("已触发" + v.name, 1);
+                                            }
                                             let p = v.send.replace("{id}", data.id);
                                             WG.SendCmd(p);
                                         }
@@ -3805,10 +3839,14 @@
                             case "combat":
                                 for (var keyworditem of keywords) {
                                     if (keyworditem == "start" && data.start == 1) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                     } else if (keyworditem == "end" && data.end == 1) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                     }
                                 }
@@ -3823,13 +3861,17 @@
                                 }
                                 if (item && item.hp) {
                                     if ((item.hp / item.max_hp) * 100 < (parseInt(keywords[0]))) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                     }
                                 }
                                 if (item && item.mp) {
                                     if ((item.mp / item.max_mp) * 100 < (parseInt(keywords[1]))) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                     }
                                 }
@@ -3837,7 +3879,9 @@
                             case "enapfm":
                                 for (let item of keywords) {
                                     if (item == data.id) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                     }
                                 }
@@ -3845,7 +3889,9 @@
                             case "dispfm":
                                 for (let item of keywords) {
                                     if (item == data.id) {
-                                        messageAppend("已触发" + v.name, 1);
+                                        if (v.istip != "0") {
+                                            messageAppend("已触发" + v.name, 1);
+                                        }
                                         WG.SendCmd(v.send);
                                     }
                                 }
@@ -5447,7 +5493,51 @@
         },
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id ="zml_name" style='width:80px' type="text" name="zml_name" value=""></span></div> <div class="setting-item">   <label for="zml_type"> 自命令类型： </label><select id="zml_type" style="width:80px"> <option value="0"> 插件原生 </option> <option value="1"> Raidjs流程 </option> <option value="2"> JS原生 </option> </select> </div> <div class="setting-item"> <label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></div> <div class="setting-item"><textarea class="settingbox hide zdy-box"style="display: inline-block;"id='zml_info'></textarea></div> <div class="item-commands"><span class="getSharezml"> 查询分享 </span> <span class="editadd"> 保存 </span> <span class="editdel"> 删除 </span> </div> <div class="item-commands" id="zml_show"></div> </div> `,
         zmlandztjkui: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="item-commands"> <span class="editzml"> 编辑自命令 </span> </div> <div class="item-commands"> <span class="editztjk"> 编辑自定义监控 </span> <div class="item-commands"> <span class="startzdjk"> 注入所有监控 </span> <span class="stopzdjk"> 暂停所有监控 </span> </div></div> <div class="item-commands" id="zml_show"></div> </div>`,
-        ztjksetting: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="setting-item"> <label> 请打开插件首页,查看文档及例子,本人血量状态监控 请按如下规则输入关键字 90|90 这样监控的是hp 90% mp 90% 以下触发</label></div> <div class="setting-item"> <label for="ztjk_name"> 名称:</label><input id ="ztjk_name" style='width:80px' type="text" name="ztjk_name" value=""></div> <div class="setting-item"><label for="ztjk_type"> 类型(type):</label><select style='width:80px' id="ztjk_type"> <option value="status"> 状态(status) </option> <option value="text"> 文本(text) </option> <option value="msg"> 聊天(msg) </option> <option value="die"> 死亡(die) </option> <option value="itemadd"> 人物刷新(itemadd) </option> <option value="room"> 地图名与房间人物(room) </option> <option value="dialog"> 背包监控(dialog) </option> <option value="combat"> 战斗状态(combat) </option> <option value="sc"> 血量状态(sc) </option> <option value="enapfm"> 技能监控(enapfm) </option> <option value="dispfm"> 技能监控(dispfm) </option> </select></div> <div class="setting-item"><span id='actionp' style='display:block'><label for="ztjk_action"> 动作(action):</label><input id ="ztjk_action" style='width:80px' type="text" name="ztjk_action" value=""></span></div> <div class="setting-item"><span><label for="ztjk_keyword"> 关键字(使用半角 | 分割):</label><input id ="ztjk_keyword" style='width:80px' type="text" name="ztjk_keyword" value=""></span></div> <div class="setting-item"><span><label for="ztjk_ishave"> 触发对象: </label><select style='width:80px' id="ztjk_ishave"> <option value="0"> 其他人 </option> <option value="1"> 本人 </option> <option value="2"> 仅NPC </option> </select></span></div> <div class="setting-item"> <span id='senduserp' style='display:block'><label for="ztjk_senduser"> MSG/其他人名称(使用半角 | 分割):</label><input id ="ztjk_senduser" style="width:80px;" type="text" name="ztjk_senduser" value=""></span></div> <div class="setting-item"> <span style='display:block'><label> Buff层数:</label><input id ="ztjk_maxcount" style="width:80px;" type="text" name="ztjk_maxcount" value=""></span></div> <div class="setting-item"><span><label for="ztjk_send"> 输入自定义命令(用半角分号(;)分隔):</label></span></div> <div class="setting-item"> <textarea class="settingbox hide zdy-box"style="display: inline-block;"id='ztjk_send'></textarea></div> <div class="item-commands"><span class="ztjk_sharedfind"> 查询分享 </span> <span class="ztjk_editadd"> 保存 </span> <span class="ztjk_editdel"> 删除 </span></div> <div class="item-commands" id="ztjk_show"></div> <div class="item-commands" id="ztjk_set"></div> </div> `,
+        ztjksetting: `<div class='zdy_dialog' style='text-align:right;width:280px'>
+    <div class="setting-item"> <label> 请打开插件首页,查看文档及例子,本人血量状态监控 请按如下规则输入关键字 90|90 这样监控的是hp 90% mp 90% 以下触发</label></div>
+    <div class="setting-item"> <label for="ztjk_name"> 名称:</label><input id="ztjk_name" style='width:80px' type="text"
+            name="ztjk_name" value=""></div>
+    <div class="setting-item"><label for="ztjk_type"> 类型(type):</label><select style='width:80px' id="ztjk_type">
+            <option value="status"> 状态(status) </option>
+            <option value="text"> 文本(text) </option>
+            <option value="msg"> 聊天(msg) </option>
+            <option value="die"> 死亡(die) </option>
+            <option value="itemadd"> 人物刷新(itemadd) </option>
+            <option value="room"> 地图名与房间人物(room) </option>
+            <option value="dialog"> 背包监控(dialog) </option>
+            <option value="combat"> 战斗状态(combat) </option>
+            <option value="sc"> 血量状态(sc) </option>
+            <option value="enapfm"> 技能监控(enapfm) </option>
+            <option value="dispfm"> 技能监控(dispfm) </option>
+        </select></div>
+    <div class="setting-item"><span id='actionp' style='display:block'><label for="ztjk_action">
+                动作(action):</label><input id="ztjk_action" style='width:80px' type="text" name="ztjk_action"
+                value=""></span></div>
+    <div class="setting-item"><span><label for="ztjk_keyword"> 关键字(使用半角 | 分割):</label><input id="ztjk_keyword"
+                style='width:80px' type="text" name="ztjk_keyword" value=""></span></div>
+    <div class="setting-item"><span><label for="ztjk_ishave"> 触发对象: </label><select style='width:80px' id="ztjk_ishave">
+                <option value="0"> 其他人 </option>
+                <option value="1"> 本人 </option>
+                <option value="2"> 仅NPC </option>
+            </select></span></div>
+    <div class="setting-item"> <span id='senduserp' style='display:block'><label for="ztjk_senduser"> MSG/其他人名称(使用半角 |
+                分割):</label><input id="ztjk_senduser" style="width:80px;" type="text" name="ztjk_senduser"
+                value=""></span></div>
+    <div class="setting-item"> <span style='display:block'><label> Buff层数:</label><input id="ztjk_maxcount"
+                style="width:80px;" type="text" name="ztjk_maxcount" value=""></span></div>
+    <div class="setting-item"> <span style='display:block'><label> 状态监控提示:</label><select style='width:80px'
+                id="ztjk_istip">
+                <option value="1"> 提示 </option>
+                <option value="0"> 不提示 </option>
+            </select></span></div>
+    <div class="setting-item"><span><label for="ztjk_send"> 输入自定义命令(用半角分号(;)分隔):</label></span></div>
+    <div class="setting-item"> <textarea class="settingbox hide zdy-box" style="display: inline-block;"
+            id='ztjk_send'></textarea></div>
+    <div class="item-commands"><span class="ztjk_sharedfind"> 查询分享 </span> <span class="ztjk_editadd"> 保存 </span> <span
+            class="ztjk_editdel"> 删除 </span></div>
+    <div class="item-commands" id="ztjk_show"></div>
+    <div class="item-commands" id="ztjk_set"></div>
+</div> `,
         jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='sortbag'>排序背包</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
         qnjsui: ` <div style="width:50%;float:left"> <div class="setting-item"> <span>潜能计算器</span></div> <div class="setting-item"><input type="number" id="c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="qnjs"> </div>`,
         khjsui: `<div style="width:50%;float:left"> <div class="setting-item"><span>开花计算器</span></div> <div class="setting-item"> <input type="number" id="nl" placeholder="当前内力" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="xg" placeholder="先天根骨" style="width:50%"></div> <div class="setting-item"> <input type="number" id="hg" placeholder="后天根骨" style="width:50%"></div> <div class="setting-item"> <input type="button" value="计算" id = "kaihua" style="width:50%" ></div> <div class="setting-item"> <label>人花分值：5000  地花分值：6500  天花分值：8000</label></div> </div>`,
