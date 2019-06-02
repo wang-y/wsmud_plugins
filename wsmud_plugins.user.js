@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.20
+// @version      0.0.32.21
 // @date         01/07/2018
 // @modified     20/04/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2158,10 +2158,12 @@
                             if (lock_list.indexOf(data.items[i].name.toLowerCase()) >= 0) { continue; }
                             if (data.items[i].count == 1) {
                                 dropcmds.push("drop " + data.items[i].id);
+                                dropcmds.push("$wait 200");
                             } else {
                                 dropcmds.push("drop " + data.items[i].count + " " + data.items[i].id);
+                                dropcmds.push("$wait 200");
                             }
-                            cmds.push("$wait 200");
+                          
                             messageAppend("<hio>包裹整理</hio>" + data.items[i].name + "丢弃");
 
                         }
