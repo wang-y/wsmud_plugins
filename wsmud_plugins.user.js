@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.24
+// @version      0.0.32.25
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1427,7 +1427,7 @@
             if (cmd) {
                 cmd = cmd instanceof Array ? cmd : cmd.split(';');
                 for (var c of cmd) {
-                    WG.Send(c);
+                    WG.SendCmd(c);
                     await WG.sleep(12000);
                 };
             }
