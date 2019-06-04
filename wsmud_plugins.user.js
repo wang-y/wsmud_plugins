@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.21
+// @version      0.0.32.22
 // @date         01/07/2018
-// @modified     20/04/2019
+// @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2885,7 +2885,18 @@
             autoeq = GM_getValue(role + "_auto_eq", autoeq);
             console.log("boss");
             console.log(boss_place);
-            messageAppend("自动前往BOSS地点");
+            var c = "<div class=\"item-commands\"><span id = 'closeauto'>关闭自动执行后命令</span></div>";
+            messageAppend("自动前往BOSS地点 "+c);
+            $('#closeauto').off('click');
+            $('#closeauto').on('click',()=>{
+                if (timer != 0) {
+                    WG.timer_close();
+                    messageAppend("已停止后命令");
+                } else {
+                    messageAppend("已经停止");
+                }
+            });
+
             WG.Send("stopstate");
             WG.go(boss_place);
             WG.ksboss = WG.add_hook(["items", "itemadd", "die", "room"], function (data) {
@@ -2938,7 +2949,7 @@
                     }
                 }
             });
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 console.log("复活挖矿");
                 WG.Send('relive');
                 WG.remove_hook(this.ksboss);
@@ -2954,6 +2965,18 @@
         },
         marryhy: undefined,
         xiyan: async function () {
+
+            var c = "<div class=\"item-commands\"><span id = 'closeauto'>关闭自动执行后命令</span></div>";
+            messageAppend("自动喜宴 " + c);
+            $('#closeauto').off('click');
+            $('#closeauto').on('click', () => {
+                if(timer!=0){
+                    WG.timer_close();
+                    messageAppend("已停止后命令");
+                }else{
+                    messageAppend("已经停止");
+                }
+            });
             WG.Send("stopstate");
             WG.go("扬州城-喜宴");
             WG.marryhy = WG.add_hook(['items', 'cmds', 'text', 'msg'], function (data) {
@@ -2992,7 +3015,7 @@
                     }
                 }
             });
-            setTimeout(() => {
+            timer = setTimeout(() => {
                 console.log("挖矿");
                 WG.remove_hook(this.marryhy);
                 if (auto_command && auto_command != null && auto_command != "" && auto_command != "null") {
@@ -5992,7 +6015,6 @@
                                 });
                             } else {
                                 console.log("xiyan");
-                                messageAppend("自动前往婚宴地点");
                                 WG.xiyan();
                             }
                         } else if (automarry == "关") {
