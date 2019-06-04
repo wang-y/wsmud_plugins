@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.23
+// @version      0.0.32.24
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3332,6 +3332,8 @@
                         }
 
                         L.msg("素材不足,请检查背包是否存在" + arr.join('.'));
+                        WG.remove_hook( WG.findMedItems_hook);
+                        WG.findMedItems_hook=null;
                         return;
                     }
                     var p_Cmd = WG.make_med_cmd(med_items_id, level, num);
@@ -3354,7 +3356,7 @@
                 }
                 result += endCmd;
             }
-            return result;
+            return result+"$syso 炼制完成;";
         },
         zmlfire: async function (zml) {
             if (zml) {
@@ -5088,6 +5090,7 @@
             while (WG.daily_hook != undefined) {
                 await WG.sleep(1000);
             }
+            WG.Send('tasks');
             await WG.sleep(1000);
             WG.oneKeySD();
             while (WG.sd_hook) {
