@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.25
+// @version      0.0.32.26
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -589,6 +589,17 @@
         "峨眉派": "jh fam 4 start;go west;go south;go west;go south",
         "逍遥派": "jh fam 5 start;go west;go east;go down",
         "丐帮": "jh fam 6 start;go down;go east;go east;go east;go east;go east",
+    };
+    var td_path = {
+        "缥缈峰": "cr lingjiu/shanjiao 1 0;cr over;",
+        "光明顶": "",
+        "天龙寺": "",
+        "血刀门": "",
+        "古墓派": "",
+        "华山论剑": "",
+        "侠客岛": "",
+        "净念禅宗": "",
+
     };
     var fb_path = [];
     var drop_list = [];
@@ -2960,6 +2971,7 @@
                     WG.zdwk();
                 }
                 next = 0;
+                WG.timer_close();
             }, 1000 * ks_wait);
 
         },
@@ -3024,6 +3036,7 @@
                     WG.zdwk();
                 }
                 next = 0;
+                WG.timer_close();
             }, 30000);
         },
 
@@ -3268,8 +3281,8 @@
             messageClear();
             var a = UI.lyui;
             messageAppend(a);
-            $('#medicint_info').val(GM_getValue("lastmed",$('#medicint_info').val()))
-            $('#medicine_level').val(GM_getValue("lastmedlevel",$('#medicine_level').val()))
+            $('#medicint_info').val(GM_getValue("lastmed", $('#medicint_info').val()))
+            $('#medicine_level').val(GM_getValue("lastmedlevel", $('#medicine_level').val()))
             $('.startDev').on('click', function () {
                 if (WG.at('住房-炼药房') || WG.at('帮会-炼药房')) {
                     WG.auto_start_dev_med($('#medicint_info').val().replace(" ", ""), $('#medicine_level').val(), $("#mednum").val());
@@ -3283,8 +3296,8 @@
         },
         findMedItems_hook: undefined,
         auto_start_dev_med: function (med_item, level, num) {
-            GM_setValue("lastmed",med_item);
-            GM_setValue("lastmedlevel",level);
+            GM_setValue("lastmed", med_item);
+            GM_setValue("lastmedlevel", level);
             if (med_item) {
                 if (med_item.split(",").length < 2) {
                     L.msg("素材不足");
@@ -3332,8 +3345,8 @@
                         }
 
                         L.msg("素材不足,请检查背包是否存在" + arr.join('.'));
-                        WG.remove_hook( WG.findMedItems_hook);
-                        WG.findMedItems_hook=null;
+                        WG.remove_hook(WG.findMedItems_hook);
+                        WG.findMedItems_hook = null;
                         return;
                     }
                     var p_Cmd = WG.make_med_cmd(med_items_id, level, num);
@@ -3346,17 +3359,17 @@
 
         },
         make_med_cmd: function (medItem_id, level, num) {
-            let result="";
+            let result = "";
             for (let i = 0; i < parseInt(num); i++) {
-                let startCmd = "lianyao2 start " + level+";";
+                let startCmd = "lianyao2 start " + level + ";";
                 let endCmd = "lianyao2 stop;";
                 let midCmd = "lianyao2 add ";
                 for (let medid of medItem_id) {
-                    result +=startCmd+ midCmd + medid + ";"
+                    result += startCmd + midCmd + medid + ";"
                 }
                 result += endCmd;
             }
-            return result+"$syso 炼制完成;";
+            return result + "$syso 炼制完成;";
         },
         zmlfire: async function (zml) {
             if (zml) {
