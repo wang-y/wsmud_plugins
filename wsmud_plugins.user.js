@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.28
+// @version      0.0.32.29
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6057,7 +6057,7 @@
                     var automarry = GM_getValue(role + "_automarry", automarry);
                     if (data.content.indexOf("，婚礼将在一分钟后开始。") >= 0) {
                         console.dir(data);
-                        if (automarry == "开") {
+                        if (automarry == "开"&&G.in_fight==false) {
                             if (stopauto || WG.at('副本')) {
                                 let b = "<div class=\"item-commands\"><span  id = 'onekeyjh'>参加喜宴</span></div>"
                                 messageClear();
@@ -6070,10 +6070,10 @@
                                 console.log("xiyan");
                                 WG.xiyan();
                             }
-                        } else if (automarry == "关") {
+                        } else if (automarry == "关" || G.in_fight == true) {
                             let b = "<div class=\"item-commands\"><span  id = 'onekeyjh'>参加喜宴</span></div>"
                             messageClear();
-                            messageAppend("<hiy>点击参加喜宴</hiy>");
+                            messageAppend("<hiy>点击参加喜宴,由于未开启自动传送,或者在战斗中,需要手动传送</hiy>");
                             messageAppend(b);
                             $('#onekeyjh').on('click', function () {
                                 WG.xiyan();
@@ -6085,7 +6085,7 @@
                         data.content.indexOf("出现在") >= 0 &&
                         data.content.indexOf("一带。") >= 0) {
                         console.dir(data);
-                        if (autoKsBoss == "开") {
+                        if (autoKsBoss == "开"&&G.in_fight==false) {
                             if (stopauto || WG.at('副本')) {
                                 var c = "<div class=\"item-commands\"><span id = 'onekeyKsboss'>传送到boss</span></div>";
                                 messageClear();
@@ -6097,10 +6097,10 @@
                             } else {
                                 WG.kksBoss(data);
                             }
-                        } else if (autoKsBoss == "关") {
+                        } else if (autoKsBoss == "关" || G.in_fight == true) {
                             var c = "<div class=\"item-commands\"><span id = 'onekeyKsboss'>传送到boss</span></div>";
                             messageClear();
-                            messageAppend("boss已出现");
+                            messageAppend("<hiy>boss已出现,由于未开启自动传送,或者在战斗中,需要手动传送</hiy>");
                             messageAppend(c);
                             $('#onekeyKsboss').on('click', function () {
                                 WG.kksBoss(data);
