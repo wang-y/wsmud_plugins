@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.26
+// @version      0.0.32.27
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4029,9 +4029,19 @@
             while (WG.sm_state >= 0) {
                 await WG.sleep(2000);
             }
-
-            WG.grove_auto(fbnums);
-
+            if(fbnums==0){
+                WG.Send("taskover signin");
+                messageAppend("<hiy>任务完成</hiy>");
+                WG.remove_hook(WG.daily_hook);
+                WG.daily_hook = undefined;
+                this.timer_close();
+                //WG.zdwk();
+                this.needGrove = 0;
+                this.fbnum = 0;
+            }else{
+                WG.grove_auto(fbnums);
+            }
+           
             // var sxplace = sm_array[family].sxplace;
             // var sx = sm_array[family].sx;
             // if (sxplace.indexOf("-") == 0) {
