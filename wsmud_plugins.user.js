@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.27
+// @version      0.0.32.28
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4476,6 +4476,7 @@
                     backimageurl = $('#backimageurl').val();
                     GM_setValue(role + "_backimageurl", backimageurl);
                     if (backimageurl != '') {
+                        WG.SendCmd("setting backcolor none");
                         GM_addStyle(`body{
               background-color:rgb(0,0,0,.25)
                 }
