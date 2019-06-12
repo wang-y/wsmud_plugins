@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.29
+// @version      0.0.32.30
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3632,6 +3632,9 @@
                     ztjk_item.push(ztjk);
                 }
                 GM_setValue(role + "_ztjk", ztjk_item);
+
+                WG.ztjk_edit();
+                messageAppend("保存成功", 2);
                 WG.ztjk_func();
             });
             $(".ztjk_editdel").on('click', function () {
@@ -3714,20 +3717,35 @@
                                                     if (v.istip == "1") {
                                                         messageAppend("已触发" + v.name, 1);
                                                     }
-                                                    WG.SendCmd(v.send);
+                                                    if (data.id) {
+                                                        let p = v.send.replace("{id}", data.id);
+                                                        WG.SendCmd(p);
+                                                    } else {
+                                                        WG.SendCmd(v.send);
+                                                    }
                                                 } else if (v.ishave == "1" && data.id == G.id) {
                                                     if (data.count != undefined && v.maxcount) {
                                                         if (parseInt(data.count) < parseInt(v.maxcount)) {
                                                             if (v.istip != "0") {
                                                                 messageAppend("已触发" + v.name, 1);
                                                             }
-                                                            WG.SendCmd(v.send);
+                                                            if (data.id) {
+                                                                let p = v.send.replace("{id}", data.id);
+                                                                WG.SendCmd(p);
+                                                            } else {
+                                                                WG.SendCmd(v.send);
+                                                            }
                                                         }
                                                     } else {
                                                         if (v.istip != "0") {
                                                             messageAppend("已触发" + v.name, 1);
                                                         }
-                                                        WG.SendCmd(v.send);
+                                                        if (data.id) {
+                                                            let p = v.send.replace("{id}", data.id);
+                                                            WG.SendCmd(p);
+                                                        } else {
+                                                            WG.SendCmd(v.send);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -3741,18 +3759,33 @@
                                                     if (v.istip != "0") {
                                                         messageAppend("已触发" + v.name, 1);
                                                     }
-                                                    WG.SendCmd(v.send);
+                                                    if (data.id) {
+                                                        let p = v.send.replace("{id}", data.id);
+                                                        WG.SendCmd(p);
+                                                    } else {
+                                                        WG.SendCmd(v.send);
+                                                    }
                                                 } else if (v.ishave == "1" && data.id == G.id) {
                                                     if (data.count != undefined && v.maxcount) {
                                                         if (parseInt(data.count) < parseInt(v.maxcount)) {
                                                             messageAppend("当前层数" + data.count + ",已触发" + v.name, 1);
-                                                            WG.SendCmd(v.send);
+                                                            if (data.id) {
+                                                                let p = v.send.replace("{id}", data.id);
+                                                                WG.SendCmd(p);
+                                                            } else {
+                                                                WG.SendCmd(v.send);
+                                                            }
                                                         }
                                                     } else {
                                                         if (v.istip != "0") {
                                                             messageAppend("已触发" + v.name, 1);
                                                         }
-                                                        WG.SendCmd(v.send);
+                                                        if (data.id) {
+                                                            let p = v.send.replace("{id}", data.id);
+                                                            WG.SendCmd(p);
+                                                        } else {
+                                                            WG.SendCmd(v.send);
+                                                        }
                                                     }
                                                 }
                                             }
@@ -4041,7 +4074,7 @@
             }else{
                 WG.grove_auto(fbnums);
             }
-           
+
             // var sxplace = sm_array[family].sxplace;
             // var sx = sm_array[family].sx;
             // if (sxplace.indexOf("-") == 0) {
