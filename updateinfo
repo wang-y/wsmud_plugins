@@ -69,7 +69,7 @@ Buff层数为设置buff最高层数,配合action=refresh,仅限于本人监控,�
 动作 remove
 关键字 busy
 触发对象 其他人
-命令: perform sword.poqi,perform unarmed.chan
+命令: perform sword.poqi;perform unarmed.chan
 ```
 ```
 例子2: 监控文本
