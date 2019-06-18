@@ -64,6 +64,14 @@ Buff层数为设置buff最高层数,配合action=refresh,仅限于本人监控,�
 命令: perform sword.wu
 ```
 ```
+例子1.1: 无缝忙乱
+类型 status
+动作 remove
+关键字 busy
+触发对象 其他人
+命令: perform sword.poqi,perform unarmed.chan
+```
+```
 例子2: 监控文本
 类型 text
 动作 
