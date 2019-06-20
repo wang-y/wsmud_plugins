@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.30
+// @version      0.0.32.31
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2884,7 +2884,7 @@
             }
             blacklist = GM_getValue(role + "_blacklist", blacklist);
             blacklist = blacklist instanceof Array ? blacklist : blacklist.split(",");
-            if (WG.inArray(boss_name, blacklist)) {
+            if (WG.inArray(boss_name.toLowerCase(), blacklist)) {
                 messageAppend("黑名单boss,忽略!");
                 return;
             }
