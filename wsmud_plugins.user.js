@@ -2884,7 +2884,7 @@
             }
             blacklist = GM_getValue(role + "_blacklist", blacklist);
             blacklist = blacklist instanceof Array ? blacklist : blacklist.split(",");
-            if (WG.inArray(boss_name.toLowerCase(), blacklist)) {
+            if (WG.inArray(boss_name.replace("/<(.*?)>/g",""), blacklist)) {
                 messageAppend("黑名单boss,忽略!");
                 return;
             }
