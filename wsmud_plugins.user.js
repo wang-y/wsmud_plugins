@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.31
+// @version      0.0.32.32
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -21,7 +21,7 @@
 
 (function () {
     'use strict';
-    var updateinfo = "🍋欢迎体验简单工具 \n 现在炼药可以选择数量了 \nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
+    var updateinfo = "🍋欢迎体验简单工具 \n 现在炼药可以多配方炼制了\nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
 
     Array.prototype.baoremove = function (dx) {
         if (isNaN(dx) || dx > this.length) {
@@ -3307,49 +3307,63 @@
                 L.msg("素材不足");
                 return;
             }
-            var med_items = med_item.split(',');
+            var tmpitme = med_item.split('|');
+            var med_items = [];
+            for (let pitem of tmpitme){
+                med_items.push(pitem.split(","));
+            }
 
             WG.findMedItems_hook = WG.add_hook("dialog", function (data) {
                 if (data.dialog == "pack" && data.items != undefined && data.items.length >= 0) {
-                    let med_items_id = [];
-                    let med_have = [];
-                    for (var med_item of med_items) {
-                        if (JSON.stringify(data.items).indexOf(med_item) >= 0) {
-                            for (var item of data.items) {
-                                if (item.name.indexOf(med_item) >= 0) {
-                                    med_items_id.push(item.id);
-                                    med_have.push(med_item);
+                    let med_items_ids = [];
+           
+                    let med_haves = [];
+                    
+                    for (let item of med_items) {
+                        let med_items_id = [];
+                        let med_have = [];
+                        for (let med_item of item ){
+                            if (JSON.stringify(data.items).indexOf(med_item) >= 0) {
+                                for (let pitem of data.items) {
+                                    if (pitem.name.indexOf(med_item) >= 0) {
+                                        med_items_id.push(pitem.id);
+                                        med_have.push(med_item);
+                                    }
                                 }
                             }
                         }
-
+                        med_haves.push(med_have);
+                        med_items_ids.push(med_items_id);
                     }
-                    if (med_items_id.length != med_items.length) {
-
-                        var temp = [];
-                        var temparray = [];
-                        for (var i = 0; i < med_have.length; i++) {
-                            temp[med_have[i]] = typeof med_have[i];;
-                        }
-                        for (var i = 0; i < med_items.length; i++) {
-                            var type = typeof med_items[i];
-                            if (!temp[med_items[i]]) {
-                                temparray.push(med_items[i]);
-                            } else if (temp[med_items[i]].indexOf(type) < 0) {
-                                temparray.push(med_items[i]);
+                    let idx =0;
+                    for (let med_items_id of med_items_ids){
+                        if (med_items_id.length != med_items[idx].length) {
+                            var temp = [];
+                            var temparray = [];
+                            for (var i = 0; i < med_haves[idx].length; i++) {
+                                temp[med_haves[idx][i]] = typeof med_haves[idx][i];;
                             }
-                        }
-                        let arr = [];
-                        for (const item of new Set(temparray)) {
-                            arr.push(item)
-                        }
+                            for (var i = 0; i < med_items[idx].length; i++) {
+                                var type = typeof med_items[idx][i];
+                                if (!temp[med_items[idx][i]]) {
+                                    temparray.push(med_items[idx][i]);
+                                } else if (temp[med_items[idx][i]].indexOf(type) < 0) {
+                                    temparray.push(med_items[idx][i]);
+                                }
+                            }
+                            let arr = [];
+                            for (const item of new Set(temparray)) {
+                                arr.push(item)
+                            }
 
-                        L.msg("素材不足,请检查背包是否存在" + arr.join('.'));
-                        WG.remove_hook(WG.findMedItems_hook);
-                        WG.findMedItems_hook = null;
-                        return;
+                            L.msg("素材不足,请检查背包是否存在" + arr.join('.'));
+                            WG.remove_hook(WG.findMedItems_hook);
+                            WG.findMedItems_hook = null;
+                            return;
+                        }
+                        idx = idx+1;
                     }
-                    var p_Cmd = WG.make_med_cmd(med_items_id, level, num);
+                    var p_Cmd = WG.make_med_cmd(med_items_ids, level, num);
                     console.log(p_Cmd);
                     WG.SendStep(p_Cmd);
                     WG.remove_hook(WG.findMedItems_hook);
@@ -3358,16 +3372,18 @@
             WG.Send('pack');
 
         },
-        make_med_cmd: function (medItem_id, level, num) {
+        make_med_cmd: function (medItem_ids, level, num) {
             let result = "";
-            for (let i = 0; i < parseInt(num); i++) {
-                let startCmd = "lianyao2 start " + level + ";";
-                let endCmd = "lianyao2 stop;";
-                let midCmd = "lianyao2 add ";
-                for (let medid of medItem_id) {
-                    result += startCmd + midCmd + medid + ";"
+            for(let medItem_id of medItem_ids){
+                for (let i = 0; i < parseInt(num); i++) {
+                    let startCmd = "lianyao2 start " + level + ";";
+                    let endCmd = "lianyao2 stop;";
+                    let midCmd = "lianyao2 add ";
+                    for (let medid of medItem_id) {
+                        result += startCmd + midCmd + medid + ";"
+                    }
+                    result += endCmd;
                 }
-                result += endCmd;
             }
             return result + "$syso 炼制完成;";
         },
@@ -5650,7 +5666,7 @@
         jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='sortbag'>排序背包</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
         qnjsui: ` <div style="width:50%;float:left"> <div class="setting-item"> <span>潜能计算器</span></div> <div class="setting-item"><input type="number" id="c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="qnjs"> </div>`,
         khjsui: `<div style="width:50%;float:left"> <div class="setting-item"><span>开花计算器</span></div> <div class="setting-item"> <input type="number" id="nl" placeholder="当前内力" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="xg" placeholder="先天根骨" style="width:50%"></div> <div class="setting-item"> <input type="number" id="hg" placeholder="后天根骨" style="width:50%"></div> <div class="setting-item"> <input type="button" value="计算" id = "kaihua" style="width:50%" ></div> <div class="setting-item"> <label>人花分值：5000  地花分值：6500  天花分值：8000</label></div> </div>`,
-        lyui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank" href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank" href="https://suqing.fun/wsmud.old/yaofang/">https://suqing.fun/wsmud.old/yaofang/</a> <div class="setting-item"> <span> <label for="medicine_level"> 级别选择： </label><select style='width:80px' id="medicine_level"> <option value="1">绿色</option> <option value="2">蓝色</option> <option value="3">黄色</option> <option value="4">紫色</option> <option value="5">橙色</option> </select></span></div> <div class="setting-item"> 数量:<span><input id="mednum" style="width:80px;" type="number" name="mednum" value="1"> </span></div> <div class="setting-item"> <span><label for="medicint_info"> 输入使用的顺序(使用半角逗号分隔):</label></span></div> <div class="setting-item"><textarea class="settingbox hide zdy-box" style="display: inline-block;" id='medicint_info'>石楠叶,金银花,金银花,金银花,当归</textarea></div> <div class="item-commands"> <span class="startDev"> 开始 </span><span class="stopDev"> 停止 </span> </div> </div>`,
+        lyui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank" href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank" href="https://suqing.fun/wsmud.old/yaofang/">https://suqing.fun/wsmud.old/yaofang/</a> <div class="setting-item"> <span> <label for="medicine_level"> 级别选择： </label><select style='width:80px' id="medicine_level"> <option value="1">绿色</option> <option value="2">蓝色</option> <option value="3">黄色</option> <option value="4">紫色</option> <option value="5">橙色</option> </select></span></div> <div class="setting-item"> 数量:<span><input id="mednum" style="width:80px;" type="number" name="mednum" value="1"> </span></div> <div class="setting-item"> <span><label for="medicint_info"> 输入使用的顺序(使用半角逗号分隔,多配方使用 | 分割):</label></span></div> <div class="setting-item"><textarea class="settingbox hide zdy-box" style="display: inline-block;" id='medicint_info'>石楠叶,金银花,金银花,金银花,当归</textarea></div> <div class="item-commands"> <span class="startDev"> 开始 </span><span class="stopDev"> 停止 </span> </div> </div>`,
         timeoutui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 注意,可以留空的时或者分,这样就是每分钟/小时 的x秒触发任务,秒为必填项目 <div class="setting-item">    <span>任务名:<input type="text" id="questname" placeholder="任务名" style="width:50%"></span></div> <div class="setting-item">     <label for = "rtype"> 运行次数 </label><select style='width:80px' id="rtype"></div> <option value="1">一次</option> <option value="2">每天</option> </select></span></div> <div class="setting-item">  <span>时:<input type="number" id="ht" placeholder="时" style="width:50%"></span></div> <div class="setting-item">   <span>分:<input type="number" id="mt" placeholder="分" style="width:50%"></span></div> <div class="setting-item">  <span>秒:<input type="number" id="st" placeholder="秒" style="width:50%"></span></div> <div class="setting-item">  <span><label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></span></div> <div class="setting-item">   <textarea class = "settingbox hide zdy-box"style = "display: inline-block;"id = 'zml_info'></textarea></div> <div class = "item-commands"> <span class = "startQuest"> 开始 </span><span class = "removeQuest"> 删除 </span>  </div> <div class='questlist item-commands'></div> </div>`,
         toui: [
             `<div class='item-commands'><span cmd = "$to 扬州城-衙门正厅" > 衙门 </span>
