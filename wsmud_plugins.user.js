@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.32
+// @version      0.0.32.33
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -679,6 +679,8 @@
     var statehml = '';
     //背景图片
     var backimageurl = '';
+    //登录后执行
+    var loginhml = '';
     //定时任务
     //名称   类型 一次 1 每天 0 发送命令  触发时间 24小时制
     //[{"name":"","type":"0","send":"","h":"","s":"","m":""}]
@@ -2884,7 +2886,7 @@
             }
             blacklist = GM_getValue(role + "_blacklist", blacklist);
             blacklist = blacklist instanceof Array ? blacklist : blacklist.split(",");
-            if (WG.inArray(boss_name.replace("/<(.*?)>/g",""), blacklist)) {
+            if (WG.inArray(boss_name.replace("/<(.*?)>/g", ""), blacklist)) {
                 messageAppend("黑名单boss,忽略!");
                 return;
             }
@@ -3309,20 +3311,20 @@
             }
             var tmpitme = med_item.split('|');
             var med_items = [];
-            for (let pitem of tmpitme){
+            for (let pitem of tmpitme) {
                 med_items.push(pitem.split(","));
             }
 
             WG.findMedItems_hook = WG.add_hook("dialog", function (data) {
                 if (data.dialog == "pack" && data.items != undefined && data.items.length >= 0) {
                     let med_items_ids = [];
-           
+
                     let med_haves = [];
-                    
+
                     for (let item of med_items) {
                         let med_items_id = [];
                         let med_have = [];
-                        for (let med_item of item ){
+                        for (let med_item of item) {
                             if (JSON.stringify(data.items).indexOf(med_item) >= 0) {
                                 for (let pitem of data.items) {
                                     if (pitem.name.indexOf(med_item) >= 0) {
@@ -3335,8 +3337,8 @@
                         med_haves.push(med_have);
                         med_items_ids.push(med_items_id);
                     }
-                    let idx =0;
-                    for (let med_items_id of med_items_ids){
+                    let idx = 0;
+                    for (let med_items_id of med_items_ids) {
                         if (med_items_id.length != med_items[idx].length) {
                             var temp = [];
                             var temparray = [];
@@ -3361,7 +3363,7 @@
                             WG.findMedItems_hook = null;
                             return;
                         }
-                        idx = idx+1;
+                        idx = idx + 1;
                     }
                     var p_Cmd = WG.make_med_cmd(med_items_ids, level, num);
                     console.log(p_Cmd);
@@ -3374,7 +3376,7 @@
         },
         make_med_cmd: function (medItem_ids, level, num) {
             let result = "";
-            for(let medItem_id of medItem_ids){
+            for (let medItem_id of medItem_ids) {
                 for (let i = 0; i < parseInt(num); i++) {
                     let startCmd = "lianyao2 start " + level + ";";
                     let endCmd = "lianyao2 stop;";
@@ -4078,7 +4080,7 @@
             while (WG.sm_state >= 0) {
                 await WG.sleep(2000);
             }
-            if(fbnums==0){
+            if (fbnums == 0) {
                 WG.Send("taskover signin");
                 messageAppend("<hiy>任务完成</hiy>");
                 WG.remove_hook(WG.daily_hook);
@@ -4087,7 +4089,7 @@
                 //WG.zdwk();
                 this.needGrove = 0;
                 this.fbnum = 0;
-            }else{
+            } else {
                 WG.grove_auto(fbnums);
             }
 
@@ -4305,6 +4307,7 @@
             _config.shieldkey = GM_getValue("_shieldkey", shieldkey);
             _config.statehml = GM_getValue(role + "_statehml", statehml);
             _config.backimageurl = GM_getValue(role + "_backimageurl", backimageurl);
+            _config.loginhml = GM_getValue(role + "_loginhml", loginhml);
             _config.timequestion = GM_getValue(role + "_timequestion", timequestion);
             _config.silence = GM_getValue(role + "_silence", silence);
             _config.dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
@@ -4350,6 +4353,7 @@
                     GM_setValue("_shieldkey", _config.shieldkey);
                     GM_setValue(role + "_statehml", _config.statehml);
                     GM_setValue(role + "_backimageurl", _config.backimageurl);
+                    GM_setValue(role + "_loginhml", _config.loginhml);
                     GM_setValue(role + "_timequestion", _config.timequestion);
                     GM_setValue(role + "_silence", _config.silence);
                     GM_setValue(role + "_dpssakada", _config.dpssakada);
@@ -4542,6 +4546,10 @@
             `);
                     }
                 });
+                $('#loginhml').change(function () {
+                    loginhml = $('#loginhml').val();
+                    GM_setValue(role + "_loginhml", loginhml);
+                });
                 $(".update_id_all").on("click", WG.update_id_all);
                 $(".update_store").on("click", WG.update_store);
                 $('.backup_btn').on('click', WG.make_config);
@@ -4601,6 +4609,7 @@
             $('#shieldkey').val(shieldkey);
             $('#statehml').val(statehml);
             $("#backimageurl").val(backimageurl);
+            $("#loginhml").val(loginhml);
             //自定义按钮刷新
             var keyitem = ["Q", "W", "E", "R", "T", "Y"];
             let zdybtni = 0;
@@ -4710,6 +4719,9 @@
             }
 
             GM_setValue(role + "_inzdy_btn", inzdy_btn);
+        },
+        runLoginhml: function () {
+            WG.SendCmd(loginhml);
         },
         hooks: [],
         hook_index: 0,
@@ -5474,7 +5486,20 @@
             `;
             return ui;
         },
-
+        html_lninput: function (prop, title) {
+            return `
+              <div class="setting-item" >
+                <span><label for="${prop}">${title}</label><input id="${prop}" name="${prop}" type="text" style="width:80px" value>
+                </span>        </div> `;
+        },
+        html_input: function (prop, title) {
+            return `
+                 <div class="setting-item" >
+                <span><label for="${prop}"> ${title}</label> </span>
+              </div>
+              <textarea class="settingbox hide zdy-box" id="${prop}" name="${prop}" style="display: inline-block;">  </textarea>
+            `;
+        },
         html_switch: function (prop, title, pfor) {
             return `<div class="setting-item setting-item2 " for="${pfor}" style='display: inline-block;'>
                 <span class="title"> ${title}</span>
@@ -5500,11 +5525,8 @@
             return `<h3>插件</h3>
                     <div class="setting-item zdy_dialog" >
                 有空的话请点个star,您的支持是我最大的动力<a href="https://github.com/knva/wsmud_plugins" target="_blank">https://github.com/knva/wsmud_plugins</a>
-                </div>
-                <div class="setting-item" >
-                <span><label for="welcome">欢迎语: </label><input id="welcome" name="welcome" type="text" style="width:80px" value>
-                </span>
-                </div>
+                </div> `+
+                 UI.html_lninput("welcome", "欢迎语： ")+`
                 <div class="setting-item" >
                 <span><label for="family">门派选择：</label><select id="family" style="width:80px">
                         <option value="武当">武当</option>
@@ -5517,37 +5539,25 @@
                         <option value="杀手楼">杀手楼</option>
                     </select>
                 </span>
-                    </div>
-                ` + UI.html_switch('shieldswitch', '聊天频道屏蔽开关:', 'shieldswitch') + `
-
-                ` + UI.html_switch('silence', '安静模式:', 'silence') + `
-                ` + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada') + `
-                <div class="setting-item" >
-                <span><label for="shield">屏蔽人物名(用半角逗号分隔): </label><input id="shield" name="shield" type="text" style="width:80px" value>
-                </span>        </div>
-                <div class="setting-item" >
-                <span><label for="shieldkey">屏蔽关键字(用半角逗号分隔): </label><input id="shieldkey" name="shieldkey" type="text" style="width:80px" value>
-                </span>        </div>
-            ` + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser") + `
-
-                ` + UI.html_switch('sm_price', '师门自动牌子：', 'sm_price') + `
-
-                ` + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore") + `
+                    </div>`
+                + UI.html_switch('shieldswitch', '聊天频道屏蔽开关:', 'shieldswitch')
+                + UI.html_switch('silence', '安静模式:', 'silence')
+                + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada') 
+                + UI.html_lninput("shield","屏蔽人物名(用半角逗号分隔)：")
+                + UI.html_lninput("shieldkey", "屏蔽关键字(用半角逗号分隔)：")
+                + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser")
+                + UI.html_switch('sm_price', '师门自动牌子：', 'sm_price')
+                + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore") + `
                 <div class="setting-item" >
                 <span> <label for="zmlshowsetting"> 自命令显示位置： </label><select id="zmlshowsetting" style="width:80px">
                     <option value="0"> 物品栏 </option>
                     <option value="1"> 技能栏下方 </option>
                 </select>
-                </span>        </div>
-                <div class="setting-item" >
-                <span><label for="wudao_pfm">武道自动攻击： </label><input id="wudao_pfm" name="wudao_pfm" type="text" style="width:80px" value>
-                </span>        </div>
-
-                ` + UI.html_switch('getitemShow', '显示获得物品：', 'getitemShow') + `
-
-                ` + UI.html_switch('marry_kiss', '自动喜宴：', "automarry") + `
-
-                ` + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") + `
+                </span></div> `
+                + UI.html_lninput("wudao_pfm", "武道自动攻击(用半角逗号分隔)：")
+                + UI.html_switch('getitemShow', '显示获得物品：', 'getitemShow')
+                + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
+                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") + `
                 <div class="setting-item" >
                 <span><label for="auto_eq">BOSS击杀时自动换装： </label><select id="auto_eq" style="width:80px">
                         <option value="0">关</option>
@@ -5555,52 +5565,21 @@
                         <option value="2">套装2</option>
                         <option value="3">套装3</option>
                     </select>
-                </span>        </div>
-                <div class="setting-item" >
-                <span><label for="ks_pfm">BOSS叫杀延时(ms)： </label><input id="ks_pfm" name="ks_pfm" type="text" style="width:80px" value>
-                </span>        </div>
-                <div class="setting-item" >
-                <span><label for="ks_wait">BOSS击杀等待延迟(s)： </label><input id="ks_wait" name="ks_wait" type="text" style="width:80px" value="120">
-                </span>        </div>
-                ` + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch') + `
-                <div class="setting-item" >
-                <span><label for="unautopfm"> 自动施法黑名单(填技能代码，使用半角逗号分隔)： </label>
-                    <textarea class="settingbox hide zdy-box" id="unauto_pfm" name="unauto_pfm" style="display: inline-block;">  </textarea>
-                </span>        </div>
-                <div class="setting-item" >
-                <label for="store_info"> 输入自动存储的物品名称(使用半角逗号分隔):</label>
-                <textarea class="settingbox hide zdy-box" id="store_info" style="display: inline-block;">  </textarea>
-                    </div>
-                <div class="setting-item" >
-               <label for="lock_info"> 已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔):</label>
-                <textarea class="settingbox hide zdy-box" id="lock_info" style="display: inline-block;">  </textarea>
-                    </div>
-                <div class="setting-item" >
-                <label for="store_drop_info"> 输入自动丢弃的物品名称(使用半角逗号分隔):</label>
-                <textarea class="settingbox hide zdy-box" id="store_drop_info" style="display: inline-block;">  </textarea>
-                        </div>
-                <div class="setting-item" >
-                <label for="store_fenjie_info"> 输入自动分解的物品名称(使用半角逗号分隔):</label>
-                <textarea class="settingbox hide zdy-box" id="store_fenjie_info" style="display: inline-block;">  </textarea>
-                        </div>
-                <div class="setting-item" >
-                <label for="auto_command"> 输入喜宴及boss后命令(留空为自动挖矿或修炼):</label>
-                <textarea class="settingbox hide zdy-box" id="auto_command" style="display: inline-block;">  </textarea>
-                        </div>
-                <div class="setting-item" >
-                <label for="blacklist"> 输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔):</label>
-                <textarea class="settingbox hide zdy-box" id="blacklist" style="display: inline-block;">  </textarea>
-                    </div>
-                <div class="setting-item" >
-                <span><label for="statehml">当你各种状态中断后，自动以下操作(部分地点不执行): </label>
-                <textarea class="settingbox hide zdy-box" id="statehml" name="statehml" style="display: inline-block;">  </textarea>
-                </span>
-                        </div>
-                        <div class="setting-item" >
-                <span><label for="backimageurl">背景图片url(建议使用1920*1080分辨率图片): </label>
-                <textarea class="settingbox hide zdy-box" id="backimageurl" name="backimageurl" style="display: inline-block;">  </textarea>
-                </span>
-                        </div>
+                </span> </div> ` 
+                + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
+                + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
+                + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
+                + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
+                + UI.html_input("store_info", "输入自动存储的物品名称(使用半角逗号分隔)：")
+                + UI.html_input("lock_info", "已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔)：")
+                + UI.html_input("store_drop_info", "输入自动丢弃的物品名称(使用半角逗号分隔)：")
+                + UI.html_input("store_fenjie_info", "输入自动分解的物品名称(使用半角逗号分隔)：")
+                + UI.html_input("auto_command", "输入喜宴及boss后命令(留空为自动挖矿或修炼)：")
+                + UI.html_input("blacklist", "输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔)：")
+                + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
+                + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
+                + UI.html_input("loginhml", "登录后执行命令：") + `
+
                 <div class="setting-item" >
                 <div class="item-commands"><span class="update_id_all">初始化ID</span></div>
                         </div>
@@ -6106,7 +6085,7 @@
                     var automarry = GM_getValue(role + "_automarry", automarry);
                     if (data.content.indexOf("，婚礼将在一分钟后开始。") >= 0) {
                         console.dir(data);
-                        if (automarry == "开"&&G.in_fight==false) {
+                        if (automarry == "开" && G.in_fight == false) {
                             if (stopauto || WG.at('副本')) {
                                 let b = "<div class=\"item-commands\"><span  id = 'onekeyjh'>参加喜宴</span></div>"
                                 messageClear();
@@ -6134,7 +6113,7 @@
                         data.content.indexOf("出现在") >= 0 &&
                         data.content.indexOf("一带。") >= 0) {
                         console.dir(data);
-                        if (autoKsBoss == "开"&&G.in_fight==false) {
+                        if (autoKsBoss == "开" && G.in_fight == false) {
                             if (stopauto || WG.at('副本')) {
                                 var c = "<div class=\"item-commands\"><span id = 'onekeyKsboss'>传送到boss</span></div>";
                                 messageClear();
@@ -6194,9 +6173,14 @@
                         messageAppend(shieldhtml, 0, 0);
                         $(`#addshield${t}`).on('click', function () {
                             shield = GM_getValue('_shield', shield);
-                            shield = shield + "," + name;
+                            if (shield!=""){
+                                shield = shield + "," + name;
+                            }else{
+                                shield = name;
+                            }
                             GM_setValue('_shield', shield);
                             $('#shield').val(shield);
+                            messageAppend("已屏蔽",1,1);
                         });
                     }
                     if (dpssakada == '开') {
@@ -6282,11 +6266,13 @@
             shieldkey = GM_getValue("_shieldkey", shieldkey);
             statehml = GM_getValue(role + "_statehml", statehml);
             backimageurl = GM_getValue(role + "_backimageurl", backimageurl);
+            loginhml = GM_getValue(role + "_loginhml", loginhml);
             timequestion = GM_getValue(role + "_timequestion", timequestion);
             silence = GM_getValue(role + "_silence", silence);
             dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
 
             WG.zdy_btnListInit();
+            WG.runLoginhml();
         }
     };
 
