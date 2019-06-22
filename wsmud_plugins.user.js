@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.33
+// @version      0.0.32.34
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1298,6 +1298,7 @@
                     messageAppend(logintext);
                 }, 500);
                 KEY.do_command("showcombat");
+                WG.runLoginhml();
                 //开启定时器
                 var systime = setInterval(() => {
                     var myDate = new Date();
@@ -6272,7 +6273,7 @@
             dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
 
             WG.zdy_btnListInit();
-            WG.runLoginhml();
+  
         }
     };
 
