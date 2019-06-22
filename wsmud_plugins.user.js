@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.34
+// @version      0.0.32.35
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4081,7 +4081,7 @@
             while (WG.sm_state >= 0) {
                 await WG.sleep(2000);
             }
-            if (fbnums == 0) {
+            if (fbnums <= 0) {
                 WG.Send("taskover signin");
                 messageAppend("<hiy>任务完成</hiy>");
                 WG.remove_hook(WG.daily_hook);
