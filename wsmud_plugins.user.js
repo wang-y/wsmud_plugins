@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.35
+// @version      0.0.32.36
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6160,6 +6160,12 @@
                     if (G.in_fight) {
                         G.in_fight = false;
                         WG.auto_preform("stop");
+                    }
+                }
+               if (data.msg.indexOf("加油，加油！！") >= 0) {
+                    if (G.in_fight==false) {
+                        G.in_fight = true;
+                        WG.auto_preform();
                     }
                 }
                 if (data.type == 'text') {
