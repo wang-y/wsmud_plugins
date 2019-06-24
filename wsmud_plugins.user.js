@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.36
+// @version      0.0.32.37
 // @date         01/07/2018
 // @modified     04/06/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2880,8 +2880,8 @@
         },
         ksboss: undefined,
         kksBoss: function (data) {
-            var boss_place = data.content.match("出现在([^%]+)一带。");
-            var boss_name = data.content.match("听说([^%]+)出现在");
+            var boss_place = data.content.match("出现在([^%]+)一带。")[1];
+            var boss_name = data.content.match("听说([^%]+)出现在")[1];
             if (boss_name == null || boss_place == null) {
                 return;
             }
@@ -2891,8 +2891,6 @@
                 messageAppend("黑名单boss,忽略!");
                 return;
             }
-            boss_name = data.content.match("听说([^%]+)出现在")[1];
-            boss_place = data.content.match("出现在([^%]+)一带。")[1];
             autoKsBoss = GM_getValue(role + "_autoKsBoss", autoKsBoss);
             ks_pfm = GM_getValue(role + "_ks_pfm", ks_pfm);
             ks_wait = GM_getValue(role + "_ks_wait", ks_wait);
@@ -6774,7 +6772,7 @@
                 },
                 "调试BOSS": {
                     name: "调试BOSS",
-                    visible: false,
+                    visible: true,
                     callback: function (key, opt) {
                         WG.kksBoss({
                             content: "听说呼符出现在逍遥派-地下石室一带。"
