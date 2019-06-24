@@ -1,6 +1,12 @@
 ### 脚本需要使用tampermonkey 插件
 
-如果安装乱码,可以访问 [github](https://github.com/knva/wsmud_plugins/raw/master/wsmud_plugins.user.js)下载
+如果安装乱码,可以访问 ,请依次安装
+
+[Wsmud_Pluginss下载](https://github.com/knva/wsmud_plugins/raw/master/wsmud_plugins.user.js)
+
+[Wsmud_Raid下载](https://github.com/knva/wsmud_plugins/raw/master/wsmud_raid.user.js)
+
+[Wsmud_Trigger下载](https://github.com/knva/wsmud_plugins/raw/master/wsmud_Trigger.user.js)
 
 第一次使用,请先点击右键,选择,设置,然后初始化ID ,若初始化失败,请重新安装,或者更换浏览器
 
