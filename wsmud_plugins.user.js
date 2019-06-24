@@ -6772,7 +6772,7 @@
                 },
                 "调试BOSS": {
                     name: "调试BOSS",
-                    visible: true,
+                    visible: false,
                     callback: function (key, opt) {
                         WG.kksBoss({
                             content: "听说呼符出现在逍遥派-地下石室一带。"
