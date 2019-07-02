@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.37
+// @version      0.0.32.38
 // @date         01/07/2018
-// @modified     04/06/2019
+// @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -971,6 +971,24 @@
             this.add(54, function () {
                 KEY.combat_commands(5);
             });
+            this.add(55, function () {//7
+                KEY.combat_commands(6);
+            });
+           this.add(56, function () {//8
+               KEY.combat_commands(7);
+            });
+           this.add(57, function () {//9
+                KEY.combat_commands(8);
+          });
+          this.add(48, function () {//0
+              KEY.combat_commands(9);
+          });
+            this.add(45, function () {//-
+               KEY.combat_commands(10);
+          }); 
+                this.add(61, function () {//=
+                  KEY.combat_commands(11);
+             }); 
 
             //alt
             this.add(49 + 512, function () {
