@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.40
+// @version      0.0.32.41
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6504,6 +6504,8 @@
                 WG.SendCmd("$daily");
             }else if(data==='挂机'){
                 WG.SendCmd("stopstate");
+            } else {
+                WG.SendCmd(data);
             }
         }
         $('.room-name').on('click', (e) => {
