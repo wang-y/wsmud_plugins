@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.39
+// @version      0.0.32.40
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -691,6 +691,8 @@
     var pfmnum = 0;
     var pfmdps = 0;
     var dpssakada = '开'
+    //funny计算
+    var funnycalc = '关'
     //自定义btn
     //[{"name":名称,"send":""},]
     var inzdy_btn = false;
@@ -985,10 +987,10 @@
           });
             this.add(45, function () {//-
                KEY.combat_commands(10);
-          }); 
+          });
                 this.add(61, function () {//=
                   KEY.combat_commands(11);
-             }); 
+             });
 
             //alt
             this.add(49 + 512, function () {
@@ -4328,6 +4330,7 @@
             _config.timequestion = GM_getValue(role + "_timequestion", timequestion);
             _config.silence = GM_getValue(role + "_silence", silence);
             _config.dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
+            _config.funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
 
             _config.zdy_btnlist = GM_getValue(role + "_zdy_btnlist", zdy_btnlist);
             S.uploadUserConfig(G.id, _config, (res) => {
@@ -4374,6 +4377,7 @@
                     GM_setValue(role + "_timequestion", _config.timequestion);
                     GM_setValue(role + "_silence", _config.silence);
                     GM_setValue(role + "_dpssakada", _config.dpssakada);
+                    GM_setValue(role + "_funnycalc", _config.funnycalc);
                     if (_config.zdy_btnlist) {
                         GM_setValue(role + "_zdy_btnlist", _config.zdy_btnlist);
                     }
@@ -4529,6 +4533,14 @@
                         messageAppend('已开启战斗统计', 0, 1);
                     }
                 });
+                $('#funnycalc').click(function () {
+
+                    funnycalc = WG.switchReversal($(this));
+                    GM_setValue(role + "_funnycalc", funnycalc);
+                    if (funnycalc == "开") {
+                        messageAppend('已开启FUNNY计算', 0, 1);
+                    }
+                });
                 $('#shield').focusout(function () {
                     shield = $('#shield').val();
                     GM_setValue("_shield", shield);
@@ -4622,6 +4634,7 @@
             $('#shieldswitch').val(shieldswitch);
             $('#silence').val(silence);
             $('#dpssakada').val(dpssakada);
+            $('#funnycalc').val(funnycalc);
             $('#shield').val(shield);
             $('#shieldkey').val(shieldkey);
             $('#statehml').val(statehml);
@@ -5559,7 +5572,8 @@
                     </div>`
                 + UI.html_switch('shieldswitch', '聊天频道屏蔽开关:', 'shieldswitch')
                 + UI.html_switch('silence', '安静模式:', 'silence')
-                + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada') 
+                + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada')
+                + UI.html_switch('funnycalc', 'funny计算:', 'funnycalc')
                 + UI.html_lninput("shield","屏蔽人物名(用半角逗号分隔)：")
                 + UI.html_lninput("shieldkey", "屏蔽关键字(用半角逗号分隔)：")
                 + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser")
@@ -5582,7 +5596,7 @@
                         <option value="2">套装2</option>
                         <option value="3">套装3</option>
                     </select>
-                </span> </div> ` 
+                </span> </div> `
                 + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
@@ -5759,6 +5773,7 @@
         getitemShow: undefined,
         wk_listener: undefined,
         status: new Map(),
+        score: undefined
     };
 
     //GlobalInit
@@ -6058,6 +6073,7 @@
                             G.family = "武馆";
                         }
                         family = G.family;
+                        G.score = data;
                         GM_setValue(role + "_family", G.family);
                     }
                 }
@@ -6228,6 +6244,23 @@
                     }
                 }
             });
+            WG.add_hook(['text','sc'],function(message){
+                if(funnycalc=='关')return;
+                if (message.type === "text" && /你的最大内力增加了/.test(message.msg)) {
+                    let x = message.msg.match(/你的最大内力增加了(.*)点。/);
+                    let nl = parseInt(x[1]);
+                    item = G.score;
+                    let max = item.max_mp;
+                    let limit = item.limit_mp;
+                    let t = (limit - max) / (nl * 6);//时间/分钟
+                    let tStr = t < 60 ? `${parseInt(t)}分钟` : `${parseInt(t / 60)}小时${parseInt(t % 60)}分钟`;
+                    html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
+                    messageAppend(html,0,1);
+                }else if(message.type=='sc'&&message.id==G.id){
+                    G.score.max_mp = message.max_mp;
+                    G.score.mp = message.mp;
+                }
+            });
         },
         configInit: function () {
             family = GM_getValue(role + "_family", family);
@@ -6293,9 +6326,9 @@
             timequestion = GM_getValue(role + "_timequestion", timequestion);
             silence = GM_getValue(role + "_silence", silence);
             dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
-
+            funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
             WG.zdy_btnListInit();
-  
+
         }
     };
 
