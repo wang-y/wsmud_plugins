@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.38
+// @version      0.0.32.39
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6461,6 +6461,18 @@
         unsafeWindow.roomData = roomData;
         unsafeWindow.MusicBox = MusicBox;
         unsafeWindow.FakerTTS = FakerTTS;
+        window.addEventListener("message", receiveMessage, false);
+        function receiveMessage(event) {
+            var origin = event.origin;
+            var data = event.data;
+            if(data==='挖矿'||data==='修炼'){
+                WG.zdwk();
+            }else if(data==='日常'){
+                WG.SendCmd("$daily");
+            }else if(data==='挂机'){
+                WG.SendCmd("stopstate");
+            }
+        }
         $('.room-name').on('click', (e) => {
             e.preventDefault();
             $('.container').contextMenu({
