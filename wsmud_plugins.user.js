@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.41
+// @version      0.0.32.42
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5773,7 +5773,9 @@
         getitemShow: undefined,
         wk_listener: undefined,
         status: new Map(),
-        score: undefined
+        score: undefined,
+        jy:0,
+        qn:0
     };
 
     //GlobalInit
@@ -6259,6 +6261,14 @@
                 }else if(message.type=='sc'&&message.id==G.id){
                     G.score.max_mp = message.max_mp;
                     G.score.mp = message.mp;
+                }else if(message.type=='text'){
+                    if (/你获得了(.*)点经验，(.*)点潜能/.test(message.msg)) {
+                        let x = message.msg.match(/获得了(.*)点经验，(.*)点潜能/);
+                        G.jy += parseInt(x[1]);
+                        G.qn += parseInt(x[2]);
+                        let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
+                        messageAppend(mss,0,1);
+                 }  
                 }
             });
         },
