@@ -5689,7 +5689,8 @@
             <span cmd = "$to 扬州城-扬州武馆" > 武馆 </span>
             <span cmd = "$to 住房" > 住房 </span>
             <span cmd = "$to 扬州城-武庙" > 武庙 </span>
-            <span cmd = "$to 帮会-大院" > 帮派 </span></div>`,
+            <span cmd = "$to 帮会-大院" > 帮派 </span>
+            <span cmd = "$to 扬州城-矿山" > 矿山 </span></div>`,
             `<div class='item-commands'><span cmd = "$to 武当派-后山小院" >掌门</span>
              <span cmd = "$to 武当派-石阶" >后勤</span>
              <span cmd = "$to 武当派-三清殿" >三清殿</span></div>`,
@@ -6278,7 +6279,7 @@
                         G.qn += parseInt(x[2]);
                         let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
                         messageAppend(mss,0,1);
-                 }
+                 }  
                 }
             });
         },
