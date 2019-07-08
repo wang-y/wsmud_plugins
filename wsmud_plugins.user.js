@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.42
+// @version      0.0.32.43
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5681,6 +5681,9 @@
         toui: [
             `<div class='item-commands'><span cmd = "$to 扬州城-衙门正厅" > 衙门 </span>
             <span cmd = "$to 扬州城-当铺" > 当铺 </span>
+            <span cmd = "$to 扬州城-醉仙楼" > 醉仙楼 </span>
+            <span cmd = "$to 扬州城-杂货铺" > 杂货铺 </span>
+            <span cmd = "$to 扬州城-打铁铺" > 打铁铺 </span>
             <span cmd = "$to 扬州城-钱庄" > 钱庄 </span>
             <span cmd = "$to 扬州城-药铺" > 药铺 </span>
             <span cmd = "$to 扬州城-扬州武馆" > 武馆 </span>
@@ -5688,17 +5691,24 @@
             <span cmd = "$to 扬州城-武庙" > 武庙 </span>
             <span cmd = "$to 帮会-大院" > 帮派 </span></div>`,
             `<div class='item-commands'><span cmd = "$to 武当派-后山小院" >掌门</span>
-             <span cmd = "$to 武当派-石阶" >后勤</span></div>`,
+             <span cmd = "$to 武当派-石阶" >后勤</span>
+             <span cmd = "$to 武当派-三清殿" >三清殿</span></div>`,
             `<div class='item-commands'><span cmd = "$to 少林派-方丈楼" >掌门</span>
-             <span cmd = "$to 少林派-山门殿" >后勤</span></div>`,
+             <span cmd = "$to 少林派-山门殿" >后勤</span>
+             <span cmd = "$to 少林派-天王殿" >天王殿</span></div>`,
             `<div class='item-commands'><span cmd = "$to 华山派-客厅" >掌门</span>
-             <span cmd = "$to 华山派-练武场" >后勤</span></div>`,
+             <span cmd = "$to 华山派-练武场" >后勤</span>
+             <span cmd = "$to 华山派-落雁峰" >落雁峰</span></div>`,
             `<div class='item-commands'><span cmd = "$to 峨眉派-清修洞" >掌门</span>
-            <span cmd = "$to 峨眉派-走廊" >后勤</span></div>`,
+            <span cmd = "$to 峨眉派-走廊" >后勤</span>
+            <span cmd = "$to 峨眉派-小屋" >周芷若</span>
+            <span cmd = "$to 峨眉派-大殿" >静心</span></div>`,
             `<div class='item-commands'><span cmd = "$to 逍遥派-地下石室" >掌门</span>
-             <span cmd = "$to 逍遥派-林间小道" >后勤</span></div>`,
+             <span cmd = "$to 逍遥派-林间小道" >后勤</span>
+             <span cmd = "$to 逍遥派-木屋" >薛慕华</span></div>`,
             `<div class='item-commands'><span cmd = "$to 丐帮-林间小屋" >掌门</span>
-             <span cmd = "$to 丐帮-暗道;go east;" >后勤</span></div>`,
+             <span cmd = "$to 丐帮-暗道;go east;" >后勤</span>
+             <span cmd = "$to 丐帮-土地庙" >土地庙</span></div>`,
             `<div class='item-commands'><span cmd = "$to 杀手楼-书房" >掌门</span>
              <span cmd = "$to 杀手楼-休息室;" >后勤</span></div>`,
             `<div class='item-commands'><span cmd = "@call 自动襄阳" >自动襄阳</span></div>`,
@@ -6268,7 +6278,7 @@
                         G.qn += parseInt(x[2]);
                         let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
                         messageAppend(mss,0,1);
-                 }  
+                 }
                 }
             });
         },
