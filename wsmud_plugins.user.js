@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.43
+// @version      0.0.32.44
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6270,8 +6270,10 @@
                     html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
                     messageAppend(html,0,1);
                 }else if(message.type=='sc'&&message.id==G.id){
-                    G.score.max_mp = message.max_mp;
-                    G.score.mp = message.mp;
+                    if( message.max_mp != null && message.mp!= null){
+                        G.score.max_mp = message.max_mp;
+                        G.score.mp = message.mp;
+                    }
                 }else if(message.type=='text'){
                     if (/你获得了(.*)点经验，(.*)点潜能/.test(message.msg)) {
                         let x = message.msg.match(/获得了(.*)点经验，(.*)点潜能/);
