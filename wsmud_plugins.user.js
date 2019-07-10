@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.44
+// @version      0.0.32.45
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5396,6 +5396,11 @@
         syso: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             messageAppend(n);
+            WG.SendCmd(cmds);
+        },
+        stop: function(idx,n,cmds){
+            cmds = T.recmd(idx, cmds);
+            WG.timer_close();
             WG.SendCmd(cmds);
         },
         tts: function (idx, n, cmds) {
