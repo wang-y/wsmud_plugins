@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.45
+// @version      0.0.32.46
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5692,6 +5692,7 @@
             <span cmd = "$to 扬州城-钱庄" > 钱庄 </span>
             <span cmd = "$to 扬州城-药铺" > 药铺 </span>
             <span cmd = "$to 扬州城-扬州武馆" > 武馆 </span>
+            <span cmd = "$to 扬州城-镖局正厅" > 镖局 </span>
             <span cmd = "$to 住房" > 住房 </span>
             <span cmd = "$to 扬州城-武庙" > 武庙 </span>
             <span cmd = "$to 帮会-大院" > 帮派 </span>
@@ -6286,7 +6287,7 @@
                         G.qn += parseInt(x[2]);
                         let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
                         messageAppend(mss,0,1);
-                 }  
+                 }
                 }
             });
         },
