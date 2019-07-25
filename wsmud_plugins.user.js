@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.46
+// @version      0.0.32.47
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5235,6 +5235,12 @@
             await WG.sleep(100);
             WG.SendCmd(cmds);
         },
+        wudao: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.wudao_auto();
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
+        },
         boss: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.kksBoss({
@@ -6287,7 +6293,7 @@
                         G.qn += parseInt(x[2]);
                         let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
                         messageAppend(mss,0,1);
-                 }
+                 }  
                 }
             });
         },
