@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.47
+// @version      0.0.32.48
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3942,7 +3942,8 @@
                                         if (v.istip != "0") {
                                             messageAppend("已触发" + v.name, 1);
                                         }
-                                        WG.SendCmd(v.send);
+                                        let p = v.send.replace("{name}", data.name);
+                                        WG.SendCmd(p);
                                         return;
                                     }
                                     for (let roomItem of roomData) {
@@ -3951,7 +3952,8 @@
                                             if (v.istip != "0") {
                                                 messageAppend("已触发" + v.name, 1);
                                             }
-                                            WG.SendCmd(v.send);
+                                             let p = v.send.replace("{name}", data.name);
+                                            WG.SendCmd(p);
                                             return;
                                         }
                                     }
@@ -6293,7 +6295,7 @@
                         G.qn += parseInt(x[2]);
                         let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
                         messageAppend(mss,0,1);
-                 }  
+                 }
                 }
             });
         },
