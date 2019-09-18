@@ -9,7 +9,7 @@
 // @author          Bob.cn
 // @match           http://*.wsmud.com/*
 // @run-at          document-end
-// @require         https://cdn.staticfile.org/vue/2.2.2/vue.min.js
+// @require         https://cdn.bootcss.com/vue/2.2.2/vue.min.js
 // @grant           unsafeWindow
 // @grant           GM_getValue
 // @grant           GM_setValue
