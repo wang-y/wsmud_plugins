@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.49
+// @version      0.0.32.50
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4748,6 +4748,9 @@
                 $(".zdwk").on("click", WG.zdwk);
                 $(".auto_perform").on("click", WG.auto_preform_switch);
                 $(".cmd_echo").on("click", WG.cmd_echo_button);
+                if (G.level!=null&&G.level.indexOf('武帝') >= 0) {
+                    $('.zdy-item.zdwk').html("修炼(Y)");
+                }
             }
 
             GM_setValue(role + "_inzdy_btn", inzdy_btn);
