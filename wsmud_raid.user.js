@@ -4663,7 +4663,7 @@ look men;open men
                 window.open("http://wsmud.bobcn.me/category/4", '_blank').location;
             });
             $(".suqingHome").on('click', function () {
-                window.open("https://suqing.fun/wsmud/", '_blank').location;
+                window.open("https://emeisuqing.github.io/wsmud/", '_blank').location;
             });
         },
         shortcut: function() {
