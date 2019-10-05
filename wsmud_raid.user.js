@@ -3750,7 +3750,7 @@ look men;unlock men
 [if] (open) == 打开
     go south
     select {r庄允城}?
-    ask {r庄允城}? about 吴荣之
+    ask {r庄允城}? about 吴之荣
     @kill 庄允城`
         },
         {
