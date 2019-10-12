@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.50
+// @version      0.0.32.51
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -9,8 +9,8 @@
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
-// @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
-// @require      https://cdn.bootcss.com/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.js
+// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.js
+// @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -6500,13 +6500,13 @@
     };
 
     $(document).ready(function () {
-        $('head').append('<link href="https://cdn.bootcss.com/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
 
         setTimeout(() => {
             var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.bootcss.com/layer/2.3/layer.js');
+            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
             setInterval(() => {
