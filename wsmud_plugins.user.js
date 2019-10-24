@@ -21,7 +21,7 @@
 
 (function () {
     'use strict';
-    var updateinfo = "🍋欢迎体验简单工具 \n 现在可以根据设置一键购买当铺物品了 \nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
+    var updateinfo = "🍋欢迎体验简单工具 \n 现在可以根据设置一键购买当铺物品了 自命令为$tnbuy \nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
 
     Array.prototype.baoremove = function (dx) {
         if (isNaN(dx) || dx > this.length) {
@@ -4793,11 +4793,11 @@
                     messageAppend("执行结束");
                     WG.remove_hook(WG.tnBuy_hook);
                 }
-           
+
             });
 
             WG.SendCmd("$to 扬州城-广场;$wait 100;$to 扬州城-当铺;$wait 200;list %唐楠%");
-            
+
         },
         hooks: [],
         hook_index: 0,
@@ -5424,6 +5424,10 @@
             cmds = T.recmd(idx, cmds);
             WG.dellock(n);
             WG.SendCmd(cmds);
+        }, tnbuy: function (idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.tnBuy();
+            WG.SendCmd(cmds);
         },
         addfenjieid: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
@@ -5666,7 +5670,7 @@
                 + UI.html_input("blacklist", "输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔)：")
                 + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
                 + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
-                + UI.html_input("loginhml", "登录后执行命令：") 
+                + UI.html_input("loginhml", "登录后执行命令：")
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)") + `
 
                 <div class="setting-item" >
@@ -6409,7 +6413,7 @@
             silence = GM_getValue(role + "_silence", silence);
             dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
             funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
-            
+
             auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
             WG.zdy_btnListInit();
 
@@ -6683,7 +6687,7 @@
                                 WG.oneKeySD();
                             },
                         },
-                        
+
                         "一键当铺购买": {
                             name: "一键当铺购买",
                             callback: function (key, opt) {
