@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.51
+// @version      0.0.32.52
 // @date         01/07/2018
 // @modified     02/07/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -21,7 +21,7 @@
 
 (function () {
     'use strict';
-    var updateinfo = "🍋欢迎体验简单工具 \n 现在炼药可以多配方炼制了\nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
+    var updateinfo = "🍋欢迎体验简单工具 \n 现在可以根据设置一键购买当铺物品了 \nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
 
     Array.prototype.baoremove = function (dx) {
         if (isNaN(dx) || dx > this.length) {
@@ -697,6 +697,8 @@
     //[{"name":名称,"send":""},]
     var inzdy_btn = false;
     var zdy_btnlist = [];
+    //自动购买
+    var auto_buylist = "";
     //快捷键功能
     var exit1 = undefined;
     var exit2 = undefined;
@@ -4335,6 +4337,7 @@
             _config.funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
 
             _config.zdy_btnlist = GM_getValue(role + "_zdy_btnlist", zdy_btnlist);
+            _config.auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
             S.uploadUserConfig(G.id, _config, (res) => {
                 if (res == "true") {
                     L.msg("已成功上传");
@@ -4382,6 +4385,9 @@
                     GM_setValue(role + "_funnycalc", _config.funnycalc);
                     if (_config.zdy_btnlist) {
                         GM_setValue(role + "_zdy_btnlist", _config.zdy_btnlist);
+                    }
+                    if (_config.auto_buylist) {
+                        GM_setValue(role + "_auto_buylist", _config.auto_buylist);
                     }
                     GI.configInit();
 
@@ -4581,6 +4587,10 @@
                     loginhml = $('#loginhml').val();
                     GM_setValue(role + "_loginhml", loginhml);
                 });
+                $('#autobuy').change(function () {
+                    auto_buylist = $('#autobuy').val();
+                    GM_setValue(role + "_auto_buylist", auto_buylist);
+                });
                 $(".update_id_all").on("click", WG.update_id_all);
                 $(".update_store").on("click", WG.update_store);
                 $('.backup_btn').on('click', WG.make_config);
@@ -4642,6 +4652,7 @@
             $('#statehml').val(statehml);
             $("#backimageurl").val(backimageurl);
             $("#loginhml").val(loginhml);
+            $("#autobuy").val(auto_buylist);
             //自定义按钮刷新
             var keyitem = ["Q", "W", "E", "R", "T", "Y"];
             let zdybtni = 0;
@@ -4757,6 +4768,36 @@
         },
         runLoginhml: function () {
             WG.SendCmd(loginhml);
+        },
+        tnBuy_hook:null,
+        tnBuy:function(){
+            WG.tnBuy_hook = WG.add_hook(["dialog","text"],  (data)=> {
+                let _seller;
+                let _itemids = new Map();
+                let _sendcmd = ""
+                if (data.type=='dialog'&&data.title!=null&&data.title.indexOf("唐楠正在贩卖")>=0){
+                    _seller = data.seller;
+                    for (let item of data.selllist){
+                        if (WG.inArray(item.name,auto_buylist.split(","))){
+                            _itemids.set(item.id,item.count);
+                        }
+                    }
+                    _itemids.forEach((val,key,map)=>{
+                        _sendcmd = _sendcmd + "buy "+ val+" "+key +" from "+ _seller+";";
+                        _sendcmd = _sendcmd +"$wait 500;";
+                    });
+                    _sendcmd= _sendcmd+"look3 1;"
+                    WG.SendCmd(_sendcmd);
+                }
+                if(data.type=="text"&&data.msg.indexOf("没有这个玩家")>=0){
+                    messageAppend("执行结束");
+                    WG.remove_hook(WG.tnBuy_hook);
+                }
+           
+            });
+
+            WG.SendCmd("$to 扬州城-广场;$wait 100;$to 扬州城-当铺;$wait 200;list %唐楠%");
+            
         },
         hooks: [],
         hook_index: 0,
@@ -5625,7 +5666,8 @@
                 + UI.html_input("blacklist", "输入黑名单boss名称(黑名单boss不会去打,中文,用半角逗号分隔)：")
                 + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
                 + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
-                + UI.html_input("loginhml", "登录后执行命令：") + `
+                + UI.html_input("loginhml", "登录后执行命令：") 
+                + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)") + `
 
                 <div class="setting-item" >
                 <div class="item-commands"><span class="update_id_all">初始化ID</span></div>
@@ -6367,6 +6409,8 @@
             silence = GM_getValue(role + "_silence", silence);
             dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
             funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
+            
+            auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
             WG.zdy_btnListInit();
 
         }
@@ -6637,6 +6681,13 @@
                             name: "一键扫荡",
                             callback: function (key, opt) {
                                 WG.oneKeySD();
+                            },
+                        },
+                        
+                        "一键当铺购买": {
+                            name: "一键当铺购买",
+                            callback: function (key, opt) {
+                                WG.tnBuy();
                             },
                         },
                     },
