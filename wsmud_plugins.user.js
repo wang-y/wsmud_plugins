@@ -6325,11 +6325,10 @@
                 if (message.type === "text" && /你的最大内力增加了/.test(message.msg)) {
                     //if中已经判断了内力相关
                     let x = message.msg.replace(/[^0-9]/ig,"");
-                    let nl = parseInt(x);
                     let item = G.score;
                     let max = item.max_mp;
                     let limit = item.limit_mp;
-                    let t = (limit - max) / (nl * 6);//时间/分钟
+                    let t = (limit - max) / (x * 6);//时间/分钟
                     let tStr = t < 60 ? `${parseInt(t)}分钟` : `${parseInt(t / 60)}小时${parseInt(t % 60)}分钟`;
                     let html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
                     messageAppend(html,0,1);
