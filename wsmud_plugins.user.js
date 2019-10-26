@@ -6325,7 +6325,7 @@
                 if (message.type === "text" && /你的最大内力增加了/.test(message.msg)) {
                     //if中已经判断了内力相关
                     let x = message.msg.replace(/[^0-9]/ig,"");
-                    let nl = parseInt(x[1]);
+                    let nl = parseInt(x);
                     let item = G.score;
                     let max = item.max_mp;
                     let limit = item.limit_mp;
