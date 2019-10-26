@@ -6323,14 +6323,15 @@
             WG.add_hook(['text','sc'],function(message){
                 if(funnycalc=='关')return;
                 if (message.type === "text" && /你的最大内力增加了/.test(message.msg)) {
-                    let x = message.msg.match(/你的最大内力增加了(.*)点。/);
+                    //if中已经判断了内力相关
+                    let x = message.msg.replace(/[^0-9]/ig,"");
                     let nl = parseInt(x[1]);
-                    item = G.score;
+                    let item = G.score;
                     let max = item.max_mp;
                     let limit = item.limit_mp;
                     let t = (limit - max) / (nl * 6);//时间/分钟
                     let tStr = t < 60 ? `${parseInt(t)}分钟` : `${parseInt(t / 60)}小时${parseInt(t % 60)}分钟`;
-                    html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
+                    let html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
                     messageAppend(html,0,1);
                 }else if(message.type=='sc'&&message.id==G.id){
                     if( message.max_mp != null && message.mp!= null){
