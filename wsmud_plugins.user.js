@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.54
+// @version      0.0.32.55
 // @date         01/07/2018
 // @modified     26/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2639,6 +2639,9 @@
             $("#qnjs_btn").on('click', function () {
                 WG.qnjs();
             });
+            $("#lxjs_btn").on('click', function () {
+                WG.lxjs();
+            });
             $("#khjs_btn").on('click', function () {
                 WG.khjs();
             });
@@ -2799,6 +2802,17 @@
             });
 
         },
+        lxjs: function () {
+            messageClear();
+            var html = UI.lxjsui;
+            messageAppend(html);
+            $("#lxjs").off('click');
+            $("#lxjs").on('click', function () {
+                var lxObj = WG.lx(Number($("#lx_xtwx").val()),Number($("#lx_htwx").val()),Number($("#lx_lxxl").val()),Number($("#lx_c").val()), Number($("#lx_m").val()), Number($("#lx_se").val()));
+                messageAppend("需要潜能:" + lxObj.qianneng + "     所需时间:"+ lxObj.time);
+            });
+
+        },
         khjs: function () {
             messageClear();
             var html = UI.khjsui;
@@ -2888,6 +2902,12 @@
             var z = j * jjc * se * 5;
             var sd = this.formatCurrencyTenThou(z);
             return sd;
+        },
+        lx: function(xtwx,htwx,lxxl,dqdj,mbdj,k){
+             var qianneng = (mbdj * mbdj - dqdj * dqdj) * 2.5 * k;
+             var time = qianneng / (xtwx + htwx) / (1 + lxxl / 100 - xtwx / 100) / 12;
+             var timeString = time < 60 ? `${parseInt(time)}分钟` : `${parseInt(time / 60)}小时${parseInt(time % 60)}分钟`;
+             return {qianneng: qianneng, time: timeString};
         },
         //找boss,boss不在,-1,
         findboss: function (data, bossname, callback) {
@@ -5735,7 +5755,8 @@
     <div class="item-commands" id="ztjk_show"></div>
     <div class="item-commands" id="ztjk_set"></div>
 </div> `,
-        jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='sortbag'>排序背包</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
+        jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='lxjs_btn'>练习时间及潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='sortbag'>排序背包</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
+        lxjsui:` <div style="width:50%;float:left"> <div class="setting-item"> <span>练习时间计算器</span></div> <div class="setting-item"><input type="number" id="lx_xtwx" placeholder="先天悟性" style="width:50%" class="mui-input-speech"></div><div class="setting-item"><input type="number" id="lx_htwx" placeholder="后天悟性" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"><input type="number" id="lx_lxxl" placeholder="练习效率" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"><input type="number" id="lx_c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="lx_m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="lx_se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="lxjs"> </div>`,
         qnjsui: ` <div style="width:50%;float:left"> <div class="setting-item"> <span>潜能计算器</span></div> <div class="setting-item"><input type="number" id="c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="qnjs"> </div>`,
         khjsui: `<div style="width:50%;float:left"> <div class="setting-item"><span>开花计算器</span></div> <div class="setting-item"> <input type="number" id="nl" placeholder="当前内力" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="xg" placeholder="先天根骨" style="width:50%"></div> <div class="setting-item"> <input type="number" id="hg" placeholder="后天根骨" style="width:50%"></div> <div class="setting-item"> <input type="button" value="计算" id = "kaihua" style="width:50%" ></div> <div class="setting-item"> <label>人花分值：5000  地花分值：6500  天花分值：8000</label></div> </div>`,
         lyui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank" href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank" href="https://suqing.fun/wsmud.old/yaofang/">https://suqing.fun/wsmud.old/yaofang/</a> <div class="setting-item"> <span> <label for="medicine_level"> 级别选择： </label><select style='width:80px' id="medicine_level"> <option value="1">绿色</option> <option value="2">蓝色</option> <option value="3">黄色</option> <option value="4">紫色</option> <option value="5">橙色</option> </select></span></div> <div class="setting-item"> 数量:<span><input id="mednum" style="width:80px;" type="number" name="mednum" value="1"> </span></div> <div class="setting-item"> <span><label for="medicint_info"> 输入使用的顺序(使用半角逗号分隔,多配方使用 | 分割):</label></span></div> <div class="setting-item"><textarea class="settingbox hide zdy-box" style="display: inline-block;" id='medicint_info'>石楠叶,金银花,金银花,金银花,当归</textarea></div> <div class="item-commands"> <span class="startDev"> 开始 </span><span class="stopDev"> 停止 </span> </div> </div>`,
