@@ -3,7 +3,7 @@
 // @namespace    cqv1
 // @version      0.0.32.55
 // @date         01/07/2018
-// @modified     29/10/2019
+// @modified     26/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
