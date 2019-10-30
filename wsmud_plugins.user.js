@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.56
+// @version      0.0.32.57
 // @date         01/07/2018
 // @modified     30/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3378,9 +3378,9 @@
             const lianyaovue = new Vue({
                 el:"#LianYao",
                 data:{
-                    level: 0,
-                    num: 1,
-                    info: ""
+                    level:0,
+                    num:1,
+                    info:""
                 },
                 created(){
                     this.info = GM_getValue("lastmed", $('#medicint_info').val());
@@ -3587,7 +3587,7 @@
                                 _flag = false;
                             }
                         }
-                    
+
                         if (_flag) {
                             this.zmldata.push(zmljson);
                         }
@@ -3631,7 +3631,7 @@
                                 item.remove();
                                 v.zmlShow = 0;
                                 GM_setValue(role + "_zml", zml);
-                                L.msg("删除快速使用" + v.name+"成功", 1);
+                                messageAppend("删除快速使用" + v.name, 1);
                                 return;
                             }
                         }
@@ -5903,11 +5903,11 @@
         qnjsui: ` <div style="width:50%;float:left" class="QianNengCalc">
     <div class="setting-item"> <span>潜能计算器</span></div>
     <div class="setting-item">初始等级:<input type="number" id="c" placeholder="初始等级" style="width:50%"
-            class="mui-input-speech" v-mode='qnsx.c'>
+            class="mui-input-speech" v-model='qnsx.c'>
     </div>
-    <div class="setting-item"> 目标等级:<input type="number" id="m" v-mode='qnsx.m' placeholder="目标等级" style="width:50%">
+    <div class="setting-item"> 目标等级:<input type="number" id="m" v-model='qnsx.m' placeholder="目标等级" style="width:50%">
     </div>
-    <div class="setting-item"> <select id="se" style="width:50%" v-mode='qnsx.color'>
+    <div class="setting-item"> <select id="se" style="width:50%" v-model='qnsx.color'>
             <option value='0'>选择技能颜色</option>
             <option value='1' style="color: #c0c0c0;">白色</option>
             <option value='2' style="color:#00ff00;">绿色</option>
