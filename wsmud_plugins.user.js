@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.57
+// @version      0.0.32.58
 // @date         01/07/2018
 // @modified     30/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5898,7 +5898,10 @@
              <option value='4' style="color:#ffff00;">黄色</option>
              <option value='5' style="color:#912cee;">紫色</option>
              <option value='6' style="color: #ffa600;">橙色</option>
-         </select></div> <input type="button" value="计算" style="width:50%" id="lxjs" @click="lxjscalc">
+         </select></div> 
+                <div class="setting-item">
+        <div class="item-commands"><span @click="lxjscalc">计算</span></div>
+             </div> 
     </div>`,
         qnjsui: ` <div style="width:50%;float:left" class="QianNengCalc">
     <div class="setting-item"> <span>潜能计算器</span></div>
