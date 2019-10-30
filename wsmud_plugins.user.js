@@ -3378,9 +3378,9 @@
             const lianyaovue = new Vue({
                 el:"#LianYao",
                 data:{
-                    level:0,
-                    num:0,
-                    info:""
+                    level: 0,
+                    num: 1,
+                    info: ""
                 },
                 created(){
                     this.info = GM_getValue("lastmed", $('#medicint_info').val());
@@ -3389,7 +3389,7 @@
                 methods:{
                     startDev:function(){
                         if (WG.at('住房-炼药房') || WG.at('帮会-炼药房')) {
-                            WG.auto_start_dev_med(this.info.replace(" ", ""), $('#medicine_level').val(),this.level);
+                            WG.auto_start_dev_med(this.info.replace(" ", ""),this.level,this.num);
                         } else {
                             L.msg("请先前往炼药房");
                         }
