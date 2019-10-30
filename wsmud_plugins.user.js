@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.55
+// @version      0.0.32.56
 // @date         01/07/2018
-// @modified     26/10/2019
+// @modified     30/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
+// @require      https://cdn.jsdelivr.net/npm/vue/dist/vue.js
 // @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.js
 // @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
@@ -978,21 +979,21 @@
             this.add(55, function () {//7
                 KEY.combat_commands(6);
             });
-           this.add(56, function () {//8
-               KEY.combat_commands(7);
+            this.add(56, function () {//8
+                KEY.combat_commands(7);
             });
-           this.add(57, function () {//9
+            this.add(57, function () {//9
                 KEY.combat_commands(8);
-          });
-          this.add(48, function () {//0
-              KEY.combat_commands(9);
-          });
+            });
+            this.add(48, function () {//0
+                KEY.combat_commands(9);
+            });
             this.add(45, function () {//-
-               KEY.combat_commands(10);
-          });
-                this.add(61, function () {//=
-                  KEY.combat_commands(11);
-             });
+                KEY.combat_commands(10);
+            });
+            this.add(61, function () {//=
+                KEY.combat_commands(11);
+            });
 
             //alt
             this.add(49 + 512, function () {
@@ -1279,6 +1280,7 @@
                 KEY.do_command("showtool");
                 KEY.do_command("pack");
                 KEY.do_command("score");
+                WG.SendCmd("score2");
                 setTimeout(() => {
                     //bind settingbox
                     KEY.do_command("score");
@@ -2620,67 +2622,61 @@
         },
         calc: function () {
             messageClear();
-            var html = UI.jsqui;
+            var html = UI.jsquivue;
             messageAppend(html);
-            $("#qnjs_btn").off("click");
-            $("#khjs_btn").off("click");
-            $("#getskilljson").off("click");
-            $("#onekeydaily").off("click");
-            $("#onekeypk").off("click");
-            $("#onekeystore").off("click");
-            $("#onekeysell").off("click");
-            $("#onekeyfenjie").off("click");
-            $("#updatestore").off("click");
-            $("#cleandps").off('click');
-            $("#sortstore").off("click");
-            $("#sortbag").off("click");
-            $("#dsrw").off("click");
-            $("#zdybtnset").off('click');
-            $("#qnjs_btn").on('click', function () {
-                WG.qnjs();
-            });
-            $("#lxjs_btn").on('click', function () {
-                WG.lxjs();
-            });
-            $("#khjs_btn").on('click', function () {
-                WG.khjs();
-            });
-            $("#getskilljson").on('click', function () {
-                WG.getPlayerSkill();
-            });
-            $("#onekeydaily").on('click', function () {
-                WG.SendCmd("$daily");
-            });
-            $("#onekeypk").on('click', function () {
-                WG.auto_fight();
-            });
-            $("#onekeystore").on('click', function () {
-                WG.SendCmd("$store")
-            });
-            $("#onekeysell").on('click', function () {
-                WG.SendCmd("$drop")
-            });
-            $("#onekeyfenjie").on('click', function () {
-                WG.SendCmd("$fenjie")
-            });
-            $("#updatestore").on("click", function () {
-                WG.update_store();
-            });
-            $("#cleandps").on("click", function () {
-                WG.clean_dps();
-            });
-            $("#sortstore").on("click", function () {
-                WG.sort_all();
-            });
-            $("#sortbag").on("click", function () {
-                WG.sort_all_bag();
-            });
-            $("#dsrw").on("click", function () {
-                WG.dsj();
-            });
-            $("#zdybtnset").on('click', function () {
-                WG.zdy_btnset();
-            });
+            const jsqset = new Vue({
+                el: '.JsqVueUI',
+                data: {
+                    status: 1
+                },
+                methods: {
+                    qnjs_btn: function () {
+                        WG.qnjs();
+                    },
+                    lxjs_btn: function () {
+                        WG.lxjs();
+                    },
+                    khjs_btn: function () {
+                        WG.khjs();
+                    },
+                    getskilljson: function () {
+                        WG.getPlayerSkill();
+                    },
+                    onekeydaily: function () {
+                        WG.SendCmd("$daily");
+                    },
+                    onekeypk: function () {
+                        WG.auto_fight();
+                    },
+                    onekeystore: function () {
+                        WG.SendCmd("$store")
+                    },
+                    onekeysell: function () {
+                        WG.SendCmd("$drop")
+                    },
+                    onekeyfenjie: function () {
+                        WG.SendCmd("$fenjie")
+                    },
+                    updatestore: function () {
+                        WG.update_store();
+                    },
+                    cleandps: function () {
+                        WG.clean_dps();
+                    },
+                    sortstore: function () {
+                        WG.sort_all();
+                    },
+                    sortbag: function () {
+                        WG.sort_all_bag();
+                    },
+                    dsrw: function () {
+                        WG.dsj();
+                    },
+                    zdybtnset: function () {
+                        WG.zdy_btnset();
+                    }
+                }
+            })
 
         },
         dsj_hook: undefined,
@@ -2796,31 +2792,86 @@
             messageClear();
             var html = UI.qnjsui;
             messageAppend(html);
-            $("#qnjs").off('click');
-            $("#qnjs").on('click', function () {
-                messageAppend("需要潜能:" + WG.dian(Number($("#c").val()), Number($("#m").val()), Number($("#se").val())));
-            });
+            const qnvue = new Vue({
+                el: ".QianNengCalc",
+                data: {
+                    qnsx: {
+                        m: 0,
+                        c: 0,
+                        color: 0
+                    }
+                },
+                methods: {
+                    qnjscalc: function () {
+                        $.each(this.qnsx, (key, value) => {
+                            this.qnsx[key] = Number(value);
+                        })
+                        messageAppend("需要潜能:" + WG.dian(this.qnsx.c,this.qnsx.m,this.qnsx.color));
+                    }
+                }
+            })
 
         },
         lxjs: function () {
             messageClear();
             var html = UI.lxjsui;
             messageAppend(html);
-            $("#lxjs").off('click');
-            $("#lxjs").on('click', function () {
-                var lxObj = WG.lx(Number($("#lx_xtwx").val()),Number($("#lx_htwx").val()),Number($("#lx_lxxl").val()),Number($("#lx_c").val()), Number($("#lx_m").val()), Number($("#lx_se").val()));
-                messageAppend("需要潜能:" + lxObj.qianneng + "     所需时间:"+ lxObj.time);
-            });
-
+            const lxjsvue = new Vue({
+                el: ".StudyTimeCalc",
+                data: {
+                    jsqsx: {
+                        xtwx: 0,
+                        htwx: 0,
+                        lxxl: 0,
+                        clevel: 0,
+                        mlevel: 0,
+                        color: 0
+                    }
+                },
+                created() {
+                    this.jsqsx.xtwx = G.score.int;
+                    this.jsqsx.htwx = G.score.int_add;
+                    this.jsqsx.lxxl = parseInt(G.score2.lianxi_per.replaceAll("%", ""));
+                },
+                methods: {
+                    lxjscalc: function () {
+                        $.each(this.jsqsx, (key, value) => {
+                            this.jsqsx[key] = Number(value);
+                        })
+                        const lxObj = WG.lx(this.jsqsx.xtwx, this.jsqsx.htwx, this.jsqsx.lxxl,
+                            this.jsqsx.clevel, this.jsqsx.mlevel, this.jsqsx.color);
+                        messageAppend("需要潜能:" + lxObj.qianneng + "     所需时间:" + lxObj.time);
+                    }
+                }
+            })
         },
         khjs: function () {
             messageClear();
             var html = UI.khjsui;
             messageAppend(html);
-            $("#kaihua").off('click');
-            $("#kaihua").on('click', function () {
-                messageAppend("你的分值:" + WG.gen(Number($("#nl").val()), Number($("#xg").val()), Number($("#hg").val())));
-            });
+            const khvue = new Vue({
+                el: ".KaihuaCalc",
+                data: {
+                    khsx: {
+                        nl: 0,
+                        xg: 0,
+                        hg: 0
+                    }
+                },
+                created() {
+                    this.khsx.nl = G.score.max_mp;
+                    this.khsx.xg = G.score.con;
+                    this.khsx.hg = G.score.con_add;
+                },
+                methods: {
+                    khjscalc: function () {
+                        $.each(this.khsx, (key, value) => {
+                            this.khsx[key] = Number(value);
+                        })
+                        messageAppend("你的分值:" + WG.gen(this.khsx.nl, this.khsx.xg, this.khsx.hg));
+                    }
+                }
+            })
         },
         switchReversal: function (e) {
             let p = e.hasClass("on");
@@ -2903,11 +2954,11 @@
             var sd = this.formatCurrencyTenThou(z);
             return sd;
         },
-        lx: function(xtwx,htwx,lxxl,dqdj,mbdj,k){
-             var qianneng = (mbdj * mbdj - dqdj * dqdj) * 2.5 * k;
-             var time = qianneng / (xtwx + htwx) / (1 + lxxl / 100 - xtwx / 100) / 12;
-             var timeString = time < 60 ? `${parseInt(time)}分钟` : `${parseInt(time / 60)}小时${parseInt(time % 60)}分钟`;
-             return {qianneng: qianneng, time: timeString};
+        lx: function (xtwx, htwx, lxxl, dqdj, mbdj, k) {
+            var qianneng = (mbdj * mbdj - dqdj * dqdj) * 2.5 * k;
+            var time = qianneng / (xtwx + htwx) / (1 + lxxl / 100 - xtwx / 100) / 12;
+            var timeString = time < 60 ? `${parseInt(time)}分钟` : `${parseInt(time / 60)}小时${parseInt(time % 60)}分钟`;
+            return { qianneng: qianneng, time: timeString };
         },
         //找boss,boss不在,-1,
         findboss: function (data, bossname, callback) {
@@ -3324,17 +3375,29 @@
             messageClear();
             var a = UI.lyui;
             messageAppend(a);
-            $('#medicint_info').val(GM_getValue("lastmed", $('#medicint_info').val()))
-            $('#medicine_level').val(GM_getValue("lastmedlevel", $('#medicine_level').val()))
-            $('.startDev').on('click', function () {
-                if (WG.at('住房-炼药房') || WG.at('帮会-炼药房')) {
-                    WG.auto_start_dev_med($('#medicint_info').val().replace(" ", ""), $('#medicine_level').val(), $("#mednum").val());
-                } else {
-                    L.msg("请先前往炼药房");
+            const lianyaovue = new Vue({
+                el:"#LianYao",
+                data:{
+                    level:0,
+                    num:0,
+                    info:""
+                },
+                created(){
+                    this.info = GM_getValue("lastmed", $('#medicint_info').val());
+                    this.level = GM_getValue("lastmedlevel", $('#medicine_level').val());
+                },
+                methods:{
+                    startDev:function(){
+                        if (WG.at('住房-炼药房') || WG.at('帮会-炼药房')) {
+                            WG.auto_start_dev_med(this.info.replace(" ", ""), $('#medicine_level').val(),this.level);
+                        } else {
+                            L.msg("请先前往炼药房");
+                        }
+                    },
+                    stopDev:function(){
+                        WG.Send("stopstate");
+                    }
                 }
-            });
-            $('.stopDev').on('click', function () {
-                WG.Send("stopstate");
             });
         },
         findMedItems_hook: undefined,
@@ -3446,157 +3509,148 @@
 
             }
         },
-        zml: function () {
+        zmlztjk: function () {
             zml = GM_getValue(role + "_zml", zml);
+            if (! typeof zml instanceof Array) {
+                zml = [];
+            }
             messageClear();
             var a = UI.zmlandztjkui;
             messageAppend(a);
-            zml.forEach(function (v, k) {
-                var btn = "<span class='addrun" + k + "'>" + v.name + "</span>";
-                $('#zml_show').append(btn);
+            const zmlvue = new Vue({
+                el:"#zmlandztjk",
+                data:{
+                },
+                created(){
+                    this.zmldata = zml;
+                },
+                methods: {
+                    run:function(v){
+                        WG.zmlfire(v);
+                    },
+                    zml:function(){
+                        WG.zml_edit();
+                    },
+                    ztjk:function(){
+                        WG.ztjk_edit();
+                    },
+                    startjk:function () {
+                        WG.ztjk_func();
+                    },
+                    stopjk:function () {
+                        if (WG.ztjk_hook) {
+                            WG.remove_hook(WG.ztjk_hook);
+                            WG.ztjk_hook = undefined;
+                            messageAppend("已取消注入", 2);
+                            return;
+                        }
+                        messageAppend("未注入", 2);
+                    }
 
-            })
-            zml.forEach(function (v, k) {
-                $(".addrun" + k).on("click", function () {
-                    WG.zmlfire(v);
-                });
-            });
-
-            $(".editzml").on("click", function () {
-                WG.zml_edit();
-            });
-            $(".editztjk").on("click", function () {
-                WG.ztjk_edit();
-            });
-            $(".startzdjk").on("click", function () {
-                WG.ztjk_func();
-            });
-            $(".stopzdjk").on("click", function () {
-                if (WG.ztjk_hook) {
-                    WG.remove_hook(WG.ztjk_hook);
-                    WG.ztjk_hook = undefined;
-                    messageAppend("已取消注入", 2);
-                    return;
                 }
-                messageAppend("未注入", 2);
-            });
-
+            })
         },
-        zml_edit: function (info = "") {
+        zml_edit: function () {
             zml = GM_getValue(role + "_zml", zml);
-            if (info != "") {
-                WG.zml_showp();
-                L.msg(info);
+            if(! typeof zml instanceof Array){
+                zml = [];
             }
             messageClear();
             var edithtml = UI.zmlsetting;
             messageAppend(edithtml);
-            $(".getSharezml").on('click', () => {
-                var id = prompt("请输入分享码");
-                S.getShareJson(id, (res) => {
-                    let v = JSON.parse(res.json);
-                    if (v.zmlRun != undefined) {
-                        $("#zml_name").val(v.name);
-                        $("#zml_type").val(v.zmlType);
-                        $("#zml_info").val(v.zmlRun);
-                    } else {
-                        L.msg("不合法")
-                    }
-                });
-            });
-            $(".editadd").on('click', function () {
-                let zmltext = $("#zml_info").val();
-                let zmlname = $("#zml_name").val().replace(" ", "");
-                let zmltype = $("#zml_type").val();
-                let zmljson = {
-                    "name": zmlname,
-                    "zmlRun": zmltext,
-                    "zmlShow": 0,
-                    "zmlType": zmltype
-                };
-                let _flag = true;
-                zml.forEach(function (v, k) {
-                    if (v.name == zmlname) {
-                        zmljson.zmlShow = v.zmlShow;
-                        zml[k] = zmljson;
-                        _flag = false;
-                    }
-                });
-                if (_flag) {
-                    zml.push(zmljson);
-                }
-                GM_setValue(role + "_zml", zml);
-                WG.zml_edit("保存成功");
-            });
-            $(".editdel").on('click', function () {
-                let zmlname = $("#zml_name").val();
-                zml.forEach(function (v, k) {
-                    if (v.name == zmlname) {
-                        zml.baoremove(k);
-                        GM_setValue(role + "_zml", zml);
-                        WG.zml_edit("删除成功");
-                    }
-                });
-
-            });
-
-            zml.forEach(function (v, k) {
-                var btn = "<span class='addrun" + k + "'>编辑" + v.name + "</span>";
-                var btn2 = "<span class='shortcut" + k + "'>设置快速使用" + v.name + "</span>";
-                var btn3 = "<span class='share" + k + "'>分享" + v.name + "</span>";
-                $('#zml_show').append(btn);
-                $('#zml_show').append(btn2);
-                $('#zml_show').append(btn3);
-                $('#zml_show').append("<br/>");
-
-            });
-
-            zml.forEach(function (v, k) {
-                $(".addrun" + k).on("click", function () {
-
-                    $("#zml_name").val(v.name);
-                    $("#zml_type").val(v.zmlType);
-                    $("#zml_info").val(v.zmlRun);
-                });
-
-                $(".shortcut" + k).on("click", function () {
-                    zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
-                    //<span class="zdy-item act-item-zdy" zml="use j8ea35f34ce">大还丹</span>
-                    let a = $(".room-commands");
-
-                    if (zmlshowsetting == 1) {
-                        a = $(".zdy-commands");
-                    }
-
-                    for (let item of a.children()) {
-                        if (item.textContent == v.name) {
-                            item.remove();
-                            v.zmlShow = 0;
-                            GM_setValue(role + "_zml", zml);
-                            messageAppend("删除快速使用" + v.name, 1);
-                            return;
+            const zmlvue = new Vue({
+                el: "#zmldialog",
+                data: {
+                    singnalzml: {
+                        name :"",
+                        zmlType: "1",
+                        zmlRun: ""
+                    },
+                    zmldata: zml
+                },
+                created() {
+                    this.zmldata = zml;
+                },
+                methods: {
+                    add: function () {
+                        let zmljson = {
+                            "name": this.singnalzml.name,
+                            "zmlRun": this.singnalzml.zmlRun,
+                            "zmlShow": 0,
+                            "zmlType": this.singnalzml.zmlType
+                        };
+                        let _flag = true;
+                        for(let item of this.zmldata){
+                            if (item.name == zmljson.name) {
+                                zmljson.zmlShow = item.zmlShow;
+                                item = zmljson;
+                                _flag = false;
+                            }
                         }
-                    }
-                    a.append("<span class=\"zdy-item act-item-zdy\">" + v.name + "</span>")
-                    v.zmlShow = 1;
-                    GM_setValue(role + "_zml", zml);
-                    messageAppend("设置快速使用" + v.name, 0, 1);
-                    //绑定事件
-                    $('.act-item-zdy').off('click');
-                    $(".act-item-zdy").on('click', function () {
-                        T.usezml(0, this.textContent, "");
-                    });
-                });
-                $(".addrun" + k).on("click", function () {
+                    
+                        if (_flag) {
+                            this.zmldata.push(zmljson);
+                        }
+                        GM_setValue(role + "_zml", this.zmldata);
+                        L.msg("保存成功");
+                    },
+                    del:function(){
+                        this.zmldata.forEach( (v, k)=> {
+                            if (v.name == this.singnalzml.name) {
+                                this.zmldata.baoremove(k);
+                                GM_setValue(role + "_zml", this.zmldata);
+                                L.msg("删除成功");
+                            }
+                        });
+                    },
+                    getShare:function(){
+                        var id = prompt("请输入分享码");
+                        S.getShareJson(id, (res) => {
+                            let v = JSON.parse(res.json);
+                            if (v.zmlRun != undefined) {
+                                this.singnalzml = v;
+                            } else {
+                                L.msg("不合法")
+                            }
+                        });
+                    },
+                    edit:function(v){
+                        this.singnalzml = v;
+                    },
+                    showp: function (v) {
+                        zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
+                        //<span class="zdy-item act-item-zdy" zml="use j8ea35f34ce">大还丹</span>
+                        let a = $(".room-commands");
 
-                    $("#zml_name").val(v.name);
-                    $("#zml_type").val(v.zmlType);
-                    $("#zml_info").val(v.zmlRun);
-                });
-                $(".share" + k).on("click", function () {
-                    S.shareJson(G.id, v);
-                });
-            });
+                        if (zmlshowsetting == 1) {
+                            a = $(".zdy-commands");
+                        }
+
+                        for (let item of a.children()) {
+                            if (item.textContent == v.name) {
+                                item.remove();
+                                v.zmlShow = 0;
+                                GM_setValue(role + "_zml", zml);
+                                messageAppend("删除快速使用" + v.name, 1);
+                                return;
+                            }
+                        }
+                        a.append("<span class=\"zdy-item act-item-zdy\">" + v.name + "</span>")
+                        v.zmlShow = 1;
+                        GM_setValue(role + "_zml", zml);
+                        messageAppend("设置快速使用" + v.name, 0, 1);
+                        //绑定事件
+                        $('.act-item-zdy').off('click');
+                        $(".act-item-zdy").on('click', function () {
+                            T.usezml(0, this.textContent, "");
+                        });
+                    },
+                    share:function(v){
+                        S.shareJson(G.id, v);
+                    }
+                }
+            })
+
         },
         isseted: false,
         zml_showp: function () {
@@ -3974,7 +4028,7 @@
                                             if (v.istip != "0") {
                                                 messageAppend("已触发" + v.name, 1);
                                             }
-                                             let p = v.send.replace("{name}", data.name);
+                                            let p = v.send.replace("{name}", data.name);
                                             WG.SendCmd(p);
                                             return;
                                         }
@@ -4779,7 +4833,7 @@
                 $(".zdwk").on("click", WG.zdwk);
                 $(".auto_perform").on("click", WG.auto_preform_switch);
                 $(".cmd_echo").on("click", WG.cmd_echo_button);
-                if (G.level!=null&&G.level.indexOf('武帝') >= 0) {
+                if (G.level != null && G.level.indexOf('武帝') >= 0) {
                     $('.zdy-item.zdwk').html("修炼(Y)");
                 }
             }
@@ -4789,27 +4843,27 @@
         runLoginhml: function () {
             WG.SendCmd(loginhml);
         },
-        tnBuy_hook:null,
-        tnBuy:function(){
-            WG.tnBuy_hook = WG.add_hook(["dialog","text"],  (data)=> {
+        tnBuy_hook: null,
+        tnBuy: function () {
+            WG.tnBuy_hook = WG.add_hook(["dialog", "text"], (data) => {
                 let _seller;
                 let _itemids = new Map();
                 let _sendcmd = ""
-                if (data.type=='dialog'&&data.title!=null&&data.title.indexOf("唐楠正在贩卖")>=0){
+                if (data.type == 'dialog' && data.title != null && data.title.indexOf("唐楠正在贩卖") >= 0) {
                     _seller = data.seller;
-                    for (let item of data.selllist){
-                        if (WG.inArray(item.name,auto_buylist.split(","))){
-                            _itemids.set(item.id,item.count);
+                    for (let item of data.selllist) {
+                        if (WG.inArray(item.name, auto_buylist.split(","))) {
+                            _itemids.set(item.id, item.count);
                         }
                     }
-                    _itemids.forEach((val,key,map)=>{
-                        _sendcmd = _sendcmd + "buy "+ val+" "+key +" from "+ _seller+";";
-                        _sendcmd = _sendcmd +"$wait 500;";
+                    _itemids.forEach((val, key, map) => {
+                        _sendcmd = _sendcmd + "buy " + val + " " + key + " from " + _seller + ";";
+                        _sendcmd = _sendcmd + "$wait 500;";
                     });
-                    _sendcmd= _sendcmd+"look3 1;"
+                    _sendcmd = _sendcmd + "look3 1;"
                     WG.SendCmd(_sendcmd);
                 }
-                if(data.type=="text"&&data.msg.indexOf("没有这个玩家")>=0){
+                if (data.type == "text" && data.msg.indexOf("没有这个玩家") >= 0) {
                     messageAppend("执行结束");
                     WG.remove_hook(WG.tnBuy_hook);
                 }
@@ -5474,7 +5528,7 @@
             messageAppend(n);
             WG.SendCmd(cmds);
         },
-        stop: function(idx,n,cmds){
+        stop: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.timer_close();
             WG.SendCmd(cmds);
@@ -5637,7 +5691,7 @@
                     <div class="setting-item zdy_dialog" >
                 有空的话请点个star,您的支持是我最大的动力<a href="https://github.com/knva/wsmud_plugins" target="_blank">https://github.com/knva/wsmud_plugins</a>
                 </div> `+
-                 UI.html_lninput("welcome", "欢迎语： ")+`
+                UI.html_lninput("welcome", "欢迎语： ") + `
                 <div class="setting-item" >
                 <span><label for="family">门派选择：</label><select id="family" style="width:80px">
                         <option value="武当">武当</option>
@@ -5655,7 +5709,7 @@
                 + UI.html_switch('silence', '安静模式:', 'silence')
                 + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada')
                 + UI.html_switch('funnycalc', 'funny计算:', 'funnycalc')
-                + UI.html_lninput("shield","屏蔽人物名(用半角逗号分隔)：")
+                + UI.html_lninput("shield", "屏蔽人物名(用半角逗号分隔)：")
                 + UI.html_lninput("shieldkey", "屏蔽关键字(用半角逗号分隔)：")
                 + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser")
                 + UI.html_switch('sm_price', '师门自动牌子：', 'sm_price')
@@ -5708,9 +5762,52 @@
                 ` <h3>系统</h3>
             `
         },
-        zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id ="zml_name" style='width:80px' type="text" name="zml_name" value=""></span></div> <div class="setting-item">   <label for="zml_type"> 自命令类型： </label><select id="zml_type" style="width:80px"> <option value="0"> 插件原生 </option> <option value="1"> Raidjs流程 </option> <option value="2"> JS原生 </option> </select> </div> <div class="setting-item"> <label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></div> <div class="setting-item"><textarea class="settingbox hide zdy-box"style="display: inline-block;"id='zml_info'></textarea></div> <div class="item-commands"><span class="getSharezml"> 查询分享 </span> <span class="editadd"> 保存 </span> <span class="editdel"> 删除 </span> </div> <div class="item-commands" id="zml_show"></div> </div> `,
-        zmlandztjkui: `<div class='zdy_dialog' style='text-align:right;width:280px'> <div class="item-commands"> <span class="editzml"> 编辑自命令 </span> </div> <div class="item-commands"> <span class="editztjk"> 编辑自定义监控 </span> <div class="item-commands"> <span class="startzdjk"> 注入所有监控 </span> <span class="stopzdjk"> 暂停所有监控 </span> </div></div> <div class="item-commands" id="zml_show"></div> </div>`,
-        ztjksetting: `<div class='zdy_dialog' style='text-align:right;width:280px'>
+        zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px' id="zmldialog">
+    <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id="zml_name"
+                style='width:80px' type="text" name="zml_name" value="" v-model="singnalzml.name"></span></div>
+    <div class="setting-item"> <label for="zml_type"> 自命令类型： </label><select id="zml_type" style="width:80px"
+            v-model="singnalzml.zmlType">
+            <option value="0"> 插件原生 </option>
+            <option value="1"> Raidjs流程 </option>
+            <option value="2"> JS原生 </option>
+        </select> </div>
+    <div class="setting-item"> <label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></div>
+    <div class="setting-item"><textarea class="settingbox hide zdy-box" style="display: inline-block;" id='zml_info'
+            v-model="singnalzml.zmlRun"></textarea></div>
+    <div class="item-commands"><span class="getSharezml" @click="getShare"> 查询分享 </span> <span class="editadd"
+            @click="add"> 保存 </span> <span class="editdel" @click="del"> 删除 </span> </div>
+    <div class="item-commands" id="zml_show">
+        <span v-for="(item, index) in zmldata" @click="edit(item)">
+            编辑{{item.name}}
+        </span>
+        <br />
+        <span v-for="(item, index) in zmldata" @click="showp(item)">
+            快速使用{{item.name}}
+        </span>
+        <br />
+        <span v-for="(item, index) in zmldata" @click="share(item)">
+            分享{{item.name}}
+        </span>
+        <br />
+    </div>
+</div> `,
+
+
+
+        zmlandztjkui: `<div class='zdy_dialog' style='text-align:right;width:280px' id="zmlandztjk">
+     <div class="item-commands"> <span class="editzml" @click="zml"> 编辑自命令 </span> </div>
+     <div class="item-commands"> <span class="editztjk" @click="ztjk"> 编辑自定义监控 </span>
+         <div class="item-commands"> <span class="startzdjk" @click="startjk"> 注入所有监控 </span> <span class="stopzdjk"
+                 @click="stopjk"> 暂停所有监控
+             </span>
+         </div>
+     </div>
+     <div class="item-commands" id="zml_show">
+                 <span v-for="(item, index) in zmldata" @click="run(item)">
+                     {{item.name}}
+                 </span>
+     </div>
+ </div>`,        ztjksetting: `<div class='zdy_dialog' style='text-align:right;width:280px'>
     <div class="setting-item"> <label> 请打开插件首页,查看文档及例子,本人血量状态监控 请按如下规则输入关键字 90|90 这样监控的是hp 90% mp 90% 以下触发</label></div>
     <div class="setting-item"> <label for="ztjk_name"> 名称:</label><input id="ztjk_name" style='width:80px' type="text"
             name="ztjk_name" value=""></div>
@@ -5755,11 +5852,99 @@
     <div class="item-commands" id="ztjk_show"></div>
     <div class="item-commands" id="ztjk_set"></div>
 </div> `,
-        jsqui: `<div class="item-commands"><span id='qnjs_btn'>潜能计算</span><span id='lxjs_btn'>练习时间及潜能计算</span><span id='khjs_btn'>开花计算</span><span id='getskilljson'>提取技能属性(可用于苏轻模拟器)</span></div> <div class="item-commands"><span id='onekeydaily'>一键日常</span><span id='onekeypk'>自动比试</span></div> <div class="item-commands"><span id='onekeystore'>存仓及贩卖</span><span id='onekeysell'>丢弃及贩卖</span><span id='onekeyfenjie'>分解及贩卖</span></div> <div class="item-commands"><span id='updatestore'>更新仓库数据(覆盖)</span><span id='sortstore'>排序仓库</span><span id='sortbag'>排序背包</span><span id='dsrw'>定时任务</span><span id='cleandps'>清空伤害</span></div>`,
-        lxjsui:` <div style="width:50%;float:left"> <div class="setting-item"> <span>练习时间计算器</span></div> <div class="setting-item"><input type="number" id="lx_xtwx" placeholder="先天悟性" style="width:50%" class="mui-input-speech"></div><div class="setting-item"><input type="number" id="lx_htwx" placeholder="后天悟性" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"><input type="number" id="lx_lxxl" placeholder="练习效率" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"><input type="number" id="lx_c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="lx_m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="lx_se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="lxjs"> </div>`,
-        qnjsui: ` <div style="width:50%;float:left"> <div class="setting-item"> <span>潜能计算器</span></div> <div class="setting-item"><input type="number" id="c" placeholder="初始等级" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="m" placeholder="目标等级" style="width:50%"></div> <div class="setting-item"> <select id="se" style="width:50%"> <option value='0'>选择技能颜色</option> <option value='1' style="color: #c0c0c0;">白色</option> <option value='2' style="color:#00ff00;">绿色</option> <option value='3' style="color:#00ffff;">蓝色</option> <option value='4' style="color:#ffff00;">黄色</option> <option value='5' style="color:#912cee;">紫色</option> <option value='6' style="color: #ffa600;">橙色</option> </select></div> <input type="button" value="计算" style="width:50%"  id="qnjs"> </div>`,
-        khjsui: `<div style="width:50%;float:left"> <div class="setting-item"><span>开花计算器</span></div> <div class="setting-item"> <input type="number" id="nl" placeholder="当前内力" style="width:50%" class="mui-input-speech"></div> <div class="setting-item"> <input type="number" id="xg" placeholder="先天根骨" style="width:50%"></div> <div class="setting-item"> <input type="number" id="hg" placeholder="后天根骨" style="width:50%"></div> <div class="setting-item"> <input type="button" value="计算" id = "kaihua" style="width:50%" ></div> <div class="setting-item"> <label>人花分值：5000  地花分值：6500  天花分值：8000</label></div> </div>`,
-        lyui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank" href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank" href="https://suqing.fun/wsmud.old/yaofang/">https://suqing.fun/wsmud.old/yaofang/</a> <div class="setting-item"> <span> <label for="medicine_level"> 级别选择： </label><select style='width:80px' id="medicine_level"> <option value="1">绿色</option> <option value="2">蓝色</option> <option value="3">黄色</option> <option value="4">紫色</option> <option value="5">橙色</option> </select></span></div> <div class="setting-item"> 数量:<span><input id="mednum" style="width:80px;" type="number" name="mednum" value="1"> </span></div> <div class="setting-item"> <span><label for="medicint_info"> 输入使用的顺序(使用半角逗号分隔,多配方使用 | 分割):</label></span></div> <div class="setting-item"><textarea class="settingbox hide zdy-box" style="display: inline-block;" id='medicint_info'>石楠叶,金银花,金银花,金银花,当归</textarea></div> <div class="item-commands"> <span class="startDev"> 开始 </span><span class="stopDev"> 停止 </span> </div> </div>`,
+        jsquivue: `
+                    <div class="JsqVueUI">
+                    <div class="item-commands">
+                <span id='qnjs_btn' @click='qnjs_btn'>潜能计算</span>
+                <span id='lxjs_btn' @click='lxjs_btn'>练习时间及潜能计算</span>
+                <span id='khjs_btn' @click='khjs_btn'>开花计算</span>
+                <span id='getskilljson' @click='getskilljson'>提取技能属性(可用于苏轻模拟器)</span>
+            </div>
+            <div class="item-commands">
+                <span id='onekeydaily' @click='onekeydaily'>一键日常</span>
+                <span id='onekeypk' @click='onekeypk'>自动比试</span>
+            </div>
+            <div class="item-commands">
+                <span id='onekeystore' @click="onekeystore">存仓及贩卖</span>
+                <span id='onekeysell' @click='onekeysell'>丢弃及贩卖</span>
+                <span id='onekeyfenjie' @click='onekeyfenjie'>分解及贩卖</span>
+            </div>
+            <div class="item-commands">
+                <span id='updatestore' @click='updatestore'>更新仓库数据(覆盖)</span>
+                <span id='sortstore' @click='sortstore'>排序仓库</span>
+                <span id='sortbag' @click='sortbag'>排序背包</span>
+                <span id='dsrw' @click='dsrw'>定时任务</span>
+                <span id='cleandps' @click='cleandps'>清空伤害</span>
+            </div></div>`,
+        lxjsui: `
+                       <div style="width:50%;float:left" class='StudyTimeCalc'>
+     <div class="setting-item"> <span>练习时间计算器</span></div>
+     <div class="setting-item">先天悟性:<input type="number" id="lx_xtwx" placeholder="先天悟性" style="width:50%"
+             class="mui-input-speech" v-model=jsqsx.xtwx></div>
+     <div class="setting-item">后天悟性:<input type="number" id="lx_htwx" placeholder="后天悟性" style="width:50%"
+             class="mui-input-speech" v-model=jsqsx.htwx></div>
+     <div class="setting-item">练习效率:<input type="number" id="lx_lxxl" placeholder="练习效率" style="width:50%"
+             class="mui-input-speech" v-model=jsqsx.lxxl></div>
+     <div class="setting-item">初始等级:<input type="number" id="lx_c" placeholder="初始等级" style="width:50%"
+             class="mui-input-speech" v-model=jsqsx.clevel></div>
+     <div class="setting-item"> 目标等级:<input type="number" id="lx_m" placeholder="目标等级" style="width:50%"
+             v-model=jsqsx.mlevel></div>
+     <div class="setting-item">技能颜色: <select id="lx_se" style="width:50%" v-model=jsqsx.color>
+             <option value='0'>选择技能颜色</option>
+             <option value='1' style="color: #c0c0c0;">白色</option>
+             <option value='2' style="color:#00ff00;">绿色</option>
+             <option value='3' style="color:#00ffff;">蓝色</option>
+             <option value='4' style="color:#ffff00;">黄色</option>
+             <option value='5' style="color:#912cee;">紫色</option>
+             <option value='6' style="color: #ffa600;">橙色</option>
+         </select></div> <input type="button" value="计算" style="width:50%" id="lxjs" @click="lxjscalc">
+    </div>`,
+        qnjsui: ` <div style="width:50%;float:left" class="QianNengCalc">
+    <div class="setting-item"> <span>潜能计算器</span></div>
+    <div class="setting-item">初始等级:<input type="number" id="c" placeholder="初始等级" style="width:50%"
+            class="mui-input-speech" v-mode='qnsx.c'>
+    </div>
+    <div class="setting-item"> 目标等级:<input type="number" id="m" v-mode='qnsx.m' placeholder="目标等级" style="width:50%">
+    </div>
+    <div class="setting-item"> <select id="se" style="width:50%" v-mode='qnsx.color'>
+            <option value='0'>选择技能颜色</option>
+            <option value='1' style="color: #c0c0c0;">白色</option>
+            <option value='2' style="color:#00ff00;">绿色</option>
+            <option value='3' style="color:#00ffff;">蓝色</option>
+            <option value='4' style="color:#ffff00;">黄色</option>
+            <option value='5' style="color:#912cee;">紫色</option>
+            <option value='6' style="color: #ffa600;">橙色</option>
+        </select></div> <input type="button" value="计算" style="width:50%" id="qnjscalc">
+</div>`,
+        khjsui: `<div style="width:50%;float:left" class="KaihuaCalc">
+    <div class="setting-item"><span>开花计算器</span></div>
+    <div class="setting-item"> 当前内力:<input type="number" id="nl" placeholder="当前内力" style="width:50%"
+            class="mui-input-speech" v-model="khsx.nl"></div>
+    <div class="setting-item"> 先天根骨:<input type="number" id="xg" placeholder="先天根骨" style="width:50%"
+        v-model="khsx.xg"></div>
+    <div class="setting-item"> 后天根骨:<input type="number" id="hg" placeholder="后天根骨" style="width:50%"
+        v-model="khsx.hg"></div>
+    <div class="setting-item"> <input type="button" @click="khjscalc" value="计算" id="kaihua" style="width:50%"></div>
+    <div class="setting-item"> <label>人花分值：5000 地花分值：6500 天花分值：8000</label></div>
+</div>`,
+        lyui: `<div class='zdy_dialog' id="LianYao" style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank"
+        href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank"
+        href="https://suqing.fun/wsmud.old/yaofang/">https://emeisuqing.github.io/wsmud.old/yaofang/</a>
+    <div class="setting-item"> <span> <label for="medicine_level"> 级别选择： </label><select style='width:80px'
+                id="medicine_level" v-model="level">
+                <option value="1">绿色</option>
+                <option value="2">蓝色</option>
+                <option value="3">黄色</option>
+                <option value="4">紫色</option>
+                <option value="5">橙色</option>
+            </select></span></div>
+    <div class="setting-item"> 数量:<span><input id="mednum" v-model="num" style="width:80px;" type="number" name="mednum" value="1">
+        </span></div>
+    <div class="setting-item"> <span><label for="medicint_info"> 输入使用的顺序(使用半角逗号分隔,多配方使用 | 分割):</label></span></div>
+    <div class="setting-item"><textarea v-model="info"  class="settingbox hide zdy-box" style="display: inline-block;"
+            id='medicint_info'>石楠叶,金银花,金银花,金银花,当归</textarea></div>
+    <div class="item-commands"> <span class="startDev" @click="startDev"> 开始 </span><span class="stopDev" @click="stopDev"> 停止 </span> </div>
+</div>`,
         timeoutui: `<div class='zdy_dialog' style='text-align:right;width:280px'> 注意,可以留空的时或者分,这样就是每分钟/小时 的x秒触发任务,秒为必填项目 <div class="setting-item">    <span>任务名:<input type="text" id="questname" placeholder="任务名" style="width:50%"></span></div> <div class="setting-item">     <label for = "rtype"> 运行次数 </label><select style='width:80px' id="rtype"></div> <option value="1">一次</option> <option value="2">每天</option> </select></span></div> <div class="setting-item">  <span>时:<input type="number" id="ht" placeholder="时" style="width:50%"></span></div> <div class="setting-item">   <span>分:<input type="number" id="mt" placeholder="分" style="width:50%"></span></div> <div class="setting-item">  <span>秒:<input type="number" id="st" placeholder="秒" style="width:50%"></span></div> <div class="setting-item">  <span><label for="zml_info"> 输入自定义命令(用半角分号(;)分隔):</label></span></div> <div class="setting-item">   <textarea class = "settingbox hide zdy-box"style = "display: inline-block;"id = 'zml_info'></textarea></div> <div class = "item-commands"> <span class = "startQuest"> 开始 </span><span class = "removeQuest"> 删除 </span>  </div> <div class='questlist item-commands'></div> </div>`,
         toui: [
             `<div class='item-commands'><span cmd = "$to 扬州城-衙门正厅" > 衙门 </span>
@@ -5869,8 +6054,8 @@
         wk_listener: undefined,
         status: new Map(),
         score: undefined,
-        jy:0,
-        qn:0
+        jy: 0,
+        qn: 0
     };
 
     //GlobalInit
@@ -6172,6 +6357,8 @@
                         family = G.family;
                         G.score = data;
                         GM_setValue(role + "_family", G.family);
+                    } else if (data.study_per != null) {
+                        G.score2 = data;
                     }
                 }
             });
@@ -6291,8 +6478,8 @@
                         WG.auto_preform("stop");
                     }
                 }
-               if (data.msg.indexOf("加油，加油！！") >= 0) {
-                    if (G.in_fight==false) {
+                if (data.msg.indexOf("加油，加油！！") >= 0) {
+                    if (G.in_fight == false) {
                         G.in_fight = true;
                         WG.auto_preform();
                     }
@@ -6309,14 +6496,14 @@
                         messageAppend(shieldhtml, 0, 0);
                         $(`#addshield${t}`).on('click', function () {
                             shield = GM_getValue('_shield', shield);
-                            if (shield!=""){
+                            if (shield != "") {
                                 shield = shield + "," + name;
-                            }else{
+                            } else {
                                 shield = name;
                             }
                             GM_setValue('_shield', shield);
                             $('#shield').val(shield);
-                            messageAppend("已屏蔽",1,1);
+                            messageAppend("已屏蔽", 1, 1);
                         });
                     }
                     if (dpssakada == '开') {
@@ -6341,31 +6528,31 @@
                     }
                 }
             });
-            WG.add_hook(['text','sc'],function(message){
-                if(funnycalc=='关')return;
+            WG.add_hook(['text', 'sc'], function (message) {
+                if (funnycalc == '关') return;
                 if (message.type === "text" && /你的最大内力增加了/.test(message.msg)) {
                     //if中已经判断了内力相关
-                    let x = message.msg.replace(/[^0-9]/ig,"");
+                    let x = message.msg.replace(/[^0-9]/ig, "");
                     let item = G.score;
                     let max = item.max_mp;
                     let limit = item.limit_mp;
                     let t = (limit - max) / (x * 6);//时间/分钟
                     let tStr = t < 60 ? `${parseInt(t)}分钟` : `${parseInt(t / 60)}小时${parseInt(t % 60)}分钟`;
                     let html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
-                    messageAppend(html,0,1);
-                }else if(message.type=='sc'&&message.id==G.id){
-                    if( message.max_mp != null && message.mp!= null){
+                    messageAppend(html, 0, 1);
+                } else if (message.type == 'sc' && message.id == G.id) {
+                    if (message.max_mp != null && message.mp != null) {
                         G.score.max_mp = message.max_mp;
                         G.score.mp = message.mp;
                     }
-                }else if(message.type=='text'){
+                } else if (message.type == 'text') {
                     if (/你获得了(.*)点经验，(.*)点潜能/.test(message.msg)) {
                         let x = message.msg.match(/获得了(.*)点经验，(.*)点潜能/);
                         G.jy += parseInt(x[1]);
                         G.qn += parseInt(x[2]);
-                        let mss =  `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
-                        messageAppend(mss,0,1);
-                 }
+                        let mss = `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
+                        messageAppend(mss, 0, 1);
+                    }
                 }
             });
         },
@@ -6607,11 +6794,11 @@
         function receiveMessage(event) {
             var origin = event.origin;
             var data = event.data;
-            if(data==='挖矿'||data==='修炼'){
+            if (data === '挖矿' || data === '修炼') {
                 WG.zdwk();
-            }else if(data==='日常'){
+            } else if (data === '日常') {
                 WG.SendCmd("$daily");
-            }else if(data==='挂机'){
+            } else if (data === '挂机') {
                 WG.SendCmd("stopstate");
             } else {
                 WG.SendCmd(data);
@@ -6783,7 +6970,7 @@
                 "自命令,及自定监控": {
                     name: "自命令,及自定监控",
                     callback: function (key, opt) {
-                        WG.zml();
+                        WG.zmlztjk();
                     },
                 },
                 "手动喜宴": {
