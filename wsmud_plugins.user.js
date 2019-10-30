@@ -3563,7 +3563,7 @@
                 data: {
                     singnalzml: {
                         name :"",
-                        zmlType: "1",
+                        zmlType: "0",
                         zmlRun: ""
                     },
                     zmldata: zml
@@ -3631,7 +3631,7 @@
                                 item.remove();
                                 v.zmlShow = 0;
                                 GM_setValue(role + "_zml", zml);
-                                messageAppend("删除快速使用" + v.name, 1);
+                                L.msg("删除快速使用" + v.name+"成功", 1);
                                 return;
                             }
                         }
@@ -5782,7 +5782,7 @@
         </span>
         <br />
         <span v-for="(item, index) in zmldata" @click="showp(item)">
-            快速使用{{item.name}}
+             <label v-if="item.zmlShow == '1'">取消快速使用</label><label v-else>快速使用</label>{{item.name}}
         </span>
         <br />
         <span v-for="(item, index) in zmldata" @click="share(item)">
@@ -5791,6 +5791,7 @@
         <br />
     </div>
 </div> `,
+
 
 
 
