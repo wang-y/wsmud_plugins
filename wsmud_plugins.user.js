@@ -5856,41 +5856,41 @@
         jsquivue: `
                     <div class="JsqVueUI">
                     <div class="item-commands">
-                <span id='qnjs_btn' @click='qnjs_btn'>潜能计算</span>
-                <span id='lxjs_btn' @click='lxjs_btn'>练习时间及潜能计算</span>
-                <span id='khjs_btn' @click='khjs_btn'>开花计算</span>
-                <span id='getskilljson' @click='getskilljson'>提取技能属性(可用于苏轻模拟器)</span>
+                <span @click='qnjs_btn'>潜能计算</span>
+                <span @click='lxjs_btn'>练习时间及潜能计算</span>
+                <span @click='khjs_btn'>开花计算</span>
+                <span  @click='getskilljson'>提取技能属性(可用于苏轻模拟器)</span>
             </div>
             <div class="item-commands">
-                <span id='onekeydaily' @click='onekeydaily'>一键日常</span>
-                <span id='onekeypk' @click='onekeypk'>自动比试</span>
+                <span  @click='onekeydaily'>一键日常</span>
+                <span  @click='onekeypk'>自动比试</span>
             </div>
             <div class="item-commands">
-                <span id='onekeystore' @click="onekeystore">存仓及贩卖</span>
-                <span id='onekeysell' @click='onekeysell'>丢弃及贩卖</span>
-                <span id='onekeyfenjie' @click='onekeyfenjie'>分解及贩卖</span>
+                <span  @click="onekeystore">存仓及贩卖</span>
+                <span  @click='onekeysell'>丢弃及贩卖</span>
+                <span  @click='onekeyfenjie'>分解及贩卖</span>
             </div>
             <div class="item-commands">
-                <span id='updatestore' @click='updatestore'>更新仓库数据(覆盖)</span>
-                <span id='sortstore' @click='sortstore'>排序仓库</span>
-                <span id='sortbag' @click='sortbag'>排序背包</span>
-                <span id='dsrw' @click='dsrw'>定时任务</span>
-                <span id='cleandps' @click='cleandps'>清空伤害</span>
+                <span @click='updatestore'>更新仓库数据(覆盖)</span>
+                <span @click='sortstore'>排序仓库</span>
+                <span @click='sortbag'>排序背包</span>
+                <span @click='dsrw'>定时任务</span>
+                <span @click='cleandps'>清空伤害</span>
             </div></div>`,
         lxjsui: `
                        <div style="width:50%;float:left" class='StudyTimeCalc'>
      <div class="setting-item"> <span>练习时间计算器</span></div>
-     <div class="setting-item">先天悟性:<input type="number" id="lx_xtwx" placeholder="先天悟性" style="width:50%"
+     <div class="setting-item">先天悟性:<input type="number"  placeholder="先天悟性" style="width:50%"
              class="mui-input-speech" v-model=jsqsx.xtwx></div>
-     <div class="setting-item">后天悟性:<input type="number" id="lx_htwx" placeholder="后天悟性" style="width:50%"
+     <div class="setting-item">后天悟性:<input type="number"  placeholder="后天悟性" style="width:50%"
              class="mui-input-speech" v-model=jsqsx.htwx></div>
-     <div class="setting-item">练习效率:<input type="number" id="lx_lxxl" placeholder="练习效率" style="width:50%"
+     <div class="setting-item">练习效率:<input type="number"  placeholder="练习效率" style="width:50%"
              class="mui-input-speech" v-model=jsqsx.lxxl></div>
-     <div class="setting-item">初始等级:<input type="number" id="lx_c" placeholder="初始等级" style="width:50%"
+     <div class="setting-item">初始等级:<input type="number" placeholder="初始等级" style="width:50%"
              class="mui-input-speech" v-model=jsqsx.clevel></div>
-     <div class="setting-item"> 目标等级:<input type="number" id="lx_m" placeholder="目标等级" style="width:50%"
+     <div class="setting-item"> 目标等级:<input type="number" placeholder="目标等级" style="width:50%"
              v-model=jsqsx.mlevel></div>
-     <div class="setting-item">技能颜色: <select id="lx_se" style="width:50%" v-model=jsqsx.color>
+     <div class="setting-item">技能颜色: <select style="width:50%" v-model=jsqsx.color>
              <option value='0'>选择技能颜色</option>
              <option value='1' style="color: #c0c0c0;">白色</option>
              <option value='2' style="color:#00ff00;">绿色</option>
@@ -5902,12 +5902,12 @@
     </div>`,
         qnjsui: ` <div style="width:50%;float:left" class="QianNengCalc">
     <div class="setting-item"> <span>潜能计算器</span></div>
-    <div class="setting-item">初始等级:<input type="number" id="c" placeholder="初始等级" style="width:50%"
+    <div class="setting-item">初始等级:<input type="number" placeholder="初始等级" style="width:50%"
             class="mui-input-speech" v-model='qnsx.c'>
     </div>
-    <div class="setting-item"> 目标等级:<input type="number" id="m" v-model='qnsx.m' placeholder="目标等级" style="width:50%">
+    <div class="setting-item"> 目标等级:<input type="number" v-model='qnsx.m' placeholder="目标等级" style="width:50%">
     </div>
-    <div class="setting-item"> <select id="se" style="width:50%" v-model='qnsx.color'>
+    <div class="setting-item"> 技能颜色:<select id="se" style="width:50%" v-model='qnsx.color'>
             <option value='0'>选择技能颜色</option>
             <option value='1' style="color: #c0c0c0;">白色</option>
             <option value='2' style="color:#00ff00;">绿色</option>
@@ -5915,17 +5915,22 @@
             <option value='4' style="color:#ffff00;">黄色</option>
             <option value='5' style="color:#912cee;">紫色</option>
             <option value='6' style="color: #ffa600;">橙色</option>
-        </select></div> <input type="button" value="计算" style="width:50%" id="qnjscalc">
+        </select>
+        </div> 
+        <div class="setting-item">
+        <div class="item-commands"><span @click="qnjscalc">计算</span></div>
+             </div> 
+        
 </div>`,
         khjsui: `<div style="width:50%;float:left" class="KaihuaCalc">
     <div class="setting-item"><span>开花计算器</span></div>
-    <div class="setting-item"> 当前内力:<input type="number" id="nl" placeholder="当前内力" style="width:50%"
+    <div class="setting-item"> 当前内力:<input type="number" placeholder="当前内力" style="width:50%"
             class="mui-input-speech" v-model="khsx.nl"></div>
-    <div class="setting-item"> 先天根骨:<input type="number" id="xg" placeholder="先天根骨" style="width:50%"
+    <div class="setting-item"> 先天根骨:<input type="number" placeholder="先天根骨" style="width:50%"
         v-model="khsx.xg"></div>
-    <div class="setting-item"> 后天根骨:<input type="number" id="hg" placeholder="后天根骨" style="width:50%"
+    <div class="setting-item"> 后天根骨:<input type="number" placeholder="后天根骨" style="width:50%"
         v-model="khsx.hg"></div>
-    <div class="setting-item"> <input type="button" @click="khjscalc" value="计算" id="kaihua" style="width:50%"></div>
+    <div class="setting-item">      <div class="item-commands"><span @click="khjscalc" >计算</span></div></div>
     <div class="setting-item"> <label>人花分值：5000 地花分值：6500 天花分值：8000</label></div>
 </div>`,
         lyui: `<div class='zdy_dialog' id="LianYao" style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank"
