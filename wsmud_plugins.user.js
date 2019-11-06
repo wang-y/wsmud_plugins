@@ -10,8 +10,8 @@
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
 // @require      https://cdn.jsdelivr.net/npm/vue/dist/vue.js
-// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.js
-// @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
+// @require      https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js
+// @require      https://cdn.bootcss.com/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -6765,13 +6765,13 @@
     };
 
     $(document).ready(function () {
-        $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.bootcss.com/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
 
         setTimeout(() => {
             var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
+            server.setAttribute('src', 'https://cdn.bootcss.com/layer/2.3/layer.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
             setInterval(() => {
