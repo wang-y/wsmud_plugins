@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.60
+// @version      0.0.32.61
 // @date         01/07/2018
 // @modified     30/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6127,6 +6127,15 @@
                 if (data.dialog == "pack" && data.items != undefined) {
                     packData = data.items;
                     eqData = data.eqs;
+                }
+                if (data.dialog =="skills"){
+                    if (data.enable != null &&zdyskills == "开"){
+                        zdyskilllist == "";
+                        messageAppend("检测到更换技能,请刷新重新获取技能数据!");
+                        zdyskills = "关";
+                        GM_setValue(role +"_zdyskilllist","");
+                        GM_setValue(role + "_zdyskills", zdyskills);
+                    }
                 }
             });
             WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat"], function (data) {
