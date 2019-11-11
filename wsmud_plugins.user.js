@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.59
+// @version      0.0.32.60
 // @date         01/07/2018
 // @modified     30/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -10,8 +10,8 @@
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
 // @require      https://cdn.jsdelivr.net/npm/vue/dist/vue.js
-// @require      https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js
-// @require      https://cdn.bootcss.com/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
+// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.js
+// @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -668,6 +668,9 @@
     //状态监控 type 类型  ishave  0 =其他任何人 1= 本人  2 仅npc  send 命令数组
     //[{"name":"","type":"status","action":"remove","keyword":"busy","ishave":"0","send":"","isactive":"1","maxcount":10,"pname":"宋远桥","istip":"1"}]
     var ztjk_item = [];
+    //  自定义技能开关
+    var zdyskills = "关";
+    var zdyskilllist = "";
     //欢迎语
     var welcome = '';
     //屏蔽开关
@@ -4412,6 +4415,12 @@
 
             _config.zdy_btnlist = GM_getValue(role + "_zdy_btnlist", zdy_btnlist);
             _config.auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
+
+
+
+            _config.zdyskills = GM_getValue(role + "_zdyskills", zdyskills);
+
+            _config.zdyskilllist = GM_getValue(role + "_zdyskilllist", zdyskilllist);
             S.uploadUserConfig(G.id, _config, (res) => {
                 if (res == "true") {
                     L.msg("已成功上传");
@@ -4457,6 +4466,8 @@
                     GM_setValue(role + "_silence", _config.silence);
                     GM_setValue(role + "_dpssakada", _config.dpssakada);
                     GM_setValue(role + "_funnycalc", _config.funnycalc);
+                    GM_setValue(role + "_zdyskills", _config.zdyskills);
+                    GM_setValue(role + "_zdyskilllist", _config.zdyskilllist);
                     if (_config.zdy_btnlist) {
                         GM_setValue(role + "_zdy_btnlist", _config.zdy_btnlist);
                     }
@@ -4599,6 +4610,26 @@
                         messageAppend('已注入屏蔽系统', 0, 1);
                     }
                 });
+                $('#zdyskillsswitch').click(function () {
+
+                    zdyskills = WG.switchReversal($(this));
+                    GM_setValue(role + "_zdyskills", zdyskills);
+                    if (zdyskills == "开") {
+                        messageAppend('已开启自定义技能顺序，填写顺序后，请刷新游戏生效', 0, 1);
+                    }
+                });
+
+                $('#zdyskilllist').change(function () {
+               
+                    let x = JSON.parse($("#zdyskilllist").val());
+                    if(!typeof x instanceof Array){
+                        alert("无效的输入")
+                        return false;
+                    }else{
+                    zdyskilllist = $("#zdyskilllist").val();
+                        GM_setValue(role + "_zdyskilllist", zdyskilllist);
+                    }
+                });
                 $('#silence').click(function () {
 
                     silence = WG.switchReversal($(this));
@@ -4727,6 +4758,9 @@
             $("#backimageurl").val(backimageurl);
             $("#loginhml").val(loginhml);
             $("#autobuy").val(auto_buylist);
+
+            $("#zdyskillsswitch").val(zdyskillsswitch);
+            $("#zdyskilllist").val(zdyskilllist);
             //自定义按钮刷新
             var keyitem = ["Q", "W", "E", "R", "T", "Y"];
             let zdybtni = 0;
@@ -5001,6 +5035,17 @@
                 WG.run_hook(data.type, data);
                 ws_on_message.apply(this, [p]);
                 return;
+            }
+            if (data.type == "perform"){
+                if(zdyskills == "开"){
+                    zdyskilllist = GM_getValue(role+"_zdyskilllist", zdyskilllist);
+                    data.skills = JSON.parse(zdyskilllist);
+                    let p = deepCopy(msg);
+                    p.data = JSON.stringify(data);
+                    WG.run_hook(data.type, data);
+                    ws_on_message.apply(this, [p]);
+                    return;
+                }
             }
             WG.run_hook(data.type, data);
 
@@ -5745,7 +5790,12 @@
                 + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
                 + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
                 + UI.html_input("loginhml", "登录后执行命令：")
-                + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)") + `
+                + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)") 
+                
+                + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
+                + UI.html_input("zdyskilllist", "自定义技能顺序json：")+ 
+                
+                `
 
                 <div class="setting-item" >
                 <div class="item-commands"><span class="update_id_all">初始化ID</span></div>
@@ -6256,6 +6306,10 @@
                     }
                 } else if (data.type == "perform") {
                     G.skills = data.skills;
+                    if (zdyskilllist == ""){
+                        zdyskilllist = JSON.stringify(data.skills);
+                        GM_setValue(role + "_zdyskilllist", zdyskilllist);
+                    }
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
                         if (data.distime) { }
@@ -6632,6 +6686,9 @@
             funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
 
             auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
+
+            zdyskilllist = GM_getValue(role + "_zdyskilllist", zdyskilllist);
+            zdyskills = GM_getValue(role + "_zdyskills", zdyskills);
             WG.zdy_btnListInit();
 
         }
@@ -6765,13 +6822,13 @@
     };
 
     $(document).ready(function () {
-        $('head').append('<link href="https://cdn.bootcss.com/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.bootcss.com/layer/2.3/skin/layer.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
 
         setTimeout(() => {
             var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.bootcss.com/layer/2.3/layer.js');
+            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
             setInterval(() => {
