@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.61
+// @version      0.0.32.62
 // @date         01/07/2018
 // @modified     30/10/2019
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -22,7 +22,6 @@
 
 (function () {
     'use strict';
-    var updateinfo = "🍋欢迎体验简单工具 \n 现在可以根据设置一键购买当铺物品了 自命令为$tnbuy \nQQ群 367657589 付费群 \n有问题请反馈\n支付宝搜索 9214712 领花呗红包\n";
 
     Array.prototype.baoremove = function (dx) {
         if (isNaN(dx) || dx > this.length) {
@@ -1294,7 +1293,7 @@
                             $('.zdy-item.zdwk').html("修炼(Y)");
                         }
                     }
-                    rolep = welcome + " " + rolep;
+                    rolep = welcome + "" + rolep;
                     if (WebSocket) {
                         if (shieldswitch == "开" || silence == '开') {
                             messageAppend('已注入屏蔽系统', 0, 1);
@@ -1305,11 +1304,15 @@
                                 插件版本: ${GM_info.script.version}
                                 </hiy>`;
                         } else {
-                            logintext = `
+                                   $.get("https://wsmud.ii74.com/hello/"+role, (result)=>{
+
+                                       let tmp  = `
                                 <hiy>欢迎${rolep},插件已加载！
                                 插件版本: ${GM_info.script.version}
-                                更新日志: ${updateinfo}
+                                更新日志: ${result}
                                 </hiy>`;
+                                        messageAppend(tmp);
+                                   });
                         }
                         WG.ztjk_func();
                         WG.zml_showp();
@@ -4620,7 +4623,7 @@
                 });
 
                 $('#zdyskilllist').change(function () {
-               
+
                     let x = JSON.parse($("#zdyskilllist").val());
                     if(!typeof x instanceof Array){
                         alert("无效的输入")
@@ -5790,11 +5793,11 @@
                 + UI.html_input("statehml", "当你各种状态中断后，自动以下操作(部分地点不执行)：")
                 + UI.html_input("backimageurl", "背景图片url(建议使用1920*1080分辨率图片)：")
                 + UI.html_input("loginhml", "登录后执行命令：")
-                + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)") 
-                
+                + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
+
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
-                + UI.html_input("zdyskilllist", "自定义技能顺序json：")+ 
-                
+                + UI.html_input("zdyskilllist", "自定义技能顺序json：")+
+
                 `
 
                 <div class="setting-item" >
@@ -5948,10 +5951,10 @@
              <option value='4' style="color:#ffff00;">黄色</option>
              <option value='5' style="color:#912cee;">紫色</option>
              <option value='6' style="color: #ffa600;">橙色</option>
-         </select></div> 
+         </select></div>
                 <div class="setting-item">
         <div class="item-commands"><span @click="lxjscalc">计算</span></div>
-             </div> 
+             </div>
     </div>`,
         qnjsui: ` <div style="width:50%;float:left" class="QianNengCalc">
     <div class="setting-item"> <span>潜能计算器</span></div>
@@ -5969,11 +5972,11 @@
             <option value='5' style="color:#912cee;">紫色</option>
             <option value='6' style="color: #ffa600;">橙色</option>
         </select>
-        </div> 
+        </div>
         <div class="setting-item">
         <div class="item-commands"><span @click="qnjscalc">计算</span></div>
-             </div> 
-        
+             </div>
+
 </div>`,
         khjsui: `<div style="width:50%;float:left" class="KaihuaCalc">
     <div class="setting-item"><span>开花计算器</span></div>
@@ -6853,6 +6856,7 @@
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
         }, 2000);
+
         KEY.init();
         WG.init();
         GI.init();
