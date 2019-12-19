@@ -138,7 +138,7 @@
                     var itemid = itemids[itemids.length - 1];
                     WG.getItemNameByid(itemid, function (name) {
                         if (lock_list.indexOf(name) >= 0) {
-                            messageAppend(`已锁物品${name},无法丢弃`);
+                            messageAppend(`已锁物品${name}，无法丢弃，请解锁后重试`);
                             return;
                         } else {
                             ws.send(text);
