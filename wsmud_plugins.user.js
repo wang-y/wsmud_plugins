@@ -5796,7 +5796,7 @@
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
 
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
-                + UI.html_input("zdyskilllist", "自定义技能顺序json：")+
+                + UI.html_input("zdyskilllist", "自定义技能顺序json数组：")+
 
                 `
 
