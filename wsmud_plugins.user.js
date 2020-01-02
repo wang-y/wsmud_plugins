@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.65
+// @version      0.0.32.66
 // @date         01/07/2018
-// @modified     01/01/2020
+// @modified     02/01/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1328,6 +1328,11 @@
                     messageAppend(logintext);
                 }, 500);
                 KEY.do_command("showcombat");
+                //执行记忆面板
+                var closeBorad = localStorage.getItem("closeBorad");
+                if (closeBorad==="true"){
+                    WG.showhideborad()
+                }
                 WG.runLoginhml();
                 //开启定时器
                 var systime = setInterval(() => {
@@ -2621,8 +2626,10 @@
         },
         showhideborad: function () {
             if ($('.WG_log').css('display') == 'none') {
+                window.localStorage.setItem("closeBorad","false")
                 $('.WG_log').show();
             } else {
+                window.localStorage.setItem("closeBorad", "true")
                 $('.WG_log').hide();
             }
         },
