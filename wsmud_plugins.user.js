@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.64
+// @version      0.0.32.65
 // @date         01/07/2018
-// @modified     30/10/2019
+// @modified     01/01/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5951,6 +5951,7 @@
              <option value='4' style="color:#ffff00;">黄色</option>
              <option value='5' style="color:#912cee;">紫色</option>
              <option value='6' style="color: #ffa600;">橙色</option>
+             <option value='7' style="color: #CC0000;">红色</option>
          </select></div>
                 <div class="setting-item">
         <div class="item-commands"><span @click="lxjscalc">计算</span></div>
