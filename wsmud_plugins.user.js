@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.66
+// @version      0.0.32.67
 // @date         01/07/2018
-// @modified     02/01/2020
+// @modified     03/01/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6858,7 +6858,7 @@
                 } else if (parseInt(Math.random() * 10) < 6) {
                     h = "<hir>【插件】欢迎登录 http://wsmud.bobcn.me 进行流程及触发器技术交流，脚本讨论。\n<hir>";
                 } else if (parseInt(Math.random() * 10) < 10) {
-                    h = "<hir>【插件】欢迎访问 https://suqing.fun/wsmud 苏轻 助你武神之路上更加轻松愉快。\n<hir>";
+                    h = "<hir>【插件】欢迎访问 https://emeisuqing.github.io/wsmud.old/ 苏轻 助你武神之路上更加轻松愉快。\n<hir>";
                 }
                 parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
                 $(".channel")[0].scrollTop = 99999;
