@@ -8,6 +8,7 @@
 
 [Wsmud_Trigger下载](https://github.com/knva/wsmud_plugins/raw/master/wsmud_Trigger.user.js)
 
+
 第一次使用,请先点击右键,选择,设置,然后初始化ID ,若初始化失败,请重新安装,或者更换浏览器
 
 请手动设置是否开启自动喜宴,自动boss,以及设定延时
@@ -22,6 +23,10 @@ Raid.js 自动副本插件 https://greasyfork.org/zh-CN/scripts/375851-wsmud-rai
 wsmud_Trigger 触发器插件 https://greasyfork.org/zh-CN/scripts/378984
 
 wsmud_funny 趣味界面插件https://greasyfork.org/zh-CN/scripts/380709-wsmud-funny
+
+wsmud 插件分享码查询 https://wsmud.ii74.com
+
+wsmud 多开 http://aize.coding.me/wsmud/
 
 有问题请发帖,会修复
 
@@ -200,6 +205,13 @@ $to 住房
 
 $eq 1 
 
+#### $eqskill
+用于切换技能组设置
+
+例如
+
+$eq 1 
+
 #### $killw
 击杀完成后才会继续执行命令
 
@@ -294,9 +306,6 @@ $startautopfm force.tu,unarmed.zhen;
 
 #### $drop
 用于自动丢弃物品
-
-#### $eqskill
-用于切换技能套装  
 
 #### $cls
 清理log输出
