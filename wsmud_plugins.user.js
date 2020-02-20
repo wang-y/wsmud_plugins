@@ -146,6 +146,12 @@
                     })
                     return;
                 }
+                if (text.indexOf('jh ') == 0 || text.indexOf("go ") == 0){
+                    if(auto_rewardgoto=="开"){
+                        WG.Send("tm " + text);
+                    }
+                }
+
                 switch (text) {
                     case 'sm':
                         T.sm();
@@ -652,6 +658,8 @@
     var unauto_pfm = '';
     //自动施法开关
     var auto_pfmswitch = "开";
+    //自动转发路径
+    var auto_rewardgoto = "开";
     var autoeq = 0;
     //自命令数组  type 0 原生 1 自命令 2js
     //[{"name":"name","zmlRun":"zzzz","zmlShow":"1","zmlType":"0"}]
@@ -4401,6 +4409,7 @@
             _config.sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
             _config.unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
             _config.auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
+            _config.auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
             _config.zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
             _config.blacklist = GM_getValue(role + "_blacklist", blacklist);
             _config.getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
@@ -4455,6 +4464,7 @@
                     GM_setValue(role + "_sm_getstore", _config.sm_getstore);
                     GM_setValue(role + "_unauto_pfm", _config.unauto_pfm);
                     GM_setValue(role + "_auto_pfmswitch", _config.auto_pfmswitch);
+                    GM_setValue(role + "_auto_rewardgoto", _config.auto_rewardgoto);
                     GM_setValue(role + "_zmlshowsetting", _config.zmlshowsetting);
                     GM_setValue(role + "_blacklist", _config.blacklist);
                     GM_setValue(role + "_getitemShow", _config.getitemShow);
@@ -4552,6 +4562,10 @@
                     } else {
                         G.auto_preform = false;
                     }
+                });
+                $('#autorewardgoto').click(function () {
+                    auto_rewardgoto = WG.switchReversal($(this));
+                    GM_setValue(role + "auto_rewardgoto", auto_rewardgoto);
                 });
 
                 $("#zmlshowsetting").change(function () {
@@ -4747,6 +4761,7 @@
             $('#ks_Boss').val(autoKsBoss);
             $('#auto_eq').val(autoeq);
             $('#autopfmswitch').val(auto_pfmswitch);
+            $('#autorewardgoto').val(auto_rewardgoto);
             $("#zmlshowsetting").val(zmlshowsetting);
             $('#getitemShow').val(getitemShow);
             $('#unauto_pfm').val(unauto_pfm);
@@ -5790,6 +5805,7 @@
                 + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
+                + UI.html_switch('autorewardgoto', '开启转发路径：', 'auto_rewardgoto')
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
                 + UI.html_input("store_info", "输入自动存储的物品名称(使用半角逗号分隔)：")
                 + UI.html_input("lock_info", "已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔)：")
