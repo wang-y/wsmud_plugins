@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.68
+// @version      0.0.32.69
 // @date         01/07/2018
 // @modified     03/01/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4565,7 +4565,7 @@
                 });
                 $('#autorewardgoto').click(function () {
                     auto_rewardgoto = WG.switchReversal($(this));
-                    GM_setValue(role + "auto_rewardgoto", auto_rewardgoto);
+                    GM_setValue(role + "_auto_rewardgoto", auto_rewardgoto);
                 });
 
                 $("#zmlshowsetting").change(function () {
@@ -6673,6 +6673,7 @@
             sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
             unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
             auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
+            auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
             blacklist = GM_getValue(role + "_blacklist", blacklist);
             if (!blacklist instanceof Array) {
                 blacklist = blacklist.split(",")
