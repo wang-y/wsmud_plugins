@@ -5,7 +5,7 @@
 // @date         01/07/2018
 // @modified     03/01/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
-// @description  武神传说 MUD
+// @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589 
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
