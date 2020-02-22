@@ -659,7 +659,7 @@
     //自动施法开关
     var auto_pfmswitch = "开";
     //自动转发路径
-    var auto_rewardgoto = "开";
+    var auto_rewardgoto = "关";
     var autoeq = 0;
     //自命令数组  type 0 原生 1 自命令 2js
     //[{"name":"name","zmlRun":"zzzz","zmlShow":"1","zmlType":"0"}]
