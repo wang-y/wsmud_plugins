@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.70
+// @version      0.0.32.71
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4725,6 +4725,14 @@
                 $('.backup_btn').on('click', WG.make_config);
                 $('.load_btn').on('click', WG.load_config);
                 $('.clean_dps').on('click', WG.clean_dps);
+                
+                $('.clear_skillJson').on('click', ()=>{
+                    zdyskilllist == "";
+                    messageAppend("已关闭自定义，请刷新重新获取技能数据!");
+                    zdyskills = "关";
+                    GM_setValue(role +"_zdyskilllist","");
+                    GM_setValue(role + "_zdyskills", zdyskills);
+                });
 
 
                 $(".savebtn").on("click", function () {
@@ -5819,9 +5827,10 @@
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
 
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
-                + UI.html_input("zdyskilllist", "自定义技能顺序json数组：")+
-
-                `
+    
+                + UI.html_input("zdyskilllist", "自定义技能顺序json数组：")
+                +` <div class="setting-item" ><div class="item-commands"><span class="clear_skillJson">清空技能json数组</span></div></div>`
+                +`
 
                 <div class="setting-item" >
                 <div class="item-commands"><span class="update_id_all">初始化ID</span></div>
