@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.71
+// @version      0.0.32.72
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6172,6 +6172,23 @@
                         GM_setValue(role +"_zdyskilllist","");
                         GM_setValue(role + "_zdyskills", zdyskills);
                     }
+                }
+                if(data.dialog == "list" && G.room_name.indexOf("钱庄")){
+                    if(data.id!=null&&data.store!=null){
+                        WG.SendCmd("store")
+                    }
+                    
+                    var stores = data.stores;
+                    if(stores!=null){
+                        store_list = [];
+                        for (let store of stores) {
+                            store_list.push(store.name.toLowerCase());
+                        }
+                        zdy_item_store = store_list.join(',');
+                        $('#store_info').val(zdy_item_store);
+                        GM_setValue(role + "_zdy_item_store", zdy_item_store);
+                    }
+
                 }
             });
             WG.add_hook(["status", "login", "exits", "room", "items", "itemadd", "itemremove", "sc", "text", "state", "msg", "perform", "dispfm", "combat"], function (data) {
