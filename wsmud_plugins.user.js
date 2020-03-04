@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.72
+// @version      0.0.32.73
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1979,15 +1979,6 @@
         sort_all: function () {
 
             var storeset = [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
             ];
             if (WG.sort_hook) {
                 messageAppend("<hio>仓库排序</hio>运行中");
@@ -2016,29 +2007,26 @@
                     if (data.stores == undefined) {
                         return;
                     }
+                const colorSet = ['wht','hig','hic','hiy','hiz','hio','red','hir','ord'];
+        
                     for (let store of data.stores) {
-                        if (store.name.toLocaleLowerCase().indexOf('wht') >= 0) {
-                            storeset[0].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hig') >= 0) {
-                            storeset[1].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hic') >= 0) {
-                            storeset[2].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hiy') >= 0) {
-                            storeset[3].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hiz') >= 0) {
-                            storeset[4].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hio') >= 0) {
-                            storeset[5].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('red') >= 0) {
-                            storeset[6].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hir') >= 0) {
-                            storeset[7].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('ord') >= 0) {
-                            storeset[8].push(store);
+                        let num = 0;
+                        for (let cx of colorSet){
+                            if (store.name.toLocaleLowerCase().indexOf(cx) >= 0) {
+                                if(storeset[num]){
+                                    storeset[num].push(store);
+                                }else{
+                                    storeset[num] = [store];
+                                }
+                            }
+                            num++;
                         }
+                  
                     }
                     for (let item of storeset) {
-                        sortCmd += getandstore(item);
+                        if(item){
+                            sortCmd += getandstore(item);
+                         }
                     }
                     sortCmd += "look3 1";
                     WG.SendCmd(sortCmd);
@@ -2059,15 +2047,6 @@
         sort_all_bag: function () {
 
             var storeset = [
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                [],
-                []
             ];
             if (WG.sort_hook) {
                 messageAppend("<hio>背包排序</hio>运行中");
@@ -2096,29 +2075,25 @@
                     if (data.items == undefined) {
                         return;
                     }
-                    for (let store of data.items) {
-                        if (store.name.toLocaleLowerCase().indexOf('wht') >= 0) {
-                            storeset[0].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hig') >= 0) {
-                            storeset[1].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hic') >= 0) {
-                            storeset[2].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hiy') >= 0) {
-                            storeset[3].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hiz') >= 0) {
-                            storeset[4].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hio') >= 0) {
-                            storeset[5].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('red') >= 0) {
-                            storeset[6].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('hir') >= 0) {
-                            storeset[7].push(store);
-                        } else if (store.name.toLocaleLowerCase().indexOf('ord') >= 0) {
-                            storeset[8].push(store);
+                    const colorSet = ['wht','hig','hic','hiy','hiz','hio','red','hir','ord'];
+              
+                    for (let store of data.stores) {
+                        let num = 0;
+                        for (let cx of colorSet){
+                            if (store.name.toLocaleLowerCase().indexOf(cx) >= 0) {
+                                if(storeset[num]){
+                                    storeset[num].push(store);
+                                }else{
+                                    storeset[num] = [store];
+                                }
+                            }
+                            num++;
                         }
                     }
                     for (let item of storeset) {
-                        sortCmd += getandstore(item);
+                        if(item){
+                           sortCmd += getandstore(item);
+                        }
                     }
                     sortCmd += "look3 1";
                     WG.SendCmd(sortCmd);
@@ -6173,7 +6148,7 @@
                         GM_setValue(role + "_zdyskills", zdyskills);
                     }
                 }
-                if(data.dialog == "list" && G.room_name.indexOf("钱庄")){
+                if(data.dialog == "list" && G.room_name.indexOf("钱庄")&&WG.sort_hook==null){
                     if(data.id!=null&&data.store!=null){
                         WG.SendCmd("store")
                     }
