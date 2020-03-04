@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.74
+// @version      0.0.32.75
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -108,7 +108,17 @@
                 return ws.onclose;
             },
             set onclose(fn) {
-                ws.onclose = fn;
+                ws.onclose = (e)=>{
+                    auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
+                    fn(e);
+                    if(auto_relogin == "开"){
+                        setTimeout(() => {
+                            console.log(new Date());
+                            KEY.do_command("score");
+                        }, 10000);
+                    }
+                }
+              
             },
             get onerror() {
                 return ws.onerror;
@@ -662,6 +672,8 @@
     var auto_rewardgoto = "关";
     //自动更新仓库数据
     var auto_updateStore = "关";
+    //自动重连
+    var auto_relogin = "关";
     var autoeq = 0;
     //自命令数组  type 0 原生 1 自命令 2js
     //[{"name":"name","zmlRun":"zzzz","zmlShow":"1","zmlType":"0"}]
@@ -4388,6 +4400,7 @@
             _config.auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
             _config.auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
             _config.auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
+            _config.auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
             _config.zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
             _config.blacklist = GM_getValue(role + "_blacklist", blacklist);
             _config.getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
@@ -4444,6 +4457,7 @@
                     GM_setValue(role + "_auto_pfmswitch", _config.auto_pfmswitch);
                     GM_setValue(role + "_auto_rewardgoto", _config.auto_rewardgoto);
                     GM_setValue(role + "_auto_updateStore", _config.auto_updateStore);
+                    GM_setValue(role + "_auto_relogin", _config.auto_relogin);
                     GM_setValue(role + "_zmlshowsetting", _config.zmlshowsetting);
                     GM_setValue(role + "_blacklist", _config.blacklist);
                     GM_setValue(role + "_getitemShow", _config.getitemShow);
@@ -4550,6 +4564,10 @@
                 $('#autoupdateStore').click(function () {
                     auto_updateStore = WG.switchReversal($(this));
                     GM_setValue(role + "_auto_updateStore", auto_updateStore);
+                });
+                $('#autorelogin').click(function () {
+                    auto_relogin = WG.switchReversal($(this));
+                    GM_setValue(role + "_auto_relogin", auto_relogin);
                 });
                 $("#zmlshowsetting").change(function () {
                     zmlshowsetting = $('#zmlshowsetting').val();
@@ -4754,6 +4772,7 @@
             $('#autopfmswitch').val(auto_pfmswitch);
             $('#autorewardgoto').val(auto_rewardgoto);
             $('#autoupdateStore').val(auto_updateStore);
+            $('#autorelogin').val(auto_relogin);
             $("#zmlshowsetting").val(zmlshowsetting);
             $('#getitemShow').val(getitemShow);
             $('#unauto_pfm').val(unauto_pfm);
@@ -5767,7 +5786,9 @@
                     </select>
                 </span>
                     </div>`
-                + UI.html_switch('shieldswitch', '聊天频道屏蔽开关:', 'shieldswitch')
+                    
+                + UI.html_switch('autorelogin', '自动重连: ', 'auto_relogin')
+                + UI.html_switch('shieldswitch', '聊天频道屏蔽开关: ', 'shieldswitch')
                 + UI.html_switch('silence', '安静模式:', 'silence')
                 + UI.html_switch('dpssakada', '战斗统计:', 'dpssakada')
                 + UI.html_switch('funnycalc', 'funny计算:', 'funnycalc')
@@ -6159,6 +6180,8 @@
                         GM_setValue(role + "_zdyskills", zdyskills);
                     }
                 }
+                
+                 auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
                 if(data.dialog == "list" && G.room_name.indexOf("钱庄")&&WG.sort_hook==null && auto_updateStore=="开"){
                     if(data.id!=null&&data.store!=null){
                         WG.SendCmd("store")
@@ -6687,6 +6710,7 @@
             auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
             auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
             auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
+            auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
             blacklist = GM_getValue(role + "_blacklist", blacklist);
             if (!blacklist instanceof Array) {
                 blacklist = blacklist.split(",")
@@ -7084,8 +7108,8 @@
                         },
                     }
                 },
-                "自命令,及自定监控": {
-                    name: "自命令,及自定监控",
+                "自命令,自定监控": {
+                    name: "自命令,自定监控",
                     callback: function (key, opt) {
                         WG.zmlztjk();
                     },
