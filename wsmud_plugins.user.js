@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.75
+// @version      0.0.32.76
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2091,7 +2091,7 @@
                     }
                     const colorSet = ['wht','hig','hic','hiy','hiz','hio','red','hir','ord'];
               
-                    for (let store of data.stores) {
+                    for (let store of data.items) {
                         let num = 0;
                         for (let cx of colorSet){
                             if (store.name.toLocaleLowerCase().indexOf(cx) >= 0) {
