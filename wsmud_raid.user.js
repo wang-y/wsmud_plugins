@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name            wsmud_Raid
 // @namespace       cqv
-// @version         2.4.9
+// @version         2.4.12
 // @date            23/12/2018
 // @modified        15/02/2019
 // @homepage        https://greasyfork.org/zh-CN/scripts/375851
 // @description     武神传说 MUD
-// @author          Bob.cn
+// @author          Bob.cn, 初心
 // @match           http://*.wsmud.com/*
 // @run-at          document-end
-// @require         https://cdn.bootcss.com/vue/2.2.2/vue.min.js
+// @require         https://cdn.staticfile.org/vue/2.2.2/vue.min.js
 // @grant           unsafeWindow
 // @grant           GM_getValue
 // @grant           GM_setValue
@@ -3210,6 +3210,35 @@ go up
 @wait 1000
 jump bi
 get all from {r五绝宝箱}`
+        },
+        {
+            name: "青城山",
+            source: `
+   jh fb 13 start1
+    cr wuyue/qingcheng/shanlu
+    go westup
+    @kill 青城派弟子,青城派弟子
+    go north
+    go northup
+    go eastup
+    @kill 青城派弟子,青城派弟子
+    go northup
+    @kill 洪人雄
+    go north[3]
+    @kill 于人豪
+    go north
+    @kill 侯人英,罗人杰
+    go south,go east
+    @kill 余人彦
+    go north
+    [if] (_DungeonWaitSkillCD) == 打开
+        @cd
+    @kill 余沧海
+    cr;cr over
+    @tidyBag
+    ($num) = (num) + 1
+stopSSAuto->
+recordGains->`
         },
         {
             name: "光明顶(组队)",
