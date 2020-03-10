@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.77
+// @version      0.0.32.78
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -496,6 +496,8 @@
         "扬州城-擂台": "jh fam 0 start;go west;go south",
         "扬州城-当铺": "jh fam 0 start;go south;go east",
         "扬州城-帮派": "jh fam 0 start;go south;go south;go east",
+        "扬州城-有间客栈": "jh fam 0 start;go north;go east",
+        "扬州城-赌场": "jh fam 0 start;go south;go west",
         "帮会-大门": "jh fam 0 start;go south;go south;go east;go east",
         "帮会-大院": "jh fam 0 start;go south;go south;go east;go east;go east",
         "帮会-练功房": "jh fam 0 start;go south;go south;go east;go east;go east;go north",
@@ -6063,6 +6065,8 @@
             <span cmd = "$to 住房" > 住房 </span>
             <span cmd = "$to 扬州城-武庙" > 武庙 </span>
             <span cmd = "$to 帮会-大院" > 帮派 </span>
+            <span cmd = "$to 扬州城-赌场" > 赌场 </span>
+            <span cmd = "$to 扬州城-有间客栈" > 客栈 </span>
             <span cmd = "$to 扬州城-矿山" > 矿山 </span></div>`,
             `<div class='item-commands'><span cmd = "$to 武当派-后山小院" >掌门</span>
              <span cmd = "$to 武当派-石阶" >后勤</span>
