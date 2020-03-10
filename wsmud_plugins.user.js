@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.76
+// @version      0.0.32.77
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1344,6 +1344,8 @@
                             <hiy>欢迎${role},插件未正常加载！
                             当前浏览器不支持自动喜宴自动boss,请使用火狐浏览器
                             谷歌系浏览器,请在network中勾选disable cache,多刷新几次,直至提示已加载!
+                            多次刷新无法仍然出现本提示，请打开tampermonkey 插件设置
+                            开启高级设置，在最下方实验 设置 “注入模式：即时”“严格模式：禁用”
                             插件版本: ${GM_info.script.version}
                             </hiy>`;
                     }
