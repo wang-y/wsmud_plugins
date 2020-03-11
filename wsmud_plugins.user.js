@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.78
+// @version      0.0.32.79
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -682,6 +682,8 @@
     var zml = [];
     //自定义存取
     var zdy_item_store = '';
+    //自定义存取
+    var zdy_item_store2 = '';
     //自定义锁
     var zdy_item_lock = '';
     //自定义丢弃
@@ -2265,17 +2267,17 @@
             })
         },
         addstore: (itemname) => {
-            if (zdy_item_store == "") {
-                zdy_item_store = itemname;
+            if (zdy_item_store2 == "") {
+                zdy_item_store2 = itemname;
             } else {
-                zdy_item_store = zdy_item_store + "," + itemname;
+                zdy_item_store2 = zdy_item_store2 + "," + itemname;
             }
-            GM_setValue(role + "_zdy_item_store", zdy_item_store);
+            GM_setValue(role + "_zdy_item_store2", zdy_item_store2);
 
-            $('#store_info').val(zdy_item_store);
+            $('#store_info2').val(zdy_item_store2);
 
-            if (zdy_item_store) {
-                store_list = zdy_item_store.split(",");
+            if (zdy_item_store2) {
+                store_list = zdy_item_store2.split(",");
             }
 
             messageAppend("添加存仓成功" + itemname);
@@ -4410,6 +4412,7 @@
             _config.getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
             _config.zml = GM_getValue(role + "_zml", zml);
             _config.zdy_item_store = GM_getValue(role + "_zdy_item_store", zdy_item_store);
+            _config.zdy_item_store2 = GM_getValue(role + "_zdy_item_store2", zdy_item_store2);
             _config.zdy_item_lock = GM_getValue(role + "_zdy_item_lock", zdy_item_lock);
             _config.zdy_item_drop = GM_getValue(role + "_zdy_item_drop", zdy_item_drop);
             _config.zdy_item_fenjie = GM_getValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
@@ -4467,6 +4470,7 @@
                     GM_setValue(role + "_getitemShow", _config.getitemShow);
                     GM_setValue(role + "_zml", _config.zml);
                     GM_setValue(role + "_zdy_item_store", _config.zdy_item_store);
+                    GM_setValue(role + "_zdy_item_store2", _config.zdy_item_store2);
                     GM_setValue(role + "_zdy_item_lock", _config.zdy_item_lock);
                     GM_setValue(role + "_zdy_item_drop", _config.zdy_item_drop);
                     GM_setValue(role + "_zdy_item_fenjie", _config.zdy_item_fenjie);
@@ -4602,6 +4606,13 @@
                     zdy_item_store = $('#store_info').val();
                     GM_setValue(role + "_zdy_item_store", zdy_item_store);
                     store_list = zdy_item_store.split(",");
+                    store_list = store_list.concat(zdy_item_store2.split(","));
+                });
+                $('#store_info2').change(function () {
+                    zdy_item_store2 = $('#store_info2').val();
+                    GM_setValue(role + "_zdy_item_store2", zdy_item_store2);
+                    store_list = zdy_item_store2.split(",");
+                    store_list = store_list.concat(zdy_item_store.split(","));
                 });
                 $('#lock_info').change(function () {
                     zdy_item_lock = $('#lock_info').val();
@@ -4781,6 +4792,7 @@
             $('#getitemShow').val(getitemShow);
             $('#unauto_pfm').val(unauto_pfm);
             $('#store_info').val(zdy_item_store);
+            $('#store_info2').val(zdy_item_store2);
 
             $('#lock_info').val(zdy_item_lock);
             $('#store_drop_info').val(zdy_item_drop);
@@ -5826,7 +5838,8 @@
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
                 
                 + UI.html_switch('autoupdateStore', '自动更新仓库数据：', 'auto_updateStore')
-                + UI.html_input("store_info", "输入自动存储的物品名称(使用半角逗号分隔)：")
+                + UI.html_input("store_info", "自动存储的物品名称（自动获得的物品信息,随仓库内容更新）：")
+                + UI.html_input("store_info2", "手动添加的自动存仓物品信息（不会随仓库内容更新，使用半角逗号分隔）：")
                 + UI.html_input("lock_info", "已锁物品名称(锁定物品不会自动丢弃,使用半角逗号分隔)：")
                 + UI.html_input("store_drop_info", "输入自动丢弃的物品名称(使用半角逗号分隔)：")
                 + UI.html_input("store_fenjie_info", "输入自动分解的物品名称(使用半角逗号分隔)：")
@@ -6202,6 +6215,8 @@
                         zdy_item_store = store_list.join(',');
                         $('#store_info').val(zdy_item_store);
                         GM_setValue(role + "_zdy_item_store", zdy_item_store);
+
+                        store_list = store_list.concat(zdy_item_store2.split(","));
                     }
 
                 }
@@ -6729,11 +6744,15 @@
             }
             zml = GM_getValue(role + "_zml", zml);
             zdy_item_store = GM_getValue(role + "_zdy_item_store", zdy_item_store);
+            zdy_item_store2 = GM_getValue(role + "_zdy_item_store2", zdy_item_store2);
             zdy_item_lock = GM_getValue(role + "_zdy_item_lock", zdy_item_lock);
             zdy_item_drop = GM_getValue(role + "_zdy_item_drop", zdy_item_drop);
             zdy_item_fenjie = GM_getValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
             if (zdy_item_store) {
                 store_list = store_list.concat(zdy_item_store.split(","))
+            }
+            if (zdy_item_store2) {
+                store_list = store_list.concat(zdy_item_store2.split(","))
             }
             if (zdy_item_lock) {
                 lock_list = lock_list.concat(zdy_item_lock.split(","))
