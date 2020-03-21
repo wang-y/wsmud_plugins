@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.79
+// @version      0.0.32.80
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4811,7 +4811,7 @@
             $("#loginhml").val(loginhml);
             $("#autobuy").val(auto_buylist);
 
-            $("#zdyskillsswitch").val(zdyskillsswitch);
+            $("#zdyskillsswitch").val(zdyskills);
             $("#zdyskilllist").val(zdyskilllist);
             //自定义按钮刷新
             var keyitem = ["Q", "W", "E", "R", "T", "Y"];
