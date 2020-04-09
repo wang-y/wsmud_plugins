@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.80
+// @version      0.0.32.81
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
-// @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589 
+// @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
@@ -118,7 +118,7 @@
                         }, 10000);
                     }
                 }
-              
+
             },
             get onerror() {
                 return ws.onerror;
@@ -2028,7 +2028,7 @@
                         return;
                     }
                 const colorSet = ['wht','hig','hic','hiy','hiz','hio','red','hir','ord'];
-        
+
                     for (let store of data.stores) {
                         let num = 0;
                         for (let cx of colorSet){
@@ -2041,7 +2041,7 @@
                             }
                             num++;
                         }
-                  
+
                     }
                     for (let item of storeset) {
                         if(item){
@@ -2096,7 +2096,7 @@
                         return;
                     }
                     const colorSet = ['wht','hig','hic','hiy','hiz','hio','red','hir','ord'];
-              
+
                     for (let store of data.items) {
                         let num = 0;
                         for (let cx of colorSet){
@@ -4741,7 +4741,7 @@
                 $('.backup_btn').on('click', WG.make_config);
                 $('.load_btn').on('click', WG.load_config);
                 $('.clean_dps').on('click', WG.clean_dps);
-                
+
                 $('.clear_skillJson').on('click', ()=>{
                     zdyskilllist == "";
                     messageAppend("已关闭自定义，请刷新重新获取技能数据!");
@@ -5802,7 +5802,7 @@
                     </select>
                 </span>
                     </div>`
-                    
+
                 + UI.html_switch('autorelogin', '自动重连: ', 'auto_relogin')
                 + UI.html_switch('shieldswitch', '聊天频道屏蔽开关: ', 'shieldswitch')
                 + UI.html_switch('silence', '安静模式:', 'silence')
@@ -5836,7 +5836,7 @@
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
                 + UI.html_switch('autorewardgoto', '开启转发路径：', 'auto_rewardgoto')
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
-                
+
                 + UI.html_switch('autoupdateStore', '自动更新仓库数据：', 'auto_updateStore')
                 + UI.html_input("store_info", "自动存储的物品名称（自动获得的物品信息,随仓库内容更新）：")
                 + UI.html_input("store_info2", "手动添加的自动存仓物品信息（不会随仓库内容更新，使用半角逗号分隔）：")
@@ -5851,7 +5851,7 @@
                 + UI.html_input("autobuy", "自动当铺购买清单：(用半角逗号分隔)")
 
                 + UI.html_switch('zdyskillsswitch', '自定义技能顺序开关：', 'zdyskills')
-    
+
                 + UI.html_input("zdyskilllist", "自定义技能顺序json数组：")
                 +` <div class="setting-item" ><div class="item-commands"><span class="clear_skillJson">清空技能json数组</span></div></div>`
                 +`
@@ -6199,13 +6199,13 @@
                         GM_setValue(role + "_zdyskills", zdyskills);
                     }
                 }
-                
+
                  auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
                 if(data.dialog == "list" && G.room_name.indexOf("钱庄")&&WG.sort_hook==null && auto_updateStore=="开"){
                     if(data.id!=null&&data.store!=null){
                         WG.SendCmd("store")
                     }
-                    
+
                     var stores = data.stores;
                     if(stores!=null){
                         store_list = [];
@@ -6967,7 +6967,17 @@
             } else if (data === '挂机') {
                 WG.SendCmd("stopstate");
             } else {
-                WG.SendCmd(data);
+                if (data.split("\n")[0].indexOf("//") >= 0) {
+                    if (unsafeWindow && unsafeWindow.ToRaid) {
+                        ToRaid.perform(data);
+                    }
+                } else if (data.split("\n")[0].indexOf("#js") >= 0) {
+                    var jscode = data.split("\n");
+                    jscode.baoremove(0)
+                    eval(jscode.join(""));
+                } else {
+                    WG.SendCmd(data);
+                }
             }
         }
         $('.room-name').on('click', (e) => {
