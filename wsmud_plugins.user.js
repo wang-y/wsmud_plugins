@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.81
+// @version      0.0.32.82
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4220,7 +4220,7 @@
         },
         oneKeyQA: async function () {
             WG.Send("stopstate");
-            WG.sm_state = 0;
+            WG.sm_state = -1;
             var sxplace = sm_array[family].sxplace;
             var sx = sm_array[family].sx;
             if (sxplace.indexOf("-") == 0) {
