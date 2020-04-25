@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.82
+// @version      0.0.32.83
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6960,6 +6960,14 @@
         function receiveMessage(event) {
             var origin = event.origin;
             var data = event.data;
+            try {
+                if(JSON.parse(data) instanceof Object){
+                    return;
+                }
+            } catch (error) {
+                console.log("Run at message");
+            }
+            
             if (data === '挖矿' || data === '修炼') {
                 WG.zdwk();
             } else if (data === '日常') {
