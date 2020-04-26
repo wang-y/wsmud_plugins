@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.83
+// @version      0.0.32.84
 // @date         01/07/2018
 // @modified     22/02/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4141,15 +4141,12 @@
             WG.daily_hook = WG.add_hook("dialog", async function (data) {
                 if (data.dialog == "tasks") {
                     if (data.items) {
-                        let dailylog = data.items[1].desc;
-                        let dailystate = data.items[1].state;
-
-                        if (data.items[1].title.indexOf("<hig>每日签到</hig>") == -1) {
-                            for (let item of data.items) {
-                                if (item.title.indexOf("<hig>每日签到</hig>") >= 0) {
-                                    dailylog = item.desc;
-                                    dailystate = item.state;
-                                }
+                        let dailylog ="";
+                        let dailystate="";
+                        for(let item of data.items){
+                            if(item.id == "signin"){
+                                dailylog = item.desc;
+                                dailystate = item.state;
                             }
                         }
                         if (dailystate == 3) {
@@ -4302,8 +4299,12 @@
                 }
                 if (data.dialog == "tasks") {
                     if (data.items) {
-                        let dailylog = data.items[3].desc;
-
+                        let dailylog = "";
+                        for(let item of data.items){
+                            if(item.id == "yamen"){
+                                dailylog = item.desc;
+                            }
+                        }
                         let str = dailylog;
                         str = str.replace(/<(?!\/?p\b)[^>]+>/ig, '');
 
