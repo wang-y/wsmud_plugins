@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.84
+// @version      0.0.32.85
 // @date         01/07/2018
-// @modified     22/02/2020
+// @modified     29/04/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6049,7 +6049,7 @@
 </div>`,
         lyui: `<div class='zdy_dialog' id="LianYao" style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank"
         href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank"
-        href="https://suqing.fun/wsmud.old/yaofang/">https://emeisuqing.github.io/wsmud.old/yaofang/</a>
+        href="https://emeisuqing.github.io/wsmud.old/yaofang/">https://emeisuqing.github.io/wsmud.old/yaofang/</a>
     <div class="setting-item"> <span> <label for="medicine_level"> 级别选择： </label><select style='width:80px'
                 id="medicine_level" v-model="level">
                 <option value="1">绿色</option>
