@@ -292,6 +292,9 @@ $startautopfm force.tu,unarmed.zhen;
 #### $zdwk
 自动挖矿 武帝为自动修炼
 
+#### $rzdwk
+自动挖矿 无视境界仅挖矿 
+
 #### $stopallauto $startallauto
 本函数仅用于启动OR暂停自动boss及喜宴,若系统自动boss及喜宴未开自动,则无效
 
