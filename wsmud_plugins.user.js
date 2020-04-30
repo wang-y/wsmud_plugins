@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.85
+// @version      0.0.32.86
 // @date         01/07/2018
 // @modified     29/04/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2342,12 +2342,14 @@
             $('#store_drop_info').val(zdy_item_drop);
         },
 
-        zdwk: function (v) {
-            if (G.level) {
-                if (G.level.indexOf('武帝') >= 0||G.level.indexOf('武神') >= 0) {
-                    WG.go("住房-练功房");
-                    WG.Send("xiulian");
-                    return;
+        zdwk: function (v,x=true) {
+            if(x){
+                if (G.level) {
+                    if (G.level.indexOf('武帝') >= 0||G.level.indexOf('武神') >= 0) {
+                        WG.go("住房-练功房");
+                        WG.Send("xiulian");
+                        return;
+                    }
                 }
             }
             if (WebSocket) {
@@ -5253,6 +5255,12 @@
         zdwk: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             WG.zdwk();
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
+        },
+        rzdwk: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.zdwk("",false);
             await WG.sleep(100);
             WG.SendCmd(cmds);
         },
