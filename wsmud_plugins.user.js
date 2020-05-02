@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.86
+// @version      0.0.32.87
 // @date         01/07/2018
-// @modified     29/04/2020
+// @modified     02/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2665,6 +2665,21 @@
                     },
                     onekeypk: function () {
                         WG.auto_fight();
+                    },
+                    onekeysansan: function () {
+                        let mlh=`// 导入三三懒人包流程，方便后续导入操作
+                        // 自命令类型选 Raidjs流程
+                        // 四区白三三
+                        ($f_ss)={"name":"三三懒人包","source":"http://wsmud-cdn.if404.com/三三懒人包.flow.txt","finder":"根文件夹"}
+                        @js var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
+                        @awiat 2000
+                        tm 【三三懒人包】流程已导入，如果曾用早期版本的懒人包导入过流程，请先删除这些流程后再使用。`;
+                        
+                        if (unsafeWindow && unsafeWindow.ToRaid) {
+                            ToRaid.perform(mlh);
+                        }else{
+                            messageAppend("请先安装Raid.js");
+                        }
                     },
                     onekeystore: function () {
                         WG.SendCmd("$store")
@@ -5982,6 +5997,7 @@
             <div class="item-commands">
                 <span  @click='onekeydaily'>一键日常</span>
                 <span  @click='onekeypk'>自动比试</span>
+                <span  @click='onekeysansan'>导入白三三懒人包（依赖raid.js）</span>
             </div>
             <div class="item-commands">
                 <span  @click="onekeystore">存仓及贩卖</span>
