@@ -2372,12 +2372,14 @@
                                 WG.Send("eq " + data.id);
                                 WG.go("扬州城-矿山");
                                 WG.Send("wa");
+                                WG.zdwk("remove",false);
                                 return;
                             }
                         } else if (data.items) {
                             if (data.eqs[0] && data.eqs[0].name.indexOf("铁镐") > -1) {
                                 WG.go("扬州城-矿山");
                                 WG.Send("wa");
+                                WG.zdwk("remove",false);
                                 return;
                             } else {
                                 for (let i = 0; i < data.items.length; i++) {
@@ -2391,7 +2393,7 @@
                                     WG.Send("eq " + tiegao_id);
                                     WG.go("扬州城-矿山");
                                     WG.Send("wa");
-                                    WG.zdwk("remove");
+                                    WG.zdwk("remove",false);
                                     return;
                                 } else {
                                     WG.go("扬州城-打铁铺");
