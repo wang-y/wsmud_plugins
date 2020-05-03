@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.88
+// @version      0.0.32.89
 // @date         01/07/2018
-// @modified     02/05/2020
+// @modified     03/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2409,7 +2409,7 @@
                             WG.Send('list ' + id);
                         } else {
                             messageAppend("<hio>自动挖矿</hio>未发现铁匠");
-                            WG.zdwk("remove");
+                            WG.zdwk("remove",false);
                         }
                     } else if (data.type == 'text') {
                         if (data.msg == '你挥着铁镐开始认真挖矿。') WG.zdwk("remove");
@@ -2435,7 +2435,7 @@
                             WG.Send('buy 1 ' + item_id + ' from ' + tiejiang_id);
                         } else {
                             messageAppend("<hio>自动挖矿</hio>无法购买<wht>铁镐</wht>");
-                            WG.zdwk("remove");
+                            WG.zdwk("remove",false);
                         }
                     }
                 });
