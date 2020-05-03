@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.89
+// @version      0.0.32.90
 // @date         01/07/2018
 // @modified     03/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2673,10 +2673,10 @@
                         // 自命令类型选 Raidjs流程
                         // 四区白三三
                         ($f_ss)={"name":"三三懒人包","source":"http://wsmud-cdn.if404.com/三三懒人包.flow.txt","finder":"根文件夹"}
-                        @js var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
+                        @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
                         @awiat 2000
                         tm 【三三懒人包】流程已导入，如果曾用早期版本的懒人包导入过流程，请先删除这些流程后再使用。`;
-                        
+
                         if (unsafeWindow && unsafeWindow.ToRaid) {
                             ToRaid.perform(mlh);
                         }else{
@@ -6994,7 +6994,7 @@
             } catch (error) {
                 console.log("Run at message");
             }
-            
+
             if (data === '挖矿' || data === '修炼') {
                 WG.zdwk();
             } else if (data === '日常') {
