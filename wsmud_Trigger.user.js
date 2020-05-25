@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name            wsmud_Trigger
 // @namespace       cqv3
-// @version         0.0.35
+// @version         0.0.36
 // @date            03/03/2019
-// @modified        04/03/2019
+// @modified        25/05/2019
 // @homepage        https://greasyfork.org/zh-CN/scripts/378984
 // @description     武神传说 MUD
 // @author          Bob.cn
@@ -1141,14 +1141,17 @@
 
     let Running = false;
 
-    $(document).ready(function () {
+  function  initLoad() {
 
-        while(WG==undefined){
-            WG = unsafeWindow.WG;
+        WG = unsafeWindow.WG;
+
+        ToRaid = unsafeWindow.ToRaid;
+        if(WG==undefined || ToRaid == undefined){
+            setTimeout(()=>{initLoad();},300);
+            return;
         }
         messageAppend  = unsafeWindow.messageAppend;
         messageClear =  unsafeWindow.messageClear;
-        ToRaid = unsafeWindow.ToRaid;
         Role = unsafeWindow.Role;
 
         unsafeWindow.TriggerUI = UI;
@@ -1162,5 +1165,9 @@
             TriggerCenter.run();
             MonitorCenter.run();
         });
+    }
+
+    $(document).ready(function () {
+        initLoad();
     });
 })();
