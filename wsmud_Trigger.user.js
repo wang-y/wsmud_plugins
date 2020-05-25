@@ -1142,24 +1142,25 @@
     let Running = false;
 
     $(document).ready(function () {
-        setTimeout(() => {console.log("run");
+
+        while(WG==undefined){
             WG = unsafeWindow.WG;
-            messageAppend  = unsafeWindow.messageAppend;
-            messageClear =  unsafeWindow.messageClear;
-            ToRaid = unsafeWindow.ToRaid;
-            Role = unsafeWindow.Role;
+        }
+        messageAppend  = unsafeWindow.messageAppend;
+        messageClear =  unsafeWindow.messageClear;
+        ToRaid = unsafeWindow.ToRaid;
+        Role = unsafeWindow.Role;
 
-            unsafeWindow.TriggerUI = UI;
-            unsafeWindow.TriggerConfig = TriggerConfig;
-            unsafeWindow.TriggerCenter = TriggerCenter;
+        unsafeWindow.TriggerUI = UI;
+        unsafeWindow.TriggerConfig = TriggerConfig;
+        unsafeWindow.TriggerCenter = TriggerCenter;
 
-            WG.add_hook("login", function(data) {
-                if (Running) return;
-                Running = true;
+        WG.add_hook("login", function(data) {
+            if (Running) return;
+            Running = true;
 
-                TriggerCenter.run();
-                MonitorCenter.run();
-            });
-       },300);
+            TriggerCenter.run();
+            MonitorCenter.run();
+        });
     });
 })();

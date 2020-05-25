@@ -5764,22 +5764,23 @@ look men;open men
     };
 
     $(document).ready(function () {
-        setTimeout(()=>{console.log("run");
+         while(WG==undefined){
             WG = unsafeWindow.WG;
-            messageAppend  = unsafeWindow.messageAppend;
-            messageClear =  unsafeWindow.messageClear;
-            T = unsafeWindow.T;
-            L = unsafeWindow.L;
+        }
+        WG = unsafeWindow.WG;
+        messageAppend  = unsafeWindow.messageAppend;
+        messageClear =  unsafeWindow.messageClear;
+        T = unsafeWindow.T;
+        L = unsafeWindow.L;
 
-            unsafeWindow.ToRaid = ToRaid;
-            unsafeWindow.Role = Role;
+        unsafeWindow.ToRaid = ToRaid;
+        unsafeWindow.Role = Role;
 
-            Role.init();
-            Room.init();
-            SystemTips.init();
-            DialogList.init();
-            TaskList.init();
-            Xiangyang.init();
-        },300);
+        Role.init();
+        Room.init();
+        SystemTips.init();
+        DialogList.init();
+        TaskList.init();
+        Xiangyang.init();
     });
 })();
