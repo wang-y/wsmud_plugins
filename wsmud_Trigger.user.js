@@ -9,7 +9,7 @@
 // @author          Bob.cn
 // @match           http://*.wsmud.com/*
 // @run-at          document-end
-// @require         https://cdn.bootcss.com/vue/2.2.2/vue.min.js
+// @require         https://cdn.staticfile.org/vue/2.2.2/vue.min.js
 // @grant           unsafeWindow
 // @grant           GM_getValue
 // @grant           GM_setValue
@@ -1142,22 +1142,24 @@
     let Running = false;
 
     $(document).ready(function () {
-        WG = unsafeWindow.WG;
-        messageAppend  = unsafeWindow.messageAppend;
-        messageClear =  unsafeWindow.messageClear;
-        ToRaid = unsafeWindow.ToRaid;
-        Role = unsafeWindow.Role;
+        setTimeout(() => {console.log("run");
+            WG = unsafeWindow.WG;
+            messageAppend  = unsafeWindow.messageAppend;
+            messageClear =  unsafeWindow.messageClear;
+            ToRaid = unsafeWindow.ToRaid;
+            Role = unsafeWindow.Role;
 
-        unsafeWindow.TriggerUI = UI;
-        unsafeWindow.TriggerConfig = TriggerConfig;
-        unsafeWindow.TriggerCenter = TriggerCenter;
+            unsafeWindow.TriggerUI = UI;
+            unsafeWindow.TriggerConfig = TriggerConfig;
+            unsafeWindow.TriggerCenter = TriggerCenter;
 
-        WG.add_hook("login", function(data) {
-            if (Running) return;
-            Running = true;
+            WG.add_hook("login", function(data) {
+                if (Running) return;
+                Running = true;
 
-            TriggerCenter.run();
-            MonitorCenter.run();
-        });
+                TriggerCenter.run();
+                MonitorCenter.run();
+            });
+       },300);
     });
 })();

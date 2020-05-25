@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.90
+// @version      0.0.32.91
 // @date         01/07/2018
 // @modified     03/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -10,6 +10,7 @@
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
 // @require      https://cdn.jsdelivr.net/npm/vue/dist/vue.js
+// @require      https://cdn.jsdelivr.net/npm/hacktimer@1.1.3/HackTimer.silent.min.js
 // @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.js
 // @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
@@ -19,7 +20,6 @@
 // @grant        GM_setClipboard
 
 // ==/UserScript==
-
 (function () {
     'use strict';
 
@@ -6953,6 +6953,7 @@
         $('body').append(UI.codeInput);
 
         setTimeout(() => {
+
             var server = document.createElement('script');
             server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
             document.head.appendChild(server);
