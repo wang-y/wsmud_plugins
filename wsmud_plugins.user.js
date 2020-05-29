@@ -4993,14 +4993,22 @@
                     var lianxiCodeEnd ="wakuang";
                         var maxSkill = data.limit;
                         var nowCount =0 ;
+                        var __enaSkill = [];
                         for(let item of data.items){
                             if (nowCount>5){
                                 break;
                             }
-                            if (parseInt(item.level) < parseInt(maxSkill)){
-                                lianxiCode = lianxiCode + `lianxi ${item.id} ${maxSkill},`
-                                messageAppend(`添加${item.name}练习到${maxSkill}`);
-                                nowCount++;
+                            if (item.enable_skill){
+                                __enaSkill.push(item.enable_skill);
+                            }
+                        
+                            
+                            if (WG.inArray(item.name, __enaSkill) || item.name.indexOf("基本") >= 0){
+                                if (parseInt(item.level) < parseInt(maxSkill)) {
+                                    lianxiCode = lianxiCode + `lianxi ${item.id} ${maxSkill},`
+                                    messageAppend(`添加${item.name}练习到${maxSkill}`);
+                                    nowCount++;
+                                }
                             }
 
                         }
