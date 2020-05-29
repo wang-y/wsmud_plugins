@@ -5003,7 +5003,7 @@
                             }
                         
                             
-                            if (WG.inArray(item.name, __enaSkill) || item.name.indexOf("基本") >= 0){
+                            if (WG.inArray(item.id, __enaSkill) || item.name.indexOf("基本") >= 0){
                                 if (parseInt(item.level) < parseInt(maxSkill)) {
                                     lianxiCode = lianxiCode + `lianxi ${item.id} ${maxSkill},`
                                     messageAppend(`添加${item.name}练习到${maxSkill}`);
