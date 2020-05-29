@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.90
+// @version      0.0.32.91
 // @date         01/07/2018
 // @modified     03/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2662,6 +2662,9 @@
                     getskilljson: function () {
                         WG.getPlayerSkill();
                     },
+                    autoAddLianxi: function () {
+                        WG.selectLowKongfu();
+                    },
                     onekeydaily: function () {
                         WG.SendCmd("$daily");
                     },
@@ -4979,6 +4982,39 @@
             WG.SendCmd("$to 扬州城-广场;$wait 100;$to 扬州城-当铺;$wait 200;list %唐楠%");
 
         },
+
+        selectLowKongfu: function(){
+            
+            WG.gpSkill_hook = WG.add_hook("dialog", (data) => {
+                if ((data.dialog && data.dialog == 'skills') && data.items && data.items != null) {
+         
+                    var lianxiCodeStart = "jh fam 0 start,go west,go west,go north,go enter,go west,";
+                    var lianxiCode = "";
+                    var lianxiCodeEnd ="wakuang";
+                        var maxSkill = data.limit;
+                        var nowCount =0 ;
+                        for(let item of data.items){
+                            if (nowCount>5){
+                                break;
+                            }
+                            if (parseInt(item.level) < parseInt(maxSkill)){
+                                lianxiCode = lianxiCode + `lianxi ${item.id} ${maxSkill},`
+                                messageAppend(`添加${item.name}练习到${maxSkill}`);
+                                nowCount++;
+                            }
+
+                        }
+                    WG.Send(`setting auto_work ${lianxiCodeStart}${lianxiCode}${lianxiCodeEnd}`);
+                    messageAppend("添加成功,数据刷新后显示");
+                
+                    WG.remove_hook(WG.gpSkill_hook);
+                    WG.gpSkill_hook = undefined;
+                }
+            });
+            KEY.do_command("skills");
+            KEY.do_command("skills");
+            WG.Send("cha");
+        },
         hooks: [],
         hook_index: 0,
         add_hook: function (types, fn) {
@@ -5625,6 +5661,10 @@
             cmds = T.recmd(idx, cmds);
             WG.tnBuy();
             WG.SendCmd(cmds);
+        }, atlx: function (idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.selectLowKongfu();
+            WG.SendCmd(cmds);
         },
         addfenjieid: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
@@ -5995,6 +6035,7 @@
                 <span @click='lxjs_btn'>练习时间及潜能计算</span>
                 <span @click='khjs_btn'>开花计算</span>
                 <span  @click='getskilljson'>提取技能属性(可用于苏轻模拟器)</span>
+                <span  @click='autoAddLianxi'>自动将最低等级技能添加到离线练习</span>
             </div>
             <div class="item-commands">
                 <span  @click='onekeydaily'>一键日常</span>
