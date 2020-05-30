@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.91
+// @version      0.0.32.92
 // @date         01/07/2018
-// @modified     03/05/2020
+// @modified     30/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -4990,7 +4990,10 @@
          
                     var lianxiCodeStart = "jh fam 0 start,go west,go west,go north,go enter,go west,";
                     var lianxiCode = "";
+                    var lianxiCodeMin = "";
                     var lianxiCodeEnd ="wakuang";
+                    var __skillNameList=[];
+                    var __skillMinNameList=[];
                         var maxSkill = data.limit;
                         var nowCount =0 ;
                         var __enaSkill = [];
@@ -5006,13 +5009,24 @@
                             if (WG.inArray(item.id, __enaSkill) || item.name.indexOf("基本") >= 0){
                                 if (parseInt(item.level) < parseInt(maxSkill)) {
                                     lianxiCode = lianxiCode + `lianxi ${item.id} ${maxSkill},`
-                                    messageAppend(`添加${item.name}练习到${maxSkill}`);
+                                    if (nowCount<4){
+                                        lianxiCodeMin = lianxiCodeMin + `lianxi ${item.id} ${maxSkill},`
+                                        __skillMinNameList.push(item.name);
+                                    }
+                                    __skillNameList.push(item.name);
                                     nowCount++;
                                 }
                             }
 
                         }
-                    WG.Send(`setting auto_work ${lianxiCodeStart}${lianxiCode}${lianxiCodeEnd}`);
+                    var __code = `setting auto_work ${lianxiCodeStart}${lianxiCode}${lianxiCodeEnd}`
+                    if(__code.length<=200){
+                        WG.Send(`setting auto_work ${lianxiCodeStart}${lianxiCode}${lianxiCodeEnd}`);
+                        messageAppend(`添加`+__skillNameList.join(",")+`到${maxSkill}`);
+                    }else{
+                        WG.Send(`setting auto_work ${lianxiCodeStart}${lianxiCodeMin}${lianxiCodeEnd}`);
+                        messageAppend(`添加` +__skillMinNameList.join(",")+`到${maxSkill}`);
+                    }
                     messageAppend("添加成功,数据刷新后显示");
                 
                     WG.remove_hook(WG.gpSkill_hook);
