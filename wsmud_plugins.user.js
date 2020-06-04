@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.92
+// @version      0.0.32.93
 // @date         01/07/2018
 // @modified     30/05/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -4984,14 +4984,17 @@
         },
 
         selectLowKongfu: function(){
-            
+
             WG.gpSkill_hook = WG.add_hook("dialog", (data) => {
                 if ((data.dialog && data.dialog == 'skills') && data.items && data.items != null) {
-         
+
                     var lianxiCodeStart = "jh fam 0 start,go west,go west,go north,go enter,go west,";
                     var lianxiCode = "";
                     var lianxiCodeMin = "";
                     var lianxiCodeEnd ="wakuang";
+                    if (G.level.indexOf('武帝') >= 0||G.level.indexOf('武神') >= 0) {
+                        lianxiCodeEnd="xiulian";
+                    }
                     var __skillNameList=[];
                     var __skillMinNameList=[];
                         var maxSkill = data.limit;
@@ -5004,8 +5007,8 @@
                             if (item.enable_skill){
                                 __enaSkill.push(item.enable_skill);
                             }
-                        
-                            
+
+
                             if (WG.inArray(item.id, __enaSkill) || item.name.indexOf("基本") >= 0){
                                 if (parseInt(item.level) < parseInt(maxSkill)) {
                                     lianxiCode = lianxiCode + `lianxi ${item.id} ${maxSkill},`
@@ -5028,7 +5031,7 @@
                         messageAppend(`添加` +__skillMinNameList.join(",")+`到${maxSkill}`);
                     }
                     messageAppend("添加成功,数据刷新后显示");
-                
+
                     WG.remove_hook(WG.gpSkill_hook);
                     WG.gpSkill_hook = undefined;
                 }
