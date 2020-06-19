@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.93
+// @version      0.0.32.94
 // @date         01/07/2018
-// @modified     30/05/2020
+// @modified     18/06/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2942,14 +2942,15 @@
             }
             if (G.preform_timer || G.auto_preform == false) return;
             $(".auto_perform").css("background", "#3E0000");
-            G.preform_timer = setInterval(() => {
-                //出招时重新获取黑名单
+             //出招时重新获取黑名单
                 unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
                 var unpfm = unauto_pfm.split(',');
                 for (var pfmname of unpfm) {
                     if (!WG.inArray(pfmname, blackpfm))
                         blackpfm.push(pfmname);
                 }
+            G.preform_timer = setInterval(() => {
+
                 if (G.in_fight == false) WG.auto_preform("stop");
                 for (var skill of G.skills) {
                     if (family.indexOf("逍遥") >= 0) {
