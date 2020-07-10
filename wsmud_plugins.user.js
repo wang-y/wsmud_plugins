@@ -5731,10 +5731,10 @@
             cmds = T.recmd(idx, cmds);
             var music = new MusicBox({
                 loop: false, // 循环播放
-                musicText: '3· 2· 3· 6 - 6 6 6 5· 2· - 2· 2· - - 3· 2· 3· 5 - 5 5 3 5 5· - 2· - 2· 2·',  // 绿色
-                autoplay: 4, // 自动弹奏速度
-                type: 'square',  // 音色类型  sine|square|triangle|sawtooth
-                duration: 3  // 键音延长时间
+                musicText: '6 - - 5 - 3 2 - 1 - - - 3 - - 2 1 - ·6 ·5 - - - ·5 - ·6 - ·5 - ·6 - 1 - - 2 - 3 5 6 - - 3 2 1 - 2',  // 沧海一声笑
+                autoplay: 6, // 自动弹奏速度
+                type: 'triangle',  // 音色类型  sine|square|triangle|sawtooth
+                duration: 2  // 键音延长时间
             });
             WG.SendCmd(cmds);
         }
