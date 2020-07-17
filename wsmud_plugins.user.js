@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.98
+// @version      0.0.32.99
 // @date         01/07/2018
 // @modified     18/07/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -636,6 +636,8 @@
     var sm_price = null;
     //师门自动取
     var sm_getstore = null;
+    //师门无视稀有程度
+    var sm_any = "开";
     //
     var wudao_pfm = "1";
     //boss战斗前等待(ms)
@@ -1736,13 +1738,22 @@
                     WG.sm_item = goods[itemName];
                     if (item != undefined && WG.inArray(item, store_list) && sm_getstore == "开") {
                         if (item.indexOf("hiz") >= 0 || item.indexOf("hio") >= 0) {
-                            var a = window.confirm("您确定要交稀有物品吗");
-                            if (a) {
+                            sm_any = GM_getValue(role + "_sm_any", sm_any);
+                            if (sm_any == "开") {
                                 messageAppend("自动仓库取" + item);
                                 WG.sm_store = item;
                                 WG.sm_state = 4;
                                 setTimeout(WG.sm, 500);
                                 return;
+                            } else {
+                                var a = window.confirm("您确定要交稀有物品吗");
+                                if (a) {
+                                    messageAppend("自动仓库取" + item);
+                                    WG.sm_store = item;
+                                    WG.sm_state = 4;
+                                    setTimeout(WG.sm, 500);
+                                    return;
+                                }
                             }
                         } else {
                             messageAppend("自动仓库取" + item);
@@ -4433,6 +4444,7 @@
             _config.autoeq = GM_getValue(role + "_auto_eq", autoeq);
             _config.wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
             _config.sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+            _config.sm_any = GM_getValue(role + "_sm_any", sm_any);
             _config.sm_price = GM_getValue(role + "_sm_price", sm_price);
             _config.sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
             _config.unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
@@ -4491,6 +4503,7 @@
                     GM_setValue(role + "_auto_eq", _config.autoeq);
                     GM_setValue(role + "_wudao_pfm", _config.wudao_pfm);
                     GM_setValue(role + "_sm_loser", _config.sm_loser);
+                    GM_setValue(role + "_sm_any", _config.sm_any);
                     GM_setValue(role + "_sm_price", _config.sm_price);
                     GM_setValue(role + "_sm_getstore", _config.sm_getstore);
                     GM_setValue(role + "_unauto_pfm", _config.unauto_pfm);
@@ -4558,6 +4571,10 @@
                 $('#sm_loser').click(function () {
                     sm_loser = WG.switchReversal($(this));
                     GM_setValue(role + "_sm_loser", sm_loser);
+                });
+                $('#sm_any').click(function () {
+                    sm_any = WG.switchReversal($(this));
+                    GM_setValue(role + "_sm_any", sm_any);
                 });
                 $('#sm_price').click(function () {
                     sm_price = WG.switchReversal($(this));
@@ -4810,6 +4827,7 @@
             $('#family').val(family);
             $('#wudao_pfm').val(wudao_pfm);
             $('#sm_loser').val(sm_loser);
+            $('#sm_any').val(sm_any);
             $('#sm_price').val(sm_price);
             $('#sm_getstore').val(sm_getstore);
             $('#ks_pfm').val(ks_pfm);
@@ -5912,6 +5930,7 @@
                 + UI.html_lninput("shield", "屏蔽人物名(用半角逗号分隔)：")
                 + UI.html_lninput("shieldkey", "屏蔽关键字(用半角逗号分隔)：")
                 + UI.html_switch('sm_loser', '师门自动放弃：', "sm_loser")
+                + UI.html_switch('sm_any', '师门任务提交稀有：', "sm_any")
                 + UI.html_switch('sm_price', '师门自动牌子：', 'sm_price')
                 + UI.html_switch('sm_getstore', '师门自动仓库取：', "sm_getstore") + `
                 <div class="setting-item" >
@@ -6841,6 +6860,7 @@
             }
             wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
             sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+            sm_any = GM_getValue(role + "_sm_any", sm_any);
             sm_price = GM_getValue(role + "_sm_price", sm_price);
             sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
             unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
