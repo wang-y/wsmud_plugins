@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.96
+// @version      0.0.32.97
 // @date         01/07/2018
 // @modified     18/07/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7069,6 +7069,7 @@
             var origin = event.origin;
             var data = event.data;
             if(data.indexOf("denglu")>=0){
+                if(role!=undefined){return;}
                 console.log(data);
                 let userName = data.split(" ")[1];
                 let userList = $('#role_panel > ul > li.content > ul >li');
