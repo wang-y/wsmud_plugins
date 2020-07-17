@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.95
+// @version      0.0.32.96
 // @date         01/07/2018
-// @modified     18/06/2020
+// @modified     18/07/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -6804,6 +6804,19 @@
                     }
                 }
             });
+            WG.add_hook("roles",function(data){
+              // console.log(data);
+                // unsafeWindow.SS_ROLES = data.roles;
+                function sendRoles(){
+                    if (originWindow.source) {
+                        originWindow.source.postMessage(data.roles, '*');
+                    } else {
+                        setTimeout(sendRoles,1000);
+                    }
+                }
+                sendRoles();
+              
+            });
         },
         configInit: function () {
             family = GM_getValue(role + "_family", family);
@@ -7013,7 +7026,7 @@
             return timer
         }
     };
-
+    var originWindow = {};
     $(document).ready(function () {
         $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
         $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
@@ -7037,7 +7050,7 @@
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
         }, 2000);
-
+        
         KEY.init();
         WG.init();
         GI.init();
@@ -7052,8 +7065,23 @@
         unsafeWindow.FakerTTS = FakerTTS;
         window.addEventListener("message", receiveMessage, false);
         function receiveMessage(event) {
+            originWindow = event;
             var origin = event.origin;
             var data = event.data;
+            if(data.indexOf("denglu")>=0){
+                console.log(data);
+                let userName = data.split(" ")[1];
+                let userList = $('#role_panel > ul > li.content > ul >li');
+                for(let user of userList){
+                    if (user.innerText.indexOf(userName)>=0){
+                        $(user).addClass("select");
+                    }else{
+                        $(user).removeClass("select");
+                    }
+                }
+                $("li[command=SelectRole]").click()
+                return;
+            }
             try {
                 if(JSON.parse(data) instanceof Object){
                     return;
