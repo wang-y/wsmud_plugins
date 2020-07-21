@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.99
+// @version      0.0.32.100
 // @date         01/07/2018
 // @modified     18/07/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3246,19 +3246,31 @@
                 eqlist = GM_getValue(role + "_eqlist", eqlist);
                 skilllist = GM_getValue(role + "_skilllist", skilllist);
                 var p_cmds = "";
+                //  console.log(G.enable_skills)
+                let mySkills = "";
+                let myEqs = "";
+                for (let ski of G.enable_skills) {
+                    mySkills = mySkills + ski.name;
+                }
+                for (let ski of G.eqs) {
+                    myEqs = myEqs + ski.id;
+                }
                 if (enaskill === 0) {
                     for (let i = 1; i < eqlist[type].length; i++) {
-                        if (eqlist[type][i] != null) {
+                        if (eqlist[type][i] != null && myEqs.indexOf(eqlist[type][i].id) < 0) {
                             p_cmds += ("$wait 20;eq " + eqlist[type][i].id + ";");
                         }
                     }
-                    if (eqlist[type][0] != null) {
+                    if (eqlist[type][0] != null && myEqs.indexOf(eqlist[type][0].id) < 0) {
                         p_cmds += ("$wait 40;eq " + eqlist[type][0].id + ";");
                     }
                 }
                 if (enaskill === 1) {
                     for (var key in skilllist[type]) {
-                        p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
+                        //console.log(skilllist[type][key])
+                        if (mySkills.indexOf(skilllist[type][key]) < 0) {
+                            p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
+                        }
                     }
                 }
                 p_cmds = p_cmds + '$wait 40;look3 1';
@@ -6298,7 +6310,9 @@
         status: new Map(),
         score: undefined,
         jy: 0,
-        qn: 0
+        qn: 0,
+        enable_skills: [],
+        eqs: []
     };
 
     //GlobalInit
@@ -6311,6 +6325,15 @@
                 if (data.dialog == "pack" && data.items != undefined) {
                     packData = data.items;
                     eqData = data.eqs;
+                    G.eqs = data.eqs
+                }
+                if (data.dialog == "pack" && data.uneq != undefined) {
+                    G.eqs[data.uneq].id = "";
+                    G.eqs[data.uneq].name = "";
+                } 
+                if (data.dialog == "pack" && data.eq != undefined) {
+                    G.eqs[data.eq].id = data.id;
+                    G.eqs[data.eq].name ="";
                 }
                 if (data.dialog == "skills") {
                     if (data.enable != null && zdyskills == "开") {
@@ -6319,6 +6342,29 @@
                         zdyskills = "关";
                         GM_setValue(role + "_zdyskilllist", "");
                         GM_setValue(role + "_zdyskills", zdyskills);
+                    }
+                    if (data.items) {
+                        for (let item of data.items) {
+                            if (item.enable_skill) {
+                                G.enable_skills.push({ name: item.enable_skill, type: item.id})
+                            }
+                        }
+                    }
+                    if(data.enable!=undefined){
+                        if(data.enable){
+                            for(let item of G.enable_skills){
+                                if(item.type ==data.id){
+                                    item.name = ""
+                                }
+                            }
+                        }else{
+                            for (let item of G.enable_skills) {
+                                if (item.type == data.id) {
+                                    item.name = data.enable
+                                }
+                            }
+                        }
+
                     }
                 }
 
