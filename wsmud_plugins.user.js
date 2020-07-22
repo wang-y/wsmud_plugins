@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.100
+// @version      0.0.32.101
 // @date         01/07/2018
 // @modified     18/07/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3250,10 +3250,14 @@
                 let mySkills = "";
                 let myEqs = "";
                 for (let ski of G.enable_skills) {
-                    mySkills = mySkills + ski.name;
+                    if(ski){
+                        mySkills = mySkills + ski.name;
+                    }
                 }
                 for (let ski of G.eqs) {
-                    myEqs = myEqs + ski.id;
+                    if(ski){
+                        myEqs = myEqs + ski.id;
+                    }
                 }
                 if (enaskill === 0) {
                     for (let i = 1; i < eqlist[type].length; i++) {
@@ -6330,7 +6334,7 @@
                 if (data.dialog == "pack" && data.uneq != undefined) {
                     G.eqs[data.uneq].id = "";
                     G.eqs[data.uneq].name = "";
-                } 
+                }
                 if (data.dialog == "pack" && data.eq != undefined) {
                     G.eqs[data.eq].id = data.id;
                     G.eqs[data.eq].name ="";
