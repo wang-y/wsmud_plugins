@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.101
+// @version      0.0.32.102
 // @date         01/07/2018
 // @modified     18/07/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6332,12 +6332,10 @@
                     G.eqs = data.eqs
                 }
                 if (data.dialog == "pack" && data.uneq != undefined) {
-                    G.eqs[data.uneq].id = "";
-                    G.eqs[data.uneq].name = "";
+                    G.eqs[data.uneq]=null;
                 }
                 if (data.dialog == "pack" && data.eq != undefined) {
-                    G.eqs[data.eq].id = data.id;
-                    G.eqs[data.eq].name ="";
+                    G.eqs[data.eq]={id:data.id,name:""};
                 }
                 if (data.dialog == "skills") {
                     if (data.enable != null && zdyskills == "开") {
