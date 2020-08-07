@@ -9,8 +9,9 @@
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
 // @match        http://*.wsmud.com/*
 // @run-at       document-start
-// @require      https://cdn.jsdelivr.net/npm/vue/dist/vue.js
-// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.js
+// @require      https://cdn.staticfile.org/vue/2.2.2/vue.min.js
+// @require      https://cdn.staticfile.org/jquery/3.3.1/jquery.min.js
+// @require      https://cdn.staticfile.org/store.js/2.0.12/store.everything.min.js
 // @require      https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.js
 // @grant        unsafeWindow
 // @grant        GM_addStyle
@@ -5796,7 +5797,7 @@
                     zIndex: 961024,
                     success: function (layero, index) {
                         layer.style(index, {
-                            marginLeft: -220,
+                           // marginLeft: -220,
                         });
                     },
                     content: $(".runtest")
@@ -7105,12 +7106,12 @@
     var originWindow = {};
     $(document).ready(function () {
         $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/layer/3.1.1/theme/default/layer.min.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
 
         setTimeout(() => {
             var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
+            server.setAttribute('src', 'https://cdn.staticfile.org/layer/3.1.1/layer.min.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
             setInterval(() => {
@@ -7139,6 +7140,7 @@
         unsafeWindow.roomData = roomData;
         unsafeWindow.MusicBox = MusicBox;
         unsafeWindow.FakerTTS = FakerTTS;
+        unsafeWindow.store = store;
         window.addEventListener("message", receiveMessage, false);
         function receiveMessage(event) {
             originWindow = event;
