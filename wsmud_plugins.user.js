@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.103
+// @version      0.0.32.104
 // @date         01/07/2018
 // @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1259,7 +1259,6 @@
                 .item-dps{display: inline-block;float: right;width: 100px;}
                 .settingbox {margin-left: 0.625 em;border: 1px solid gray;background-color: transparent;color: unset;resize: none;width: 80% ;height: 3rem;}
                 .runtest textarea{display:block;width:300px;height:160px;border:10px solid #F8F8F8;border-top-width:0;padding:10px;line-height:20px;overflow:auto;background-color:#3F3F3F;color:#eee;font-size:12px;font-family:Courier New}
-                .runtest a{position:absolute;right:20px;bottom:20px}
                 .layui-btn,.layui-input,.layui-select,.layui-textarea,.layui-upload-button{outline:0;-webkit-appearance:none;transition:all .3s;-webkit-transition:all .3s;box-sizing:border-box}
                 .layui-btn{display:inline-block;height:38px;line-height:38px;padding:0 18px;background-color:#009688;color:#fff;white-space:nowrap;text-align:center;font-size:14px;border:none;border-radius:2px;cursor:pointer}
                 .layui-btn-normal{background-color:#1E9FFF}
@@ -5796,18 +5795,20 @@
                     offset: "rb",
                     zIndex: 961024,
                     success: function (layero, index) {
-                        layer.style(index, {
-                           // marginLeft: -220,
-                        });
+                          $(".runtesta").show();
                     },
-                    content: $(".runtest")
+                    content: $(".runtest"),
+                    end:function(){
+                        $(".runtesta").off("click");
+                        $(".runtesta").hide();
+                    }
                 });
                 var lastrun = GM_getValue("_lastrun", "");
                 if (lastrun != "") {
                     $("#testmain").val(lastrun);
                 }
-                $("#runtesta").off("click");
-                $("#runtesta").on('click', function () {
+                $(".runtesta").off("click");
+                $(".runtesta").on('click', function () {
                     if ($('#testmain').val().split("\n")[0].indexOf("//") >= 0) {
                         if (unsafeWindow && unsafeWindow.ToRaid) {
                             ToRaid.perform($('#testmain').val());
@@ -5834,7 +5835,12 @@
     }
     //UI
     var UI = {
-        codeInput: `<div class="runtest layui-layer-wrap" style="display: none;"> <textarea class="site-demo-text" id="testmain" data-enpassusermodified="yes">//<-第一行输入双斜杠即可运行流程命令 ,第一行输入#js 即可运行JS\n</textarea> <a class="layui-btn layui-btn-normal" id="runtesta" >立即运行</a> </div>`,
+        codeInput: `<div class="runtest layui-layer-wrap" style="display: none;">
+                         <textarea class="site-demo-text" id="testmain" data-enpassusermodified="yes">
+                         //<-第一行输入双斜杠即可运行流程命令 ,第一行输入#js 即可运行JS\n
+                        </textarea>
+                        <a class="layui-btn layui-btn-normal runtesta" style="position:absolute;right:20px;bottom:20px"  >立即运行</a>
+                     </div>`,
         zdybtnui: function () {
             let ui = `<div class='WG_button'>`;
             let keyitem = ["Q", "W", "E", "R", "T", "Y"];
