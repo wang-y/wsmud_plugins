@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.104
+// @version      0.0.32.105
 // @date         01/07/2018
 // @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7112,12 +7112,12 @@
     var originWindow = {};
     $(document).ready(function () {
         $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
-        $('head').append('<link href="https://cdn.staticfile.org/layer/3.1.1/theme/default/layer.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
 
         setTimeout(() => {
             var server = document.createElement('script');
-            server.setAttribute('src', 'https://cdn.staticfile.org/layer/3.1.1/layer.min.js');
+            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
             document.head.appendChild(server);
             console.log("layer 加载完毕!");
             setInterval(() => {
@@ -7146,7 +7146,7 @@
         unsafeWindow.roomData = roomData;
         unsafeWindow.MusicBox = MusicBox;
         unsafeWindow.FakerTTS = FakerTTS;
-        unsafeWindow.store = store;
+        unsafeWindow.WSStore = store;
         window.addEventListener("message", receiveMessage, false);
         function receiveMessage(event) {
             originWindow = event;
