@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.102
+// @version      0.0.32.103
 // @date         01/07/2018
-// @modified     18/07/2020
+// @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -7035,15 +7035,14 @@
     };
     var FakerTTS = {
 
-        playurl: function (url) {
-            var audio = new Audio(url);
-            audio.play();
-        },
         playtts: function (text) {
-            let url = `https://fanyi.baidu.com/gettts?lan=zh&text=${text}&spd=5&source=web`;
-            FakerTTS.playurl(url);
+            var msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'zh';
+            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
+                return voice.name == 'Whisper';
+            })[0];
+            speechSynthesis.speak(msg);
         }
-
     }
     class MusicBox {
         constructor(options) {
