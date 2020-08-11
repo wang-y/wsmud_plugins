@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.105
+// @version      0.0.32.106
 // @date         01/07/2018
 // @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5158,7 +5158,7 @@
                     let a = pdata.split(/.*造成<wht>|.*造成<hir>|<\/wht>点|<\/hir>点/);
                     if (a[2]) {
                         let b = a[2].split(/伤害|\(|</);
-                        messageAppend(`${b[2]}受到<wht>${a[1]}</wht>点<hir>${b[0]}</hir>伤害！`, 0, 1);
+                        messageAppend(`造成<wht>${a[1]}</wht>点<hir>${b[0]}</hir>伤害！`, 0, 1);
                         WG.run_hook(data.type, data);
                         return;
                     }
