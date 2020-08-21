@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.106
+// @version      0.0.32.107
 // @date         01/07/2018
 // @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7140,6 +7140,7 @@
         unsafeWindow.WG = WG;
         unsafeWindow.T = T;
         unsafeWindow.L = L;
+        unsafeWindow.G = G;
         unsafeWindow.messageClear = messageClear;
         unsafeWindow.messageAppend = messageAppend;
         unsafeWindow.send_cmd = send_cmd;
