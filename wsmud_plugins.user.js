@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.107
+// @version      0.0.32.108
 // @date         01/07/2018
 // @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6675,6 +6675,8 @@
                     packData.push(item)
                 }
                 if (data.dialog == 'score') {
+
+                    console.log("score update");
                     if (!G.level && (data.level != null)) {
                         G.level = data.level;
                         console.log("欢迎" + G.level);
@@ -6691,6 +6693,9 @@
                         GM_setValue(role + "_family", G.family);
                     } else if (data.study_per != null) {
                         G.score2 = data;
+                    }
+                    if(data.hp &&data.mp && data.pot){
+                        G.score =data;
                     }
                 }
             });
