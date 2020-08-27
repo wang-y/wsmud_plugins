@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.108
+// @version      0.0.32.109
 // @date         01/07/2018
 // @modified     07/08/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2247,6 +2247,7 @@
 
                         }
                     }
+
                     cmds.push("$to 扬州城-杂货铺");
                     cmds.push("sell all");
                     cmds.push("$wait 1000");
@@ -6379,7 +6380,7 @@
 
                 auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
                 if (data.dialog == "list" && G.room_name.indexOf("钱庄") && WG.sort_hook == null && auto_updateStore == "开") {
-                    if (data.id != null && data.store != null) {
+                    if (WG.packup_listener==null && data.id != null && data.store != null) {
                         WG.SendCmd("store")
                     }
 
