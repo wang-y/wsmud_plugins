@@ -1462,6 +1462,7 @@
             GM_setValue("npcs", npcs);
         },
         update_id_all: function () {
+            WG.SendCmd("stopstate")
             var t = [];
             Object.keys(goods).forEach(function (key) {
                 if (t[goods[key].place] == undefined)
