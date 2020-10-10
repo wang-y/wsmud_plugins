@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.112
+// @version      0.0.32.113
 // @date         01/07/2018
 // @modified     10/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -50,70 +50,70 @@
     };
 
 
-/**
- * 为数字加上单位：万或亿
- *
- * 例如：
- * 1000.01 => 1000.01
- * 10000 => 1万
- * 99000 => 9.9万
- * 566000 => 56.6万
- * 5660000 => 566万
- * 44440000 => 4444万
- * 11111000 => 1111.1万
- * 444400000 => 4.44亿
- * 40000000,00000000,00000000 => 4000万亿亿
- * 4,00000000,00000000,00000000 => 4亿亿亿
- *
- * @param {number} number 输入数字.
- * @param {number} decimalDigit 小数点后最多位数，默认为2
- * @return {string} 加上单位后的数字
- */
+    /**
+     * 为数字加上单位：万或亿
+     *
+     * 例如：
+     * 1000.01 => 1000.01
+     * 10000 => 1万
+     * 99000 => 9.9万
+     * 566000 => 56.6万
+     * 5660000 => 566万
+     * 44440000 => 4444万
+     * 11111000 => 1111.1万
+     * 444400000 => 4.44亿
+     * 40000000,00000000,00000000 => 4000万亿亿
+     * 4,00000000,00000000,00000000 => 4亿亿亿
+     *
+     * @param {number} number 输入数字.
+     * @param {number} decimalDigit 小数点后最多位数，默认为2
+     * @return {string} 加上单位后的数字
+     */
 
-function addWan(integer, number, mutiple, decimalDigit) {
+    function addWan(integer, number, mutiple, decimalDigit) {
 
-    var digit = getDigit(integer);
-    if (digit > 3) {
-        var remainder = digit % 8;
+        var digit = getDigit(integer);
+        if (digit > 3) {
+            var remainder = digit % 8;
             if (remainder >= 5) { // ‘十万’、‘百万’、‘千万’显示为‘万’
-            remainder = 4;
-        }
-        return Math.round(number / Math.pow(10, remainder + mutiple - decimalDigit)) / Math.pow(10, decimalDigit) + '万';
-    } else {
-        return Math.round(number / Math.pow(10, mutiple - decimalDigit)) / Math.pow(10, decimalDigit);
-    }
-}
-function getDigit(integer) {
-    var digit = -1;
-    while (integer >= 1) {
-        digit++;
-        integer = integer / 10;
-    }
-    return digit;
-}
-function addChineseUnit(number, decimalDigit) {
-
-    decimalDigit = decimalDigit == null ? 2 : decimalDigit;
-    var integer = Math.floor(number);
-    var digit = getDigit(integer);
-    // ['个', '十', '百', '千', '万', '十万', '百万', '千万'];
-    var unit = [];
-    if (digit > 3) {
-        var multiple = Math.floor(digit / 8);
-        if (multiple >= 1) {
-            var tmp = Math.round(integer / Math.pow(10, 8 * multiple));
-            unit.push(addWan(tmp, number, 8 * multiple, decimalDigit));
-            for (var i = 0; i < multiple; i++) {
-                unit.push('亿');
+                remainder = 4;
             }
-            return unit.join('');
+            return Math.round(number / Math.pow(10, remainder + mutiple - decimalDigit)) / Math.pow(10, decimalDigit) + '万';
         } else {
-            return addWan(integer, number, 0, decimalDigit);
+            return Math.round(number / Math.pow(10, mutiple - decimalDigit)) / Math.pow(10, decimalDigit);
         }
-    } else {
-        return number;
     }
-}
+    function getDigit(integer) {
+        var digit = -1;
+        while (integer >= 1) {
+            digit++;
+            integer = integer / 10;
+        }
+        return digit;
+    }
+    function addChineseUnit(number, decimalDigit) {
+
+        decimalDigit = decimalDigit == null ? 2 : decimalDigit;
+        var integer = Math.floor(number);
+        var digit = getDigit(integer);
+        // ['个', '十', '百', '千', '万', '十万', '百万', '千万'];
+        var unit = [];
+        if (digit > 3) {
+            var multiple = Math.floor(digit / 8);
+            if (multiple >= 1) {
+                var tmp = Math.round(integer / Math.pow(10, 8 * multiple));
+                unit.push(addWan(tmp, number, 8 * multiple, decimalDigit));
+                for (var i = 0; i < multiple; i++) {
+                    unit.push('亿');
+                }
+                return unit.join('');
+            } else {
+                return addWan(integer, number, 0, decimalDigit);
+            }
+        } else {
+            return number;
+        }
+    }
     if (WebSocket) {
         console.log('插件可正常运行,Plugins can run normally');
 
@@ -1480,22 +1480,22 @@ function addChineseUnit(number, decimalDigit) {
                     name = $(a.children()[0]).html();
 
                     gtype = a.children()[0].localName;
-                    if(name=="金创药"||name=="引气丹"){
-                        if(goods[gtype+name]){
-                       goods[gtype+name].id = id;
-                        }else{
-                           goods[gtype+name] =   {
-                               "id": id,
-                               "type":gtype,
-                               "sales": "药铺老板 平一指",
-                               "place": "扬州城-药铺"
-                           }
+                    if (name == "金创药" || name == "引气丹") {
+                        if (goods[gtype + name]) {
+                            goods[gtype + name].id = id;
+                        } else {
+                            goods[gtype + name] = {
+                                "id": id,
+                                "type": gtype,
+                                "sales": "药铺老板 平一指",
+                                "place": "扬州城-药铺"
+                            }
 
                         }
 
                     }
-                    else{
-                     goods[name].id = id;
+                    else {
+                        goods[name].id = id;
                     }
                     messageAppend(`<${gtype}>${name}</${gtype}>:${id}`);
                 }
@@ -1804,7 +1804,7 @@ function addChineseUnit(number, decimalDigit) {
                         return;
                     };
                     var itemName = item.html();
-                     let _gtype = item[0].localName;
+                    let _gtype = item[0].localName;
                     item = item[0].outerHTML;
 
                     if (WG.ungetStore) {
@@ -1835,9 +1835,9 @@ function addChineseUnit(number, decimalDigit) {
                         }
                     }
                     //不能上交自动购买
-                    if(itemName=="金创药"||itemName=="引气丹"){
-                        WG.sm_item = goods[_gtype+itemName];
-                    }else{
+                    if (itemName == "金创药" || itemName == "引气丹") {
+                        WG.sm_item = goods[_gtype + itemName];
+                    } else {
                         WG.sm_item = goods[itemName];
                     }
 
@@ -3356,12 +3356,12 @@ function addChineseUnit(number, decimalDigit) {
                 let mySkills = "";
                 let myEqs = "";
                 for (let ski of G.enable_skills) {
-                    if(ski){
+                    if (ski) {
                         mySkills = mySkills + ski.name;
                     }
                 }
                 for (let ski of G.eqs) {
-                    if(ski){
+                    if (ski) {
                         myEqs = myEqs + ski.id;
                     }
                 }
@@ -5284,7 +5284,17 @@ function addChineseUnit(number, decimalDigit) {
                     }
                 }
             }
-
+            if (data.type == 'text') {
+                if (shieldswitch == '开') {
+                 
+                    var skey = shieldkey.split(",");
+                    for (let keyword of skey) {
+                        if (keyword != "" && data.msg.indexOf(keyword) >= 0) {
+                            return;
+                        }
+                    }
+                }
+            }
 
             if (data.type == 'dialog' && data.t == 'fam' && data.k == undefined) {
                 if (UI.toui[data.index] != undefined) {
@@ -5901,10 +5911,10 @@ function addChineseUnit(number, decimalDigit) {
                     offset: "rb",
                     zIndex: 961024,
                     success: function (layero, index) {
-                          $(".runtesta").show();
+                        $(".runtesta").show();
                     },
                     content: $(".runtest"),
-                    end:function(){
+                    end: function () {
                         $(".runtesta").off("click");
                         $(".runtesta").hide();
                     }
@@ -6445,10 +6455,10 @@ function addChineseUnit(number, decimalDigit) {
                     G.eqs = data.eqs
                 }
                 if (data.dialog == "pack" && data.uneq != undefined) {
-                    G.eqs[data.uneq]=null;
+                    G.eqs[data.uneq] = null;
                 }
                 if (data.dialog == "pack" && data.eq != undefined) {
-                    G.eqs[data.eq]={id:data.id,name:""};
+                    G.eqs[data.eq] = { id: data.id, name: "" };
                 }
                 if (data.dialog == "skills") {
                     if (data.enable != null && zdyskills == "开") {
@@ -6461,18 +6471,18 @@ function addChineseUnit(number, decimalDigit) {
                     if (data.items) {
                         for (let item of data.items) {
                             if (item.enable_skill) {
-                                G.enable_skills.push({ name: item.enable_skill, type: item.id})
+                                G.enable_skills.push({ name: item.enable_skill, type: item.id })
                             }
                         }
                     }
-                    if(data.enable!=undefined){
-                        if(data.enable){
-                            for(let item of G.enable_skills){
-                                if(item.type ==data.id){
+                    if (data.enable != undefined) {
+                        if (data.enable) {
+                            for (let item of G.enable_skills) {
+                                if (item.type == data.id) {
                                     item.name = ""
                                 }
                             }
-                        }else{
+                        } else {
                             for (let item of G.enable_skills) {
                                 if (item.type == data.id) {
                                     item.name = data.enable
@@ -6485,7 +6495,7 @@ function addChineseUnit(number, decimalDigit) {
 
                 auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
                 if (data.dialog == "list" && G.room_name.indexOf("钱庄") && WG.sort_hook == null && auto_updateStore == "开") {
-                    if (WG.packup_listener==null && data.id != null && data.store != null) {
+                    if (WG.packup_listener == null && data.id != null && data.store != null) {
                         WG.SendCmd("store")
                     }
 
@@ -6800,8 +6810,8 @@ function addChineseUnit(number, decimalDigit) {
                     } else if (data.study_per != null) {
                         G.score2 = data;
                     }
-                    if(data.hp &&data.mp && data.pot){
-                        G.score =data;
+                    if (data.hp && data.mp && data.pot) {
+                        G.score = data;
                     }
                 }
             });
@@ -6815,8 +6825,8 @@ function addChineseUnit(number, decimalDigit) {
                             if (goods[realname] != undefined) {
                                 goods[realname].id = item.id;
                             }
-                            if (goods[_gtype+realname] != undefined) {
-                                goods[_gtype+realname].id = item.id;
+                            if (goods[_gtype + realname] != undefined) {
+                                goods[_gtype + realname].id = item.id;
                             }
                         }
                         GM_setValue("goods", goods);
@@ -7161,7 +7171,7 @@ function addChineseUnit(number, decimalDigit) {
         playtts: function (text) {
             var msg = new SpeechSynthesisUtterance(text);
             msg.lang = 'zh';
-            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
+            msg.voice = speechSynthesis.getVoices().filter(function (voice) {
                 return voice.name == 'Whisper';
             })[0];
             speechSynthesis.speak(msg);
