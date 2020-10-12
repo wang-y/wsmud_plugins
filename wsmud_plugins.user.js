@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.113
+// @version      0.0.32.114
 // @date         01/07/2018
-// @modified     10/10/2020
+// @modified     12/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -537,12 +537,6 @@
         "hic引气丹": {
             "id": null,
             "type": "hic",
-            "sales": "药铺老板 平一指",
-            "place": "扬州城-药铺"
-        },
-        "养精丹": {
-            "id": null,
-            "type": "hig",
             "sales": "药铺老板 平一指",
             "place": "扬州城-药铺"
         },
@@ -4496,36 +4490,6 @@
             WG.Send("stopstate");
             WG.SendCmd("tasks");
         },
-        yj_hook: undefined,
-        oneKeyyj: async function () {
-            WG.SendCmd("stopstate;$to 扬州城-药铺;$wait 1000;list %药铺老板 平一指%;$wait 1000;buy 10 *养精丹* from %药铺老板 平一指%;$wait 1000");
-            await WG.sleep(4000);
-            let lyj = '';
-            let byj = '';
-            WG.yj_hook = WG.add_hook("dialog", function (data) {
-                if (data.items) {
-                    for (let item of data.items) {
-                        if (item.name == '<hic>养精丹</hic>') {
-                            byj = item.id;
-                        }
-                        if (item.name == "<hig>养精丹</hig>") {
-                            lyj = item.id;
-                        }
-                    }
-                    let send = '';
-                    for (let i = 0; i < 10; i++) {
-                        send += "$wait 500;use " + lyj + ";";
-                        if (byj != '') {
-                            send += "$wait 500;use " + byj + ";";
-                        }
-                    }
-                    WG.SendCmd(send);
-                }
-                WG.remove_hook(WG.yj_hook);
-            });
-            WG.Send("pack");
-            await WG.sleep(20000);
-        },
         gpSkill_hook: undefined,
         getPlayerSkill: async function () {
             WG.gpSkill_hook = WG.add_hook("dialog", (data) => {
@@ -5661,7 +5625,6 @@
         daily: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
             KEY.do_command("tasks");
-            await WG.oneKeyyj();
             messageAppend("执行请安.", 1);
             await WG.oneKeyQA();
             WG.oneKeyDaily();
