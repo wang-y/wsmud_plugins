@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.115
+// @version      0.0.32.116
 // @date         01/07/2018
 // @modified     16/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1864,6 +1864,24 @@
                         }
                     }
                     if (WG.sm_item != undefined && item.indexOf(WG.sm_item.type) >= 0) {
+
+                        if(WG.smbuyNum == null){
+                            WG.smbuyNum = 0;
+                        }else if( WG.smbuyNum > 3){
+                            messageAppend("无法购买" + item);
+                            WG.smbuyNum = null;
+                            if (mysm_loser == "关") {
+                                WG.sm_state = -1;
+                                $(".sm_button").text("师门(Q)");
+                            } else if (mysm_loser == "开") {
+                                $("span[cmd$='giveup']:last").click();
+                                messageAppend("放弃任务");
+                                WG.sm_state = 0;
+                                setTimeout(WG.sm, 500);
+                                return;
+                            }
+                        }
+
                         WG.go(WG.sm_item.place);
                         messageAppend("自动购买" + item);
                         WG.sm_state = 3;
@@ -1908,6 +1926,7 @@
                             }
                             if (!_p) {
                                 messageAppend("没有牌子并且无法购买" + item);
+                                WG.smbuyNum = null;
                                 if (mysm_loser == "关") {
                                     WG.sm_state = -1;
                                     $(".sm_button").text("师门(Q)");
@@ -1921,6 +1940,7 @@
                             }
                         } else {
                             messageAppend("无法购买" + item);
+                            WG.smbuyNum = null;
                             if (mysm_loser == "关") {
                                 WG.sm_state = -1;
                                 $(".sm_button").text("师门(Q)");
@@ -1938,6 +1958,12 @@
                     WG.go(WG.sm_item.place);
                     if (WG.buy(WG.sm_item)) {
                         WG.sm_state = 0;
+                        if(WG.smbuyNum==0){
+                          WG.lastBuy = WG.sm_item
+                        }
+                        if( WG.lastBuy == WG.sm_item){
+                          WG.smbuyNum = WG.smbuyNum + 1;
+                        }
                     }
                     setTimeout(WG.sm, 500);
                     break;
