@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.117
+// @version      0.0.32.118
 // @date         01/07/2018
 // @modified     16/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1386,9 +1386,11 @@
 
 
             setTimeout(() => {
-                GM_registerMenuCommand("初始化",WG.update_id_all)
-                GM_registerMenuCommand("设  置",WG.setting)
-                GM_registerMenuCommand("调  试",WG.cmd_echo_button)
+                if(GM_registerMenuCommand){
+                    GM_registerMenuCommand("初始化",WG.update_id_all)
+                    GM_registerMenuCommand("设  置",WG.setting)
+                    GM_registerMenuCommand("调  试",WG.cmd_echo_button)
+                }
                 role = role;
                 var logintext = '';
                 document.title = role + "-MUD游戏-武神传说";
