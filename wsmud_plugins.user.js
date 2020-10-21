@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.120
+// @version      0.0.32.121
 // @date         01/07/2018
 // @modified     16/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7186,7 +7186,8 @@
                 parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
-
+        }, 2000);
+        setTimeout(() => {
             let loginnum = getQueryVariable("login")
             if(loginnum){
                 let userList = $('#role_panel > ul > li.content > ul >li');
@@ -7239,33 +7240,27 @@
                 $("li[command=SelectRole]").click()
                 return;
             }
-            try {
-                if (JSON.parse(data) instanceof Object) {
-                    return;
-                }
-            } catch (error) {
-                console.log("Run at message");
-            }
-
-            if (data === '挖矿' || data === '修炼') {
-                WG.zdwk();
-            } else if (data === '日常') {
-                WG.SendCmd("$daily");
-            } else if (data === '挂机') {
-                WG.SendCmd("stopstate");
-            } else {
-                if (data.split("\n")[0].indexOf("//") >= 0) {
-                    if (unsafeWindow && unsafeWindow.ToRaid) {
-                        ToRaid.perform(data);
-                    }
-                } else if (data.split("\n")[0].indexOf("#js") >= 0) {
-                    var jscode = data.split("\n");
-                    jscode.baoremove(0)
-                    eval(jscode.join(""));
+            if(data instanceof String){
+                if (data === '挖矿' || data === '修炼') {
+                    WG.zdwk();
+                } else if (data === '日常') {
+                    WG.SendCmd("$daily");
+                } else if (data === '挂机') {
+                    WG.SendCmd("stopstate");
                 } else {
-                    WG.SendCmd(data);
+                    if (data.split("\n")[0].indexOf("//") >= 0) {
+                        if (unsafeWindow && unsafeWindow.ToRaid) {
+                            ToRaid.perform(data);
+                        }
+                    } else if (data.split("\n")[0].indexOf("#js") >= 0) {
+                        var jscode = data.split("\n");
+                        jscode.baoremove(0)
+                        eval(jscode.join(""));
+                    } else {
+                        WG.SendCmd(data);
+                    }
                 }
-            }
+               }
         }
         $('.room-name').on('click', (e) => {
             e.preventDefault();
