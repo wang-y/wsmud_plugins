@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.119
+// @version      0.0.32.120
 // @date         01/07/2018
 // @modified     16/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -115,6 +115,16 @@
         } else {
             return number;
         }
+    }
+    function getQueryVariable(variable)
+    {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i=0;i<vars.length;i++) {
+            var pair = vars[i].split("=");
+            if(pair[0] == variable){return pair[1];}
+        }
+        return(false);
     }
     if (WebSocket) {
         console.log('插件可正常运行,Plugins can run normally');
@@ -7176,7 +7186,21 @@
                 parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
-        }, 2000);
+
+            let loginnum = getQueryVariable("login")
+            if(loginnum){
+                let userList = $('#role_panel > ul > li.content > ul >li');
+                for (let uidx =0;uidx<userList.length;uidx++) {
+                    if (loginnum==uidx+1) {
+                        $(userList[uidx]).addClass("select");
+                    } else {
+                        $(userList[uidx]).removeClass("select");
+                    }
+                }
+                $("li[command=SelectRole]").click()
+                return;
+            }
+        }, 5000);
 
         KEY.init();
         WG.init();
@@ -7192,6 +7216,9 @@
         unsafeWindow.MusicBox = MusicBox;
         unsafeWindow.FakerTTS = FakerTTS;
         unsafeWindow.WSStore = store;
+
+
+
         window.addEventListener("message", receiveMessage, false);
         function receiveMessage(event) {
             originWindow = event;
