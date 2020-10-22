@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.121
+// @version      0.0.32.122
 // @date         01/07/2018
 // @modified     16/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7240,7 +7240,7 @@
                 $("li[command=SelectRole]").click()
                 return;
             }
-            if(data instanceof String){
+            if(typeof  data =='string'){
                 if (data === '挖矿' || data === '修炼') {
                     WG.zdwk();
                 } else if (data === '日常') {
