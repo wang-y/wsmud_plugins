@@ -7240,6 +7240,13 @@
                 $("li[command=SelectRole]").click()
                 return;
             }
+            try {
+                if (JSON.parse(data) instanceof Object) {
+                    return;
+                }
+            } catch (error) {
+                console.log("Run at message");
+            }
             if(typeof  data =='string'){
                 if (data === '挖矿' || data === '修炼') {
                     WG.zdwk();
