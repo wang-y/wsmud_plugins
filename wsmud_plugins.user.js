@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.124
+// @version      0.0.32.125
 // @date         01/07/2018
 // @modified     27/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -564,7 +564,7 @@
     };
     var place = {
         "住房": "jh fam 0 start;go west;go west;go north;go enter",
-        "住房-卧室": "jh fam 0 start;go west;go west;go north;go enter;go north",
+        "住房-卧室": "jh fam 0 start;go west;go west;go north;go enter;go north;store",
         "住房-小花园": "jh fam 0 start;go west;go west;go north;go enter;go northeast",
         "住房-炼药房": "jh fam 0 start;go west;go west;go north;go enter;go east",
         "住房-练功房": "jh fam 0 start;go west;go west;go north;go enter;go west",
