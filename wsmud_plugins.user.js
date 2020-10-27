@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.123
+// @version      0.0.32.124
 // @date         01/07/2018
-// @modified     16/10/2020
+// @modified     27/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -759,6 +759,8 @@
     var auto_pfmswitch = "开";
     //自动转发路径
     var auto_rewardgoto = "关";
+    //仓库位置
+    var saveAddr = "关";
     //自动更新仓库数据
     var auto_updateStore = "关";
     //自动重连
@@ -1730,6 +1732,9 @@
             stopauto = false;
         },
         go: async function (p) {
+            if(saveAddr =='开' && p=='扬州城-钱庄'){
+                p = '住房-卧室'
+            }
             if (needfind[p] == undefined) {
                 if (WG.at(p)) {
                     return;
@@ -1742,6 +1747,9 @@
             }
         },
         at: function (p) {
+            if (saveAddr == '开' && p == '扬州城-钱庄') {
+                p = '住房-卧室'
+            }
             var w = $(".room-name").html();
             return w.indexOf(p) == -1 ? false : true;
         },
@@ -4669,6 +4677,10 @@
                     auto_rewardgoto = WG.switchReversal($(this));
                     GM_setValue(role + "_auto_rewardgoto", auto_rewardgoto);
                 });
+                $('#saveAddr').click(function () {
+                    saveAddr = WG.switchReversal($(this));
+                    GM_setValue(role + "_saveAddr", saveAddr);
+                });
 
                 $('#autoupdateStore').click(function () {
                     auto_updateStore = WG.switchReversal($(this));
@@ -4888,6 +4900,7 @@
             $('#auto_eq').val(autoeq);
             $('#autopfmswitch').val(auto_pfmswitch);
             $('#autorewardgoto').val(auto_rewardgoto);
+            $('#saveAddr').val(saveAddr);
             $('#autoupdateStore').val(auto_updateStore);
             $('#autorelogin').val(auto_relogin);
             $("#zmlshowsetting").val(zmlshowsetting);
@@ -5215,7 +5228,7 @@
             }
             if (data.type == 'text') {
                 if (shieldswitch == '开') {
-                 
+
                     var skey = shieldkey.split(",");
                     for (let keyword of skey) {
                         if (keyword != "" && data.msg.indexOf(keyword) >= 0) {
@@ -6022,6 +6035,7 @@
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
                 + UI.html_switch('autorewardgoto', '开启转发路径：', 'auto_rewardgoto')
+                + UI.html_switch('saveAddr', '使用豪宅仓库：', "saveAddr")
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
 
                 + UI.html_switch('autoupdateStore', '自动更新仓库数据：', 'auto_updateStore')
@@ -6975,6 +6989,7 @@
             unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
             auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
             auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
+            saveAddr = GM_getValue(role + "_saveAddr", saveAddr);
             auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
             auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
             blacklist = GM_getValue(role + "_blacklist", blacklist);
