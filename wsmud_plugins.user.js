@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.125
+// @version      0.0.32.126
 // @date         01/07/2018
-// @modified     27/10/2020
+// @modified     28/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -116,15 +116,14 @@
             return number;
         }
     }
-    function getQueryVariable(variable)
-    {
+    function getQueryVariable(variable) {
         var query = window.location.search.substring(1);
         var vars = query.split("&");
-        for (var i=0;i<vars.length;i++) {
+        for (var i = 0; i < vars.length; i++) {
             var pair = vars[i].split("=");
-            if(pair[0] == variable){return pair[1];}
+            if (pair[0] == variable) { return pair[1]; }
         }
-        return(false);
+        return (false);
     }
     if (WebSocket) {
         console.log('插件可正常运行,Plugins can run normally');
@@ -1398,14 +1397,14 @@
 
 
             setTimeout(() => {
-                try{
-                    if(GM_registerMenuCommand){
-                        GM_registerMenuCommand("初始化",WG.update_id_all)
-                        GM_registerMenuCommand("设  置",WG.setting)
-                        GM_registerMenuCommand("调  试",WG.cmd_echo_button)
+                try {
+                    if (GM_registerMenuCommand) {
+                        GM_registerMenuCommand("初始化", WG.update_id_all)
+                        GM_registerMenuCommand("设  置", WG.setting)
+                        GM_registerMenuCommand("调  试", WG.cmd_echo_button)
                     }
                 }
-                catch(e){
+                catch (e) {
                 }
                 role = role;
                 var logintext = '';
@@ -1732,7 +1731,7 @@
             stopauto = false;
         },
         go: async function (p) {
-            if(saveAddr =='开' && p=='扬州城-钱庄'){
+            if (saveAddr == '开' && p == '扬州城-钱庄') {
                 p = '住房-卧室'
             }
             if (needfind[p] == undefined) {
@@ -1893,20 +1892,74 @@
                     }
                     if (WG.sm_item != undefined && item.indexOf(WG.sm_item.type) >= 0) {
 
-                        if(WG.smbuyNum == null){
+                        if (WG.smbuyNum == null) {
                             WG.smbuyNum = 0;
-                        }else if( WG.smbuyNum > 3){
-                            messageAppend("无法购买" + item);
-                            WG.smbuyNum = null;
-                            if (mysm_loser == "关") {
-                                WG.sm_state = -1;
-                                $(".sm_button").text("师门(Q)");
-                            } else if (mysm_loser == "开") {
-                                $("span[cmd$='giveup']:last").click();
-                                messageAppend("放弃任务");
-                                WG.sm_state = 0;
-                                setTimeout(WG.sm, 500);
-                                return;
+                        } else if (WG.smbuyNum > 3) {
+                            if (sm_price == "开") {
+                                let pz = [{}, {}, {}, {}, {}]
+                                tmpObj = $("span[cmd$='giveup']:last").prev();
+                                for (let i = 0; i < 6; i++) {
+                                    if (tmpObj.children().html()) {
+                                        if (tmpObj.html().indexOf('放弃') == -1 &&
+                                            tmpObj.html().indexOf('令牌') >= 0) {
+                                            if (tmpObj.html().indexOf('hig') >= 0) {
+                                                pz[0] = tmpObj;
+                                            }
+                                            if (tmpObj.html().indexOf('hic') >= 0) {
+                                                pz[1] = tmpObj;
+                                            }
+                                            if (tmpObj.html().indexOf('hiy') >= 0) {
+                                                pz[2] = tmpObj;
+                                            }
+                                            if (tmpObj.html().indexOf('hiz') >= 0) {
+                                                pz[3] = tmpObj;
+                                            }
+                                            if (tmpObj.html().indexOf('hio') >= 0) {
+                                                pz[4] = tmpObj;
+                                            }
+                                        }
+                                    }
+                                    tmpObj = tmpObj.prev();
+                                }
+                                let _p = false;
+                                for (let p of pz) {
+                                    if (p.html != undefined) {
+                                        p.click();
+                                        messageAppend("自动上交牌子");
+                                        WG.sm_state = 0;
+                                        _p = true;
+                                        setTimeout(WG.sm, 500);
+                                        return;
+                                    }
+                                }
+                                if (!_p) {
+                                    messageAppend("没有牌子并且无法购买" + item);
+                                    WG.smbuyNum = null;
+                                    if (mysm_loser == "关") {
+                                        WG.sm_state = -1;
+                                        $(".sm_button").text("师门(Q)");
+                                    } else if (mysm_loser == "开") {
+                                        $("span[cmd$='giveup']:last").click();
+                                        messageAppend("放弃任务");
+                                        WG.sm_state = 0;
+                                        setTimeout(WG.sm, 500);
+                                        return;
+                                    }
+                                }
+                            }
+                            else {
+                                messageAppend("无法购买" + item);
+                                WG.smbuyNum = null;
+                                if (mysm_loser == "关") {
+                                    WG.sm_state = -1;
+                                    $(".sm_button").text("师门(Q)");
+                                } else if (mysm_loser == "开") {
+                                    $("span[cmd$='giveup']:last").click();
+                                    messageAppend("放弃任务");
+                                    WG.sm_state = 0;
+                                    setTimeout(WG.sm, 500);
+                                    return;
+                                }
                             }
                         }
 
@@ -1986,11 +2039,11 @@
                     WG.go(WG.sm_item.place);
                     if (WG.buy(WG.sm_item)) {
                         WG.sm_state = 0;
-                        if(WG.smbuyNum==0){
-                          WG.lastBuy = WG.sm_item
+                        if (WG.smbuyNum == 0) {
+                            WG.lastBuy = WG.sm_item
                         }
-                        if( WG.lastBuy == WG.sm_item){
-                          WG.smbuyNum = WG.smbuyNum + 1;
+                        if (WG.lastBuy == WG.sm_item) {
+                            WG.smbuyNum = WG.smbuyNum + 1;
                         }
                     }
                     setTimeout(WG.sm, 500);
@@ -4577,8 +4630,8 @@
             let _config = {};
             let keys = GM_listValues();
             keys.forEach(key => {
-                if(key.indexOf(role)>=0){
-                 _config[key] = GM_getValue(key);
+                if (key.indexOf(role) >= 0) {
+                    _config[key] = GM_getValue(key);
                 }
             });
             _config._shieldswitch = GM_getValue("_shieldswitch", shieldswitch);
@@ -4595,9 +4648,9 @@
             S.getUserConfig(G.id, (res) => {
                 if (res != "") {
                     let _config = JSON.parse(res);
-                     for (const key in _config) {
+                    for (const key in _config) {
                         GM_setValue(key, _config[key]);
-                     }
+                    }
 
 
                     GI.configInit();
@@ -7204,10 +7257,10 @@
         }, 2000);
         setTimeout(() => {
             let loginnum = getQueryVariable("login")
-            if(loginnum){
+            if (loginnum) {
                 let userList = $('#role_panel > ul > li.content > ul >li');
-                for (let uidx =0;uidx<userList.length;uidx++) {
-                    if (loginnum==uidx+1) {
+                for (let uidx = 0; uidx < userList.length; uidx++) {
+                    if (loginnum == uidx + 1) {
                         $(userList[uidx]).addClass("select");
                     } else {
                         $(userList[uidx]).removeClass("select");
@@ -7262,7 +7315,7 @@
             } catch (error) {
                 console.log("Run at message");
             }
-            if(typeof  data =='string'){
+            if (typeof data == 'string') {
                 if (data === '挖矿' || data === '修炼') {
                     WG.zdwk();
                 } else if (data === '日常') {
@@ -7282,7 +7335,7 @@
                         WG.SendCmd(data);
                     }
                 }
-               }
+            }
         }
         $('.room-name').on('click', (e) => {
             e.preventDefault();
