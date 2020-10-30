@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.127
+// @version      0.0.32.128
 // @date         01/07/2018
-// @modified     28/10/2020
+// @modified     30/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -25,7 +25,6 @@
 
 (function () {
     'use strict';
-
     Array.prototype.baoremove = function (dx) {
         if (isNaN(dx) || dx > this.length) {
             return false;
@@ -4669,10 +4668,66 @@
 
             $('.footer-item')[$('.footer-item').length - 1].click();
             GI.configInit();
+    
             if ($('.dialog-custom .zdy_dialog').length == 0) {
                 var a = UI.syssetting();
-                $(".dialog-custom").on("click", ".switch2", UI.switchClick);
                 $(".dialog-custom").prepend(a);
+
+            }
+                $(".dialog-custom").off('click');
+                $("#family").off('change');
+                $('#wudao_pfm').off('focusout');
+                $(".savebtn").off('click')
+                $('.clear_skillJson').off('click')
+                $('.backup_btn').off('click')
+                $('.clean_dps').off('click')
+                $('.load_btn').off('click')
+                $(".update_store").off('click')
+                $(".update_id_all").off('click')
+                $('#autobuy').off('change')
+                $('#loginhml').off('change')
+                $('#backimageurl').off('change')
+                $('#statehml').off('change')
+                $('#shieldkey').off('focusout');
+                $('#shield').off('focusout');
+                $('#funnycalc').off('click')
+                $('#dpssakada').off('click')
+                $('#silence').off('click')
+                $('#zdyskilllist').off('change')
+                $('#zdyskillsswitch').off('click')
+                $('#shieldswitch').off('click')
+                $('#welcome').off('focusout');
+                $('#blacklist').off('change')
+                $('#auto_command').off('change')
+                $('#store_fenjie_info').off('change')
+                $('#store_drop_info').off('change')
+                $('#lock_info').off('change')
+                $('#store_info2').off('change')
+                $('#store_info').off('change')
+                $('#unauto_pfm').off('change')
+                $('#getitemShow').off('click')
+                $("#zmlshowsetting").off('change')
+
+                $('#autorelogin').off('click')
+                $('#autoupdateStore').off('click')
+                $('#saveAddr').off('click')
+                $('#autorewardgoto').off('click')
+                $('#autopfmswitch').off('click')
+                $('#auto_eq').off('change')
+                $('#ks_Boss').off('click')
+
+                $('#marry_kiss').off('click')
+                $('#ks_wait').off('focusout');
+
+                $('#ks_pfm').off('focusout');
+                $('#sm_getstore').off('click')
+
+                $('#sm_price').off('click')
+                $('#sm_any').off('click')
+                $('#sm_loser').off('click')
+
+
+                $(".dialog-custom").on("click", ".switch2", UI.switchClick);
                 $("#family").change(function () {
                     family = $("#family").val();
                     GM_setValue(role + "_family", family);
@@ -4939,7 +4994,7 @@
                     messageAppend("保存自定义按钮成功");
                     WG.zdy_btnListInit();
                 });
-            }
+            
 
             $('#family').val(family);
             $('#wudao_pfm').val(wudao_pfm);
