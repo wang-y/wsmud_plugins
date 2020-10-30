@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.126
+// @version      0.0.32.127
 // @date         01/07/2018
 // @modified     28/10/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -125,9 +125,10 @@
         }
         return (false);
     }
+    var CanUse = false;
     if (WebSocket) {
         console.log('插件可正常运行,Plugins can run normally');
-
+        CanUse =true;
         function show_msg(msg) {
             ws_on_message({
                 type: "text",
@@ -1425,7 +1426,7 @@
                         }
                     }
                     rolep = welcome + "" + rolep;
-                    if (WebSocket) {
+                    if (CanUse) {
                         if (shieldswitch == "开" || silence == '开') {
                             messageAppend('已注入屏蔽系统', 0, 1);
                         }
@@ -1614,7 +1615,7 @@
             pfmnum = 0;
         },
         Send: async function (cmd) {
-            if (WebSocket) {
+            if (CanUse) {
                 send_cmd(cmd, true);
             } else {
                 if (cmd) {
@@ -2580,7 +2581,7 @@
                     }
                 }
             }
-            if (WebSocket) {
+            if (CanUse) {
                 if (v == "remove") {
                     if (G.wk_listener) {
                         WG.remove_hook(G.wk_listener);
@@ -2732,7 +2733,7 @@
             }
             if (!WG.at("武道塔")) {
                 //进入武道塔 对于武神塔不知道咋操作
-                if (WebSocket) {
+                if (CanUse) {
                     if (!WG.wudao_hook) {
                         WG.wudao_hook = WG.add_hook("dialog", (data) => {
                             var item = data.items
