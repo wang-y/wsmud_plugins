@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.129
+// @version      0.0.32.130
 // @date         01/07/2018
 // @modified     02/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1635,14 +1635,15 @@
                     ⚔️总计伤害:${addChineseUnit(alldps)}
                     ⏱️每秒伤害:${addChineseUnit(real_dps)}
                     ⏱️每秒攻击:${Math.round(real_act)}次`, 4);
+                   pfmdps = 0;
+                   pfmnum = 0;
+                   critical = 0;
+                   criticalnum = 0;
+                   dpslock = 0;
                }, 100);
            
 
-                pfmdps = 0;
-                pfmnum = 0;
-                critical = 0;
-                criticalnum = 0;
-                dpslock = 0;
+              
             }
         },
         Send: async function (cmd) {
