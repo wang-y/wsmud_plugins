@@ -1622,12 +1622,13 @@
                 let allpfmnum = pfmnum + criticalnum;
                 let alldps = pfmdps + critical;
                 let battle_t = (new Date().getTime() - battletime.getTime()) / 1000;
+
+                let real_dps = alldps / battle_t;
+                let real_act = allpfmnum / battle_t;
                 if( battle_t < 1){
                     real_dps = alldps;
                     real_act = allpfmnum;
-                }
-                let real_dps = alldps / battle_t;
-                let real_act = allpfmnum / battle_t;
+                 }
                setTimeout(() => {
                    messageAppend(`⚔️战斗过程分析:
                     ⏱️战斗时长:${battle_t}秒
