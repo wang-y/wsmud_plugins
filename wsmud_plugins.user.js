@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.131
+// @version      0.0.32.132
 // @date         01/07/2018
 // @modified     02/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -812,6 +812,7 @@
     var criticalnum = 0;
     var dpslock = 0;
     var battletime = 0;
+    var lastcri = 0, lastpfm = 0;
     //funny计算
     var funnycalc = '关'
     //自定义btn
@@ -7057,6 +7058,7 @@
                             messageAppend("已屏蔽", 1, 1);
                         });
                     }
+                
                     if (dpssakada == '开') {
 
                         if (/.*造成<.*>.*<\/.*>点.*/.test(data.msg)) {
@@ -7065,15 +7067,36 @@
                             let b = a[2].split(/伤害|\(|</);
                             if (b[2] != '你') {
                                 if (b[0] == '暴击') {//判断关键字
-                                    critical = critical + parseInt(a[1]);
-                                    criticalnum = criticalnum + 1;//暴击伤害和暴击次数增加
+                                    //critical = critical + parseInt(a[1]);
+                                    lastcri = parseInt(a[1]);
+                                  
                                 } else {
-                                    pfmdps = pfmdps + parseInt(a[1]);
-                                    pfmnum = pfmnum + 1;
+                                    // pfmdps = pfmdps + parseInt(a[1]);
+                                    lastpfm = parseInt(a[1]);
+                                   
                                 }
                                 dpslock = 1;
                                // messageAppend(`你造成了${addChineseUnit(pfmdps)}伤害,共计${pfmnum}次。`, 1, 1);
                             }
+
+                        }
+                        let dd = data.msg.split(/看起来充满活力，一点也不累。|似乎有些疲惫，但是仍然十分有活力。|看起来可能有些累了。|动作似乎开始有点不太灵光，但是仍然有条不紊。|已经一副头重脚轻的模样，正在勉力支撑著不倒下去。|看起来已经力不从心了。|已经陷入半昏迷状态，随时都可能摔倒晕去。|似乎十分疲惫，看来需要好好休息了。|气喘嘘嘘，看起来状况并不太好。|摇头晃脑、歪歪斜斜地站都站不稳，眼看就要倒在地上。/);
+                        //console.log(dd);
+                        if (dd.length>=2){
+                            //console.log(data.msg)
+                            if(dd[0].indexOf("你")<0){
+                                if (lastcri>0){
+                                    critical = critical + lastcri;
+                                    criticalnum = criticalnum + 1;//暴击伤害和暴击次数增加
+                                }
+                                if (lastpfm > 0) {
+                                    pfmdps = pfmdps + lastpfm;
+                                    pfmnum = pfmnum + 1;
+                                }
+                            }
+
+                            lastcri = 0;
+                            lastpfm = 0;
                         }
                     }
                 }
