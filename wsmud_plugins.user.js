@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.130
+// @version      0.0.32.131
 // @date         01/07/2018
 // @modified     02/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1622,6 +1622,10 @@
                 let allpfmnum = pfmnum + criticalnum;
                 let alldps = pfmdps + critical;
                 let battle_t = (new Date().getTime() - battletime.getTime()) / 1000;
+                if( battle_t < 1){
+                    real_dps = alldps;
+                    real_act = allpfmnum;
+                }
                 let real_dps = alldps / battle_t;
                 let real_act = allpfmnum / battle_t;
                setTimeout(() => {
@@ -1641,9 +1645,9 @@
                    criticalnum = 0;
                    dpslock = 0;
                }, 100);
-           
 
-              
+
+
             }
         },
         Send: async function (cmd) {
@@ -7021,7 +7025,7 @@
                         G.in_fight = false;
                         WG.auto_preform("stop");
                         WG.clean_dps();
-                        
+
                     }
                 }
                 if (data.msg.indexOf("加油，加油！！") >= 0) {
