@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.132
+// @version      0.0.32.133
 // @date         01/07/2018
 // @modified     02/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1626,12 +1626,12 @@
 
                 let real_dps = alldps / battle_t;
                 let real_act = allpfmnum / battle_t;
-                if( battle_t < 1){
+                if (battle_t < 1) {
                     real_dps = alldps;
                     real_act = allpfmnum;
-                 }
-               setTimeout(() => {
-                   messageAppend(`⚔️战斗过程分析:
+                }
+                setTimeout(() => {
+                    messageAppend(`⚔️战斗过程分析:
                     ⏱️战斗时长:${battle_t}秒
                     ⚔️普通攻击:${pfmnum}次
                     ⚔️普通伤害:${addChineseUnit(pfmdps)}
@@ -1641,12 +1641,12 @@
                     ⚔️总计伤害:${addChineseUnit(alldps)}
                     ⏱️每秒伤害:${addChineseUnit(real_dps)}
                     ⏱️每秒攻击:${Math.round(real_act)}次`, 4);
-                   pfmdps = 0;
-                   pfmnum = 0;
-                   critical = 0;
-                   criticalnum = 0;
-                   dpslock = 0;
-               }, 100);
+                    pfmdps = 0;
+                    pfmnum = 0;
+                    critical = 0;
+                    criticalnum = 0;
+                    dpslock = 0;
+                }, 100);
 
 
 
@@ -7058,7 +7058,7 @@
                             messageAppend("已屏蔽", 1, 1);
                         });
                     }
-                
+
                     if (dpssakada == '开') {
 
                         if (/.*造成<.*>.*<\/.*>点.*/.test(data.msg)) {
@@ -7069,23 +7069,23 @@
                                 if (b[0] == '暴击') {//判断关键字
                                     //critical = critical + parseInt(a[1]);
                                     lastcri = parseInt(a[1]);
-                                  
+
                                 } else {
                                     // pfmdps = pfmdps + parseInt(a[1]);
                                     lastpfm = parseInt(a[1]);
-                                   
+
                                 }
                                 dpslock = 1;
-                               // messageAppend(`你造成了${addChineseUnit(pfmdps)}伤害,共计${pfmnum}次。`, 1, 1);
+                                // messageAppend(`你造成了${addChineseUnit(pfmdps)}伤害,共计${pfmnum}次。`, 1, 1);
                             }
 
                         }
                         let dd = data.msg.split(/看起来充满活力，一点也不累。|似乎有些疲惫，但是仍然十分有活力。|看起来可能有些累了。|动作似乎开始有点不太灵光，但是仍然有条不紊。|已经一副头重脚轻的模样，正在勉力支撑著不倒下去。|看起来已经力不从心了。|已经陷入半昏迷状态，随时都可能摔倒晕去。|似乎十分疲惫，看来需要好好休息了。|气喘嘘嘘，看起来状况并不太好。|摇头晃脑、歪歪斜斜地站都站不稳，眼看就要倒在地上。/);
                         //console.log(dd);
-                        if (dd.length>=2){
+                        if (dd.length >= 2) {
                             //console.log(data.msg)
-                            if(dd[0].indexOf("你")<0){
-                                if (lastcri>0){
+                            if (dd[0].indexOf("你") < 0) {
+                                if (lastcri > 0) {
                                     critical = critical + lastcri;
                                     criticalnum = criticalnum + 1;//暴击伤害和暴击次数增加
                                 }
@@ -7382,21 +7382,36 @@
                 $(".channel")[0].scrollTop = 99999;
             }, 320 * 1000);
         }, 2000);
+        let loginnum = getQueryVariable("login");
+        if (loginnum) {
+            localStorage.setItem("login", loginnum);
+            if ("?test" != window.location.search) {
+                window.location.href = window.location.origin + "?test";
+            }
+        }
+
         setTimeout(() => {
-            let loginnum = getQueryVariable("login")
-            if (loginnum) {
-                let userList = $('#role_panel > ul > li.content > ul >li');
-                for (let uidx = 0; uidx < userList.length; uidx++) {
-                    if (loginnum == uidx + 1) {
-                        $(userList[uidx]).addClass("select");
-                    } else {
-                        $(userList[uidx]).removeClass("select");
+            if ($('#slist_panel').attr("style").indexOf("none") >= 0) {
+                if (G.id == null) {
+                    let loginnum = localStorage.getItem("login");
+                    if (loginnum) {
+                        let userList = $('#role_panel > ul > li.content > ul >li');
+                        for (let uidx = 0; uidx < userList.length; uidx++) {
+                            if (loginnum == uidx + 1) {
+                                $(userList[uidx]).addClass("select");
+                            } else {
+                                $(userList[uidx]).removeClass("select");
+                            }
+                        }
+                        $("li[command=SelectRole]").click()
+                        return;
                     }
                 }
-                $("li[command=SelectRole]").click()
-                return;
             }
+            localStorage.removeItem("login");
         }, 5000);
+
+
 
         KEY.init();
         WG.init();
