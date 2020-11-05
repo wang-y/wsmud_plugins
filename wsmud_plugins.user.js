@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.134
+// @version      0.0.32.135
 // @date         01/07/2018
 // @modified     05/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -7295,12 +7295,21 @@
     var FakerTTS = {
 
         playtts: function (text) {
-            var msg = new SpeechSynthesisUtterance(text);
-            msg.lang = 'zh';
-            msg.voice = speechSynthesis.getVoices().filter(function (voice) {
-                return voice.name == 'Whisper';
-            })[0];
-            speechSynthesis.speak(msg);
+            try{
+                var msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'zh';
+                msg.voice = speechSynthesis.getVoices().filter(function (voice) {
+                    return voice.name == 'Whisper';
+                })[0];
+                speechSynthesis.speak(msg);
+            }catch(e){
+                try{
+                    android.speak(text);
+                }catch(ex){
+                    console.log('这个真没有.')
+                }
+           
+            }
         }
     }
     class MusicBox {
