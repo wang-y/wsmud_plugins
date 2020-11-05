@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.135
+// @version      0.0.32.136
 // @date         01/07/2018
 // @modified     05/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1349,7 +1349,8 @@
                 margin-left: 0.4em;position: relative;padding-left: 0.4em;padding-right: 0.4em;line-height: 24px;}
                 .WG_log{flex: 1;overflow-y: auto;border: 1px solid #404000;max-height: 15em;width: calc(100% - 40px);}
                 .WG_log > pre{margin: 0px; white-space: pre-line;}
-                .WG_button { width: calc(100% - 40px);}
+                .WG_button { width: calc(100% - 40px); overflow-x: auto;display: block;line-height:2em;}
+                .WG_button > .zdy-item:active {background-color: gray;color:black;}
                 .item-plushp{display: inline-block;float: right;width: 100px;}
                 .item-dps{display: inline-block;float: right;width: 100px;}
                 .settingbox {margin-left: 0.625 em;border: 1px solid gray;background-color: transparent;color: unset;resize: none;width: 80% ;height: 3rem;}
@@ -3960,7 +3961,7 @@
                                 return;
                             }
                         }
-                        a.append("<span class=\"zdy-item act-item-zdy\">" + v.name + "</span>")
+                        a.append("<span class=\"zdy-item act-item-zdy act-item\">" + v.name + "</span>")
                         v.zmlShow = 1;
                         GM_setValue(role + "_zml", zml);
                         messageAppend("设置快速使用" + v.name, 0, 1);
@@ -4010,7 +4011,7 @@
 
                 if (zmlitem.zmlShow == 1) {
 
-                    a.append("<span class=\"zdy-item act-item-zdy\">" + zmlitem.name + "</span>")
+                    a.append("<span class=\"zdy-item act-item-zdy act-item\">" + zmlitem.name + "</span>")
                     messageAppend("设置快速使用" + zmlitem.name, 0, 1);
                     //绑定事件
                     $('.act-item-zdy').off('click');
