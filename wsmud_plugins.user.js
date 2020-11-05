@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.133
+// @version      0.0.32.134
 // @date         01/07/2018
-// @modified     02/11/2020
+// @modified     05/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -370,6 +370,7 @@
         "逍遥派-地下石室": ["go up"],
         "逍遥派-木屋": ["go south;go south;go south;go south"]
     };
+    var pgoods={};
     var goods = {
         "米饭": {
             "id": null,
@@ -1390,7 +1391,7 @@
             `;
             GM_addStyle(css);
             npcs = GM_getValue("npcs", npcs);
-            goods = GM_getValue("goods", goods);
+            pgoods = GM_getValue("goods", goods);
             equip = GM_getValue(role + "_equip", equip);
             //初始化角色配置
             GI.configInit();
@@ -1506,10 +1507,10 @@
 
                     gtype = a.children()[0].localName;
                     if (name == "金创药" || name == "引气丹") {
-                        if (goods[gtype + name]) {
-                            goods[gtype + name].id = id;
+                        if (pgoods[gtype + name]) {
+                            pgoods[gtype + name].id = id;
                         } else {
-                            goods[gtype + name] = {
+                            pgoods[gtype + name] = {
                                 "id": id,
                                 "type": gtype,
                                 "sales": "药铺老板 平一指",
@@ -1520,11 +1521,11 @@
 
                     }
                     else {
-                        goods[name].id = id;
+                        pgoods[name].id = id;
                     }
                     messageAppend(`<${gtype}>${name}</${gtype}>:${id}`);
                 }
-                GM_setValue("goods", goods);
+                GM_setValue("goods", pgoods);
                 return true;
             } else {
                 messageAppend("未检测到商品清单");
@@ -1554,12 +1555,12 @@
         },
         update_id_all: function () {
 
-            GM_SetValue("goods", {});
+            GM_setValue("goods",goods);
             WG.SendCmd("stopstate")
             var t = [];
-            Object.keys(goods).forEach(function (key) {
-                if (t[goods[key].place] == undefined)
-                    t[goods[key].place] = goods[key].sales;
+            Object.keys(pgoods).forEach(function (key) {
+                if (t[pgoods[key].place] == undefined)
+                    t[pgoods[key].place] = pgoods[key].sales;
             });
             var keys = Object.keys(t);
             var i = 0;
@@ -1751,9 +1752,9 @@
                     //商店 id解析
                     if (c.indexOf("*") >= 0) {
                         var rep = c.match("\\*([^%]+)\\*");
-                        if (goods[rep[1]] != undefined) {
+                        if (pgoods[rep[1]] != undefined) {
                             var subStr = new RegExp('\\*([^%]+)\\*');
-                            c = c.replace(subStr, goods[rep[1]].id);
+                            c = c.replace(subStr, pgoods[rep[1]].id);
                         }
                     }
 
@@ -1899,9 +1900,9 @@
                     }
                     //不能上交自动购买
                     if (itemName == "金创药" || itemName == "引气丹") {
-                        WG.sm_item = goods[_gtype + itemName];
+                        WG.sm_item = pgoods[_gtype + itemName];
                     } else {
-                        WG.sm_item = goods[itemName];
+                        WG.sm_item = pgoods[itemName];
                     }
 
                     if (item != undefined && WG.inArray(item, store_list) && sm_getstore == "开") {
@@ -2730,7 +2731,7 @@
                 if (WG.at("扬州城-矿山") && t == -1) {
                     //不能挖矿，自动买铁镐
                     WG.go("扬州城-打铁铺");
-                    WG.buy(goods["铁镐"]);
+                    WG.buy(pgoods["铁镐"]);
                     //买完等待下一次检查
                     messageAppend("自动买铁镐");
                     return;
@@ -6917,14 +6918,14 @@
                         for (let item of data.selllist) {
                             let realname = item.name.replace(/<[^>]+>/g, ""); //去尖括号
                             let _gtype = /<([^<>]*)>/.exec(item.name)[1]
-                            if (goods[realname] != undefined) {
-                                goods[realname].id = item.id;
+                            if (pgoods[realname] != undefined) {
+                                pgoods[realname].id = item.id;
                             }
-                            if (goods[_gtype + realname] != undefined) {
-                                goods[_gtype + realname].id = item.id;
+                            if (pgoods[_gtype + realname] != undefined) {
+                                pgoods[_gtype + realname].id = item.id;
                             }
                         }
-                        GM_setValue("goods", goods);
+                        GM_setValue("goods", pgoods);
                     }
                 } else if (data.type == 'items') {
                     if (WG.at("扬州城-醉仙楼")) {
@@ -7034,6 +7035,821 @@
                 }
                 if (data.msg.indexOf("加油，加油！！") >= 0) {
                     if (G.in_fight == false) {
+                        G.in_fight = true;
+                        WG.auto_preform();
+                    }
+                }
+                if (data.type == 'text') {
+                    if (data.msg.indexOf("长得") >= 0 && data.msg.indexOf("看起来") >= 0) {
+                        let s = data.msg.split("\n")[0].split(" ");
+                        let name = s[s.length - 1];
+                        if (name.indexOf("<") >= 0) {
+                            name = name.split("<")[0];
+                        }
+                        let t = new Date().getMilliseconds();
+                        let shieldhtml = `<div class="item-commands"><span id="addshield${t}">屏蔽 ${name}</span></div>`
+                        messageAppend(shieldhtml, 0, 0);
+                        $(`#addshield${t}`).on('click', function () {
+                            shield = GM_getValue('_shield', shield);
+                            if (shield != "") {
+                                shield = shield + "," + name;
+                            } else {
+                                shield = name;
+                            }
+                            GM_setValue('_shield', shield);
+                            $('#shield').val(shield);
+                            messageAppend("已屏蔽", 1, 1);
+                        });
+                    }
+                
+                    if (dpssakada == '开') {
+
+                        if (/.*造成<.*>.*<\/.*>点.*/.test(data.msg)) {
+                            let pdata = data.msg;
+                            let a = pdata.split(/.*造成<wht>|.*造成<hir>|<\/wht>点|<\/hir>点/);
+                            let b = a[2].split(/伤害|\(|</);
+                            if (b[2] != '你') {
+                                if (b[0] == '暴击') {//判断关键字
+                                    //critical = critical + parseInt(a[1]);
+                                    lastcri = parseInt(a[1]);
+                                  
+                                } else {
+                                    // pfmdps = pfmdps + parseInt(a[1]);
+                                    lastpfm = parseInt(a[1]);
+                                   
+                                }
+                                dpslock = 1;
+                               // messageAppend(`你造成了${addChineseUnit(pfmdps)}伤害,共计${pfmnum}次。`, 1, 1);
+                            }
+
+                        }
+                        let dd = data.msg.split(/看起来充满活力，一点也不累。|似乎有些疲惫，但是仍然十分有活力。|看起来可能有些累了。|动作似乎开始有点不太灵光，但是仍然有条不紊。|已经一副头重脚轻的模样，正在勉力支撑著不倒下去。|看起来已经力不从心了。|已经陷入半昏迷状态，随时都可能摔倒晕去。|似乎十分疲惫，看来需要好好休息了。|气喘嘘嘘，看起来状况并不太好。|摇头晃脑、歪歪斜斜地站都站不稳，眼看就要倒在地上。/);
+                        //console.log(dd);
+                        if (dd.length>=2){
+                            //console.log(data.msg)
+                            if(dd[0].indexOf("你")<0){
+                                if (lastcri>0){
+                                    critical = critical + lastcri;
+                                    criticalnum = criticalnum + 1;//暴击伤害和暴击次数增加
+                                }
+                                if (lastpfm > 0) {
+                                    pfmdps = pfmdps + lastpfm;
+                                    pfmnum = pfmnum + 1;
+                                }
+                            }
+
+                            lastcri = 0;
+                            lastpfm = 0;
+                        }
+                    }
+                }
+            });
+            WG.add_hook('dialog', function (data) {
+                if (data.dialog == 'jh') {
+                    if (data.fbs) {
+                        fb_path = data.fbs;
+                    }
+                }
+            });
+            WG.add_hook(['text', 'sc'], function (message) {
+                if (funnycalc == '关') return;
+                if (message.type === "text" && /你的最大内力增加了/.test(message.msg)) {
+                    //if中已经判断了内力相关
+                    let x = message.msg.replace(/[^0-9]/ig, "");
+                    let item = G.score;
+                    let max = item.max_mp;
+                    let limit = item.limit_mp;
+                    let t = (limit - max) / (x * 6);//时间/分钟
+                    let tStr = t < 60 ? `${parseInt(t)}分钟` : `${parseInt(t / 60)}小时${parseInt(t % 60)}分钟`;
+                    let html = `<hic class="remove_nl">你的最大内力从${max}到${limit}还需${tStr}。\n</hic>`;
+                    messageAppend(html, 0, 1);
+                } else if (message.type == 'sc' && message.id == G.id) {
+                    if (message.max_mp != null && message.mp != null) {
+                        G.score.max_mp = message.max_mp;
+                        G.score.mp = message.mp;
+                    }
+                } else if (message.type == 'text') {
+                    if (/你获得了(.*)点经验，(.*)点潜能/.test(message.msg)) {
+                        let x = message.msg.match(/获得了(.*)点经验，(.*)点潜能/);
+                        G.jy += parseInt(x[1]);
+                        G.qn += parseInt(x[2]);
+                        let mss = `共计获得了${G.jy}点经验和${G.qn}点潜能。`;
+                        messageAppend(mss, 0, 1);
+                    }
+                }
+            });
+            WG.add_hook("roles", function (data) {
+                // console.log(data);
+                // unsafeWindow.SS_ROLES = data.roles;
+                function sendRoles() {
+                    if (originWindow.source) {
+                        originWindow.source.postMessage(data.roles, '*');
+                    } else {
+                        setTimeout(sendRoles, 1000);
+                    }
+                }
+                sendRoles();
+
+            });
+        },
+        configInit: function () {
+            family = GM_getValue(role + "_family", family);
+            automarry = GM_getValue(role + "_automarry", automarry);
+            autoKsBoss = GM_getValue(role + "_autoKsBoss", autoKsBoss);
+            ks_pfm = GM_getValue(role + "_ks_pfm", ks_pfm);
+            ks_wait = GM_getValue(role + "_ks_wait", ks_wait);
+            eqlist = GM_getValue(role + "_eqlist", eqlist);
+            skilllist = GM_getValue(role + "_skilllist", skilllist);
+            autoeq = GM_getValue(role + "_auto_eq", autoeq);
+            if (family == null) {
+                family = $('.role-list .select').text().substr(0, 2)
+            }
+            wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
+            sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+            sm_any = GM_getValue(role + "_sm_any", sm_any);
+            sm_price = GM_getValue(role + "_sm_price", sm_price);
+            sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
+            unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
+            auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
+            auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
+            saveAddr = GM_getValue(role + "_saveAddr", saveAddr);
+            auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
+            auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
+            blacklist = GM_getValue(role + "_blacklist", blacklist);
+            if (!blacklist instanceof Array) {
+                blacklist = blacklist.split(",")
+            }
+            getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
+            if (getitemShow == "开") {
+                G.getitemShow = true
+            } else {
+                G.getitemShow = false
+            }
+            zml = GM_getValue(role + "_zml", zml);
+            zdy_item_store = GM_getValue(role + "_zdy_item_store", zdy_item_store);
+            zdy_item_store2 = GM_getValue(role + "_zdy_item_store2", zdy_item_store2);
+            zdy_item_lock = GM_getValue(role + "_zdy_item_lock", zdy_item_lock);
+            zdy_item_drop = GM_getValue(role + "_zdy_item_drop", zdy_item_drop);
+            zdy_item_fenjie = GM_getValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
+            if (zdy_item_store) {
+                store_list = store_list.concat(zdy_item_store.split(","))
+            }
+            if (zdy_item_store2) {
+                store_list = store_list.concat(zdy_item_store2.split(","))
+            }
+            if (zdy_item_lock) {
+                lock_list = lock_list.concat(zdy_item_lock.split(","))
+            }
+            if (zdy_item_drop) {
+                drop_list = drop_list.concat(zdy_item_drop.split(","))
+            }
+            if (zdy_item_fenjie) {
+                fenjie_list = fenjie_list.concat(zdy_item_fenjie.split(","))
+            }
+            ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
+            if (auto_pfmswitch == "开") {
+                G.auto_preform = true
+            }
+            auto_command = GM_getValue(role + "_auto_command", auto_command);
+            var unpfm = unauto_pfm.split(',');
+            for (var pfmname of unpfm) {
+                if (pfmname) blackpfm.push(pfmname)
+            }
+            welcome = GM_getValue(role + "_welcome", welcome);
+            shieldswitch = GM_getValue("_shieldswitch", shieldswitch);
+            shield = GM_getValue("_shield", shield);
+            shieldkey = GM_getValue("_shieldkey", shieldkey);
+            statehml = GM_getValue(role + "_statehml", statehml);
+            backimageurl = GM_getValue(role + "_backimageurl", backimageurl);
+            loginhml = GM_getValue(role + "_loginhml", loginhml);
+            timequestion = GM_getValue(role + "_timequestion", timequestion);
+            silence = GM_getValue(role + "_silence", silence);
+            dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
+            funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
+
+            auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
+
+            zdyskilllist = GM_getValue(role + "_zdyskilllist", zdyskilllist);
+            zdyskills = GM_getValue(role + "_zdyskills", zdyskills);
+            WG.zdy_btnListInit();
+
+        }
+    };
+
+    var S = {
+        serverUrl: "https://wsmud.ii74.com",
+        GetJson: function (path, data) {
+            let res = '';
+            $.post(S.serverUrl + path, data, (data) => {
+                res = data;
+            });
+            return res;
+        },
+        shareJson: function (usernaem, json) {
+            $.post(S.serverUrl + "/sharejk", {
+                username: usernaem,
+                json: JSON.stringify(json)
+            }, (res) => {
+                if (res && res.code == 0) {
+                    GM_setClipboard(res.shareid);
+                    messageAppend("复制成功" + res.msg + ":" + res.shareid);
+                } else {
+                    messageAppend("失败了" + res.msg);
+                }
+            })
+        },
+        getShareJson: function (id, callback) {
+            $.post(S.serverUrl + "/getjk", {
+                shareid: id
+            }, (res) => {
+                if (res && res.code == 0) {
+                    callback(res);
+                } else {
+                    messageAppend("失败了" + res.msg);
+                }
+            });
+        },
+        getUserConfig: function (id, callback) {
+            $.get(S.serverUrl + "/User/Load?id=" + id, (res) => {
+                if (res && res != "") {
+                    callback(res);
+                } else {
+                    messageAppend("失败了");
+                }
+            });
+        },
+        uploadUserConfig: function (id, data, callback) {
+            $.post(S.serverUrl + "/User/Backup", {
+                id: id,
+                data: JSON.stringify(data)
+            }, (res) => {
+                if (res && res == "true") {
+                    callback(res);
+                } else {
+                    messageAppend("失败了,或配置已存在");
+                }
+            });
+        }
+
+    };
+    var FakerTTS = {
+
+        playtts: function (text) {
+            var msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'zh';
+            msg.voice = speechSynthesis.getVoices().filter(function (voice) {
+                return voice.name == 'Whisper';
+            })[0];
+            speechSynthesis.speak(msg);
+        }
+    }
+    class MusicBox {
+        constructor(options) {
+            let defaults = {
+                loop: false,
+                musicText: '',
+                autoplay: false,
+                type: 'sine',
+                duration: 2
+            };
+            this.arrFrequency = [262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784, 880, 988, 1047, 1175, 1319, 1397, 1568, 1760, 1967];
+            this.arrNotes = ['·1', '·2', '·3', '·4', '·5', '·6', '·7', '1', '2', '3', '4', '5', '6', '7', '1·', '2·', '3·', '4·', '5·', '6·', '7·'];
+            this.opts = Object.assign(defaults, options);
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.opts.autoplay && this.playMusic(this.opts.musicText, this.opts.autoplay)
+        }
+        createSound(freq) {
+            let oscillator = this.audioCtx.createOscillator();
+            let gainNode = this.audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(this.audioCtx.destination);
+            oscillator.type = this.opts.type;
+            oscillator.frequency.value = freq;
+            gainNode.gain.setValueAtTime(0, this.audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(1, this.audioCtx.currentTime + 0.01);
+            oscillator.start(this.audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + this.opts.duration);
+            oscillator.stop(this.audioCtx.currentTime + this.opts.duration)
+        }
+        createMusic(note) {
+            let index = this.arrNotes.indexOf(note);
+            if (index !== -1) {
+                this.createSound(this.arrFrequency[index])
+            }
+        }
+        pressBtn(i) {
+            this.createSound(this.arrFrequency[i])
+        }
+        playMusic(musicText, speed = 2) {
+            let i = 0,
+                musicArr = musicText.split(' ');
+            let timer = setInterval(() => {
+                try {
+                    let n = this.arrNotes.indexOf(musicArr[i]);
+                    if (musicArr[i] !== '-' && musicArr[i] !== '0') {
+                        this.pressBtn(n)
+                    }
+                    i++;
+                    if (i >= musicArr.length) {
+                        this.opts.loop ? i = 0 : clearInterval(timer)
+                    }
+                } catch (e) {
+                    alert('请输入正确的乐谱！');
+                    clearInterval(timer)
+                }
+            }, 1000 / speed);
+            return timer
+        }
+    };
+    var originWindow = {};
+    $(document).ready(function () {
+        $('head').append('<link href="https://cdn.staticfile.org/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.min.css" rel="stylesheet">');
+        $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
+        $('body').append(UI.codeInput);
+
+        setTimeout(() => {
+            var server = document.createElement('script');
+            server.setAttribute('src', 'https://cdn.staticfile.org/layer/2.3/layer.js');
+            document.head.appendChild(server);
+            console.log("layer 加载完毕!");
+            setInterval(() => {
+                var h = '';
+                if (parseInt(Math.random() * 10) < 3) {
+                    h = "<hir>【插件】有任何问题欢迎加入 武神传说-仙界 367657589 进行技术交流，脚本讨论。\n<hir>"
+                } else if (parseInt(Math.random() * 10) < 6) {
+                    h = "<hir>【插件】欢迎登录 http://wsmud.bobcn.me 进行流程及触发器技术交流，脚本讨论。\n<hir>";
+                } else if (parseInt(Math.random() * 10) < 10) {
+                    h = "<hir>【插件】欢迎访问 https://emeisuqing.github.io/wsmud.old/ 苏轻 助你武神之路上更加轻松愉快。\n<hir>";
+                }
+                parseInt(Math.random() * 10) < 2 ? $('.channel pre').append(h) : console.log("");
+                $(".channel")[0].scrollTop = 99999;
+            }, 320 * 1000);
+        }, 2000);
+        setTimeout(() => {
+            let loginnum = getQueryVariable("login")
+            if (loginnum) {
+                let userList = $('#role_panel > ul > li.content > ul >li');
+                for (let uidx = 0; uidx < userList.length; uidx++) {
+                    if (loginnum == uidx + 1) {
+                        $(userList[uidx]).addClass("select");
+                    } else {
+                        $(userList[uidx]).removeClass("select");
+                    }
+                }
+                $("li[command=SelectRole]").click()
+                return;
+            }
+        }, 5000);
+
+        KEY.init();
+        WG.init();
+        GI.init();
+        unsafeWindow.WG = WG;
+        unsafeWindow.T = T;
+        unsafeWindow.L = L;
+        unsafeWindow.G = G;
+        unsafeWindow.messageClear = messageClear;
+        unsafeWindow.messageAppend = messageAppend;
+        unsafeWindow.send_cmd = send_cmd;
+        unsafeWindow.roomData = roomData;
+        unsafeWindow.MusicBox = MusicBox;
+        unsafeWindow.FakerTTS = FakerTTS;
+        unsafeWindow.WSStore = store;
+
+
+
+        window.addEventListener("message", receiveMessage, false);
+        function receiveMessage(event) {
+            originWindow = event;
+            var origin = event.origin;
+            var data = event.data;
+            if (data.indexOf("denglu") >= 0) {
+                if (role != undefined) { return; }
+                console.log(data);
+                let userName = data.split(" ")[1];
+                let userList = $('#role_panel > ul > li.content > ul >li');
+                for (let user of userList) {
+                    if (user.innerText.indexOf(userName) >= 0) {
+                        $(user).addClass("select");
+                    } else {
+                        $(user).removeClass("select");
+                    }
+                }
+                $("li[command=SelectRole]").click()
+                return;
+            }
+            try {
+                if (JSON.parse(data) instanceof Object) {
+                    return;
+                }
+            } catch (error) {
+                console.log("Run at message");
+            }
+            if (typeof data == 'string') {
+                if (data === '挖矿' || data === '修炼') {
+                    WG.zdwk();
+                } else if (data === '日常') {
+                    WG.SendCmd("$daily");
+                } else if (data === '挂机') {
+                    WG.SendCmd("stopstate");
+                } else {
+                    if (data.split("\n")[0].indexOf("//") >= 0) {
+                        if (unsafeWindow && unsafeWindow.ToRaid) {
+                            ToRaid.perform(data);
+                        }
+                    } else if (data.split("\n")[0].indexOf("#js") >= 0) {
+                        var jscode = data.split("\n");
+                        jscode.baoremove(0)
+                        eval(jscode.join(""));
+                    } else {
+                        WG.SendCmd(data);
+                    }
+                }
+            }
+        }
+        $('.room-name').on('click', (e) => {
+            e.preventDefault();
+            $('.container').contextMenu({
+                x: 1,
+                y: 1
+            });
+        });
+        $.contextMenu({
+            selector: '.container',
+            items: {
+                "关闭自动": {
+                    name: "关闭自动",
+                    visible: function (key, opt) {
+                        return timer != 0;
+                    },
+                    callback: function (key, opt) {
+                        WG.timer_close();
+                    },
+                },
+                "自动": {
+                    name: "自动",
+                    visible: function (key, opt) {
+                        return timer == 0;
+                    },
+                    "items": {
+                        "自动武道": {
+                            name: "自动武道",
+                            callback: function (key, opt) {
+                                WG.wudao_auto();
+                            },
+                        },
+                        "自动小树林": {
+                            name: "自动小树林",
+                            callback: function (key, opt) {
+                                WG.grove_auto();
+                            }
+                        },
+                        "自动整理并清包": {
+                            name: "自动整理并清包",
+                            callback: function (key, opt) {
+                                WG.sell_all();
+                            }
+                        },
+                        "自动比试": {
+                            name: "自动比试",
+                            visible: function (key, opt) {
+                                return WG.fight_listener == undefined;
+                            },
+                            callback: function (key, opt) {
+                                WG.auto_fight();
+                            },
+                        },
+                        "关闭比试": {
+                            name: "关闭比试",
+                            visible: function (key, opt) {
+                                return WG.fight_listener != undefined;
+                            },
+                            callback: function (key, opt) {
+                                WG.auto_fight();
+                            },
+                        },
+                        "自动使用道具": {
+                            name: "自动使用道具",
+                            callback: function (key, opt) {
+                                WG.auto_useitem();
+                            },
+                        },
+                        "自动研药": {
+                            name: "自动研药",
+                            callback: function (key, opt) {
+                                WG.auto_Development_medicine();
+                            },
+                        },
+                        "一键日常": {
+                            name: "一键日常",
+                            callback: function (key, opt) {
+                                WG.oneKeyDaily();
+                            },
+                        },
+                        "一键请安": {
+                            name: "一键请安",
+                            callback: function (key, opt) {
+                                WG.oneKeyQA();
+                            },
+                        },
+                        "一键扫荡": {
+                            name: "一键扫荡",
+                            callback: function (key, opt) {
+                                WG.oneKeySD();
+                            },
+                        },
+
+                        "一键当铺购买": {
+                            name: "一键当铺购买",
+                            callback: function (key, opt) {
+                                WG.tnBuy();
+                            },
+                        },
+                    },
+                },
+                "换装设置": {
+                    name: "换装设置",
+                    "items": {
+                        "xx0": {
+                            name: "套装1设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(1);
+                            },
+                        },
+                        "xxx0": {
+                            name: "技能1设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(1, 1);
+                            },
+                        },
+                        "xx1": {
+                            name: "清除套装1设置",
+                            callback: function (key, opt) {
+                                WG.eqhelperdel(1);
+                            },
+                        },
+                        "yy0": {
+                            name: "套装2设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(2);
+                            },
+                        }, "yyy1": {
+                            name: "技能2设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(2, 1);
+                            },
+                        },
+                        "yy1": {
+                            name: "清除套装2设置",
+                            callback: function (key, opt) {
+                                WG.eqhelperdel(2);
+                            },
+                        },
+                        "zz0": {
+                            name: "套装3设或备",
+                            callback: function (key, opt) {
+                                WG.eqhelper(3);
+                            },
+                        }, "zzz1": {
+                            name: "技能3设或装",
+                            callback: function (key, opt) {
+                                WG.eqhelper(3, 1);
+                            },
+                        },
+                        "zz1": {
+                            name: "清除套装3设置",
+                            callback: function (key, opt) {
+                                WG.eqhelperdel(3);
+                            },
+                        },
+                        "uneq": {
+                            name: "取消所有装备",
+                            callback: function (key, opt) {
+                                WG.uneqall();
+                            },
+                        },
+                    }
+                },
+                "自命令,自定监控": {
+                    name: "自命令,自定监控",
+                    callback: function (key, opt) {
+                        WG.zmlztjk();
+                    },
+                },
+                "手动喜宴": {
+                    name: "手动喜宴",
+                    callback: function (key, opt) {
+                        console.log("当前自动状态:" + stopauto);
+                        WG.xiyan();
+                    },
+                },
+                "快捷传送": {
+                    name: "常用地点",
+                    "items": {
+                        "mp0": {
+                            name: "豪宅",
+                            callback: function (key, opt) {
+                                WG.go("住房");
+                            },
+                        },
+                        "mp11": {
+                            name: "衙门",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-衙门正厅");
+                            },
+                        },
+                        "mp12": {
+                            name: "镖局",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-镖局正厅");
+                            },
+                        },
+                        "mp1": {
+                            name: "当铺",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-当铺");
+                            },
+                        },
+                        "mp2": {
+                            name: "擂台",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-擂台");
+                            },
+                        },
+                        "mp6": {
+                            name: "药铺",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-药铺");
+                            },
+                        },
+                        "mp7": {
+                            name: "武庙疗伤",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-武庙");
+                                WG.Send("liaoshang");
+                            },
+                        }
+
+                    },
+                },
+                "门派传送": {
+                    name: "门派传送",
+                    "items": {
+                        "mp0": {
+                            name: "武当",
+                            callback: function (key, opt) {
+                                let myDate = new Date();
+                                if (myDate.getHours() >= 17) {
+                                    WG.go("武当派-后山小院");
+                                } else {
+                                    WG.go("武当派-广场");
+                                }
+                            },
+                        },
+                        "mp1": {
+                            name: "少林",
+                            callback: function (key, opt) {
+                                let myDate = new Date();
+                                if (myDate.getHours() >= 17) {
+                                    WG.go("少林派-方丈楼");
+                                } else {
+                                    WG.go("少林派-广场");
+                                }
+                            },
+                        },
+                        "mp2": {
+                            name: "华山",
+                            callback: function (key, opt) {
+                                let myDate = new Date();
+                                if (myDate.getHours() >= 17) {
+                                    WG.go("华山派-客厅");
+                                } else {
+                                    WG.go("华山派-镇岳宫");
+                                }
+                            },
+                        },
+                        "mp3": {
+                            name: "峨眉",
+                            callback: function (key, opt) {
+                                let myDate = new Date();
+                                if (myDate.getHours() >= 17) {
+                                    WG.go("峨眉派-清修洞");
+                                } else {
+                                    WG.go("峨眉派-金顶")
+                                }
+                            },
+                        },
+                        "mp4": {
+                            name: "逍遥",
+                            callback: function (key, opt) {
+                                let myDate = new Date();
+                                if (myDate.getHours() >= 17) {
+                                    WG.go("逍遥派-地下石室");
+                                } else {
+                                    WG.go("逍遥派-青草坪");
+                                }
+                            },
+                        },
+                        "mp5": {
+                            name: "丐帮",
+                            callback: function (key, opt) {
+                                let myDate = new Date();
+                                if (myDate.getHours() >= 17) {
+                                    WG.go("丐帮-林间小屋");
+                                } else {
+                                    WG.go("丐帮-树洞内部");
+                                }
+                            },
+                        },
+                        "mp6": {
+                            name: "武馆",
+                            callback: function (key, opt) {
+                                WG.go("扬州城-扬州武馆");
+                            },
+                        },
+                        "mp7": {
+                            name: "杀手楼",
+                            callback: function (key, opt) {
+                                WG.go("杀手楼-大门");
+                            },
+                        }
+                    },
+                },
+                "打开仓库": {
+                    name: "打开仓库",
+                    callback: function (key, opt) {
+                        if (WG.at("扬州城-钱庄")) {
+                            WG.Send("store");
+                        } else {
+                            WG.go("扬州城-钱庄");
+                        }
+                    },
+                },
+                "切换菜单": {
+                    name: "切换菜单",
+                    callback: function (key, opt) {
+                        let p = 'on'
+                        if (inzdy_btn) {
+                            p = 'off'
+                        }
+                        WG.zdy_btnshow(p);
+                    },
+                },
+                "简单工具": {
+                    name: "简单工具",
+                    callback: function (key, opt) {
+                        WG.calc();
+                    },
+                },
+                "调试BOSS": {
+                    name: "调试BOSS",
+                    visible: false,
+                    callback: function (key, opt) {
+                        WG.kksBoss({
+                            content: "听说呼符出现在逍遥派-地下石室一带。"
+                        });
+                    },
+                },
+                "流程菜单Raid.js": {
+                    name: "流程菜单Raid.js",
+                    callback: function (key, opt) {
+                        if (unsafeWindow && unsafeWindow.ToRaid) {
+                            unsafeWindow.ToRaid.menu();
+                        } else {
+                            messageAppend("插件未安装,请访问 https://greasyfork.org/zh-CN/scripts/375851-wsmud-raid 下载并安装");
+                            window.open("https://greasyfork.org/zh-CN/scripts/375851-wsmud-raid ", '_blank').location;
+                        }
+                    }
+                },
+                "设置": {
+                    name: "设置",
+                    callback: function (key, opt) {
+                        WG.setting();
+                    },
+                },
+                "打开面板": {
+                    name: "打开面板",
+                    visible: function (key, opt) {
+                        return $('.WG_log').css('display') == 'none';
+                    },
+                    callback: function (key, opt) {
+                        WG.showhideborad();
+                    },
+                },
+                "关闭面板": {
+                    name: "关闭面板",
+                    visible: function (key, opt) {
+                        return $('.WG_log').css('display') != 'none';
+                    },
+                    callback: function (key, opt) {
+                        WG.showhideborad();
+                    },
+                }
+            }
+        });
+    });
+})();
+se) {
                         G.in_fight = true;
                         WG.auto_preform();
                     }
