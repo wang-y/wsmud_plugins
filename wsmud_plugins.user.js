@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.132
+// @version      0.0.32.133
 // @date         01/07/2018
 // @modified     02/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1553,6 +1553,8 @@
             GM_setValue("npcs", npcs);
         },
         update_id_all: function () {
+
+            GM_SetValue("goods", {});
             WG.SendCmd("stopstate")
             var t = [];
             Object.keys(goods).forEach(function (key) {
