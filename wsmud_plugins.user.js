@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.136
+// @version      0.0.32.137
 // @date         01/07/2018
 // @modified     05/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -2155,7 +2155,7 @@
                     }
                 })
                 callback(storestatus);
-            }, 1000);
+            }, 1500);
 
         },
         Give: function (items) {
