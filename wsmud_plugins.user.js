@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.137
+// @version      0.0.32.138
 // @date         01/07/2018
-// @modified     05/11/2020
+// @modified     09/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2950,6 +2950,18 @@
                         @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
                         @awiat 2000
                         tm 【三三懒人包】流程已导入，如果曾用早期版本的懒人包导入过流程，请先删除这些流程后再使用。`;
+
+                        if (unsafeWindow && unsafeWindow.ToRaid) {
+                            ToRaid.perform(mlh);
+                        } else {
+                            messageAppend("请先安装Raid.js");
+                        }
+                    }, onelddh: function () {
+                        let mlh = `// 
+                        ($f_ss)={"name":"来点动画","source":"http://qjio0y33d.hb-bkt.clouddn.com/gif.txt","finder":"根文件夹"}
+                        @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
+                        @awiat 2000
+                        tm 来点动画已导入`;
 
                         if (unsafeWindow && unsafeWindow.ToRaid) {
                             ToRaid.perform(mlh);
@@ -6328,6 +6340,7 @@
                 <span  @click='onekeydaily'>一键日常</span>
                 <span  @click='onekeypk'>自动比试</span>
                 <span  @click='onekeysansan'>导入白三三懒人包（依赖raid.js）</span>
+                <span  @click='onelddh'>来点动画（依赖raid.js）</span>
             </div>
             <div class="item-commands">
                 <span  @click="onekeystore">存仓及贩卖</span>
