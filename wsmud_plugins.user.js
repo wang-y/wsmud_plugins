@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.138
+// @version      0.0.32.139
 // @date         01/07/2018
-// @modified     09/11/2020
+// @modified     10/11/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1235,7 +1235,16 @@
     }
     var log_line = 0;
 
+    function imgShow(url,t=2000){
+       
+        $('.container > .content-message').css('background', 'url('+url+') no-repeat center center')
+        setTimeout(() => {
+            $('.container > .content-message').css('background', '')
+        }, t);
+    }
     function messageAppend(m, t = 0, area = 0) {
+
+
         if (area) {
             var ap = m + "\n";
             if (t == 1) {
@@ -7438,6 +7447,7 @@
         unsafeWindow.MusicBox = MusicBox;
         unsafeWindow.FakerTTS = FakerTTS;
         unsafeWindow.WSStore = store;
+        unsafeWindow.imgShow = imgShow;
 
 
 
