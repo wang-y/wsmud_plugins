@@ -1,4 +1,6 @@
 # wsmud_plugins
+
+[![Github](https://img.shields.io/github/stars/knva/wsmud_plugins?label=Star&style=social)](https://github.com/knva/wsmud_plugins) [![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-wsmud-pluginss)](https://greasyfork.org/zh-CN/scripts/371372-wsmud-pluginss) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/knva/wsmud_plugins) ![GitHub](https://img.shields.io/github/license/knva/wsmud_plugins)
 ## 适用于
 武神传说(http://game.wsmud.com)
 
