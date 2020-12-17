@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.139
+// @version      0.0.32.140
 // @date         01/07/2018
-// @modified     10/11/2020
+// @modified     17/12/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1607,6 +1607,11 @@
                         break;
                 }
             }, 1000);
+        },
+        clean_id_all:function(){
+            GM_setValue("goods", goods);
+            pgoods = goods
+            alert("清空完毕,请刷新一下页面")
         },
         update_store_hook: undefined,
         update_store: async function () {
@@ -4748,6 +4753,7 @@
             $('.load_btn').off('click')
             $(".update_store").off('click')
             $(".update_id_all").off('click')
+            $(".clean_id_all").off('click')
             $('#autobuy').off('change')
             $('#loginhml').off('change')
             $('#backimageurl').off('change')
@@ -5023,6 +5029,7 @@
                 GM_setValue(role + "_auto_buylist", auto_buylist);
             });
             $(".update_id_all").on("click", WG.update_id_all);
+            $(".clean_id_all").on("click", WG.clean_id_all);
             $(".update_store").on("click", WG.update_store);
             $('.backup_btn').on('click', WG.make_config);
             $('.load_btn').on('click', WG.load_config);
@@ -6231,7 +6238,8 @@
                 + `
 
                 <div class="setting-item" >
-                <div class="item-commands"><span class="update_id_all">初始化ID</span></div>
+                <div class="item-commands"><span class="update_id_all">初始化ID</span>
+                                            <span class="clean_id_all">清空商品ID配置</span></div>
                         </div>
                 <div class="setting-item" >
                 <div class="item-commands"><span class="update_store">更新存仓数据(覆盖)</span><span class="clean_dps">重置伤害统计</span></div>
@@ -6445,9 +6453,9 @@
         toui: [
             `<div class='item-commands'><span cmd = "$to 扬州城-衙门正厅" > 衙门 </span>
             <span cmd = "$to 扬州城-当铺" > 当铺 </span>
-            <span cmd = "$to 扬州城-醉仙楼" > 醉仙楼 </span>
-            <span cmd = "$to 扬州城-杂货铺" > 杂货铺 </span>
-            <span cmd = "$to 扬州城-打铁铺" > 打铁铺 </span>
+            <span cmd = "$to 扬州城-醉仙楼" > 醉仙 </span>
+            <span cmd = "$to 扬州城-杂货铺" > 杂货 </span>
+            <span cmd = "$to 扬州城-打铁铺" > 打铁 </span>
             <span cmd = "$to 扬州城-钱庄" > 钱庄 </span>
             <span cmd = "$to 扬州城-药铺" > 药铺 </span>
             <span cmd = "$to 扬州城-扬州武馆" > 武馆 </span>
@@ -6502,7 +6510,7 @@
                 ui += `未安装Raid.js插件`;
             }
             if (ui == `<div class='item-commands'>`) {
-                return `<div>暂无自动副本脚本,欢迎共享。</div>`
+                return `<div>暂无自动副本脚本,欢迎共享。可以到三三仓库寻找更多脚本。</div>`
             } else {
                 return ui + `</div>`;
             }
