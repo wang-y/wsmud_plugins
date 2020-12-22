@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.140
+// @version      0.0.32.141
 // @date         01/07/2018
-// @modified     17/12/2020
+// @modified     22/12/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2972,7 +2972,7 @@
                         }
                     }, onelddh: function () {
                         let mlh = `// 
-                        ($f_ss)={"name":"来点动画","source":"http://qjio0y33d.hb-bkt.clouddn.com/gif.txt","finder":"根文件夹"}
+                        ($f_ss)={"name":"来点动画","source":"http://ws-mud.ii74.com/gif.txt","finder":"根文件夹"}
                         @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
                         @awiat 2000
                         tm 来点动画已导入`;
