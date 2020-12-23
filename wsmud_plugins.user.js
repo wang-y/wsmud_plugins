@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.142
+// @version      0.0.32.143
 // @date         01/07/2018
 // @modified     23/12/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -537,18 +537,6 @@
         "hig引气丹": {
             "id": null,
             "type": "hig",
-            "sales": "药铺老板 平一指",
-            "place": "扬州城-药铺"
-        },
-        "hic金创药": {
-            "id": null,
-            "type": "hic",
-            "sales": "药铺老板 平一指",
-            "place": "扬州城-药铺"
-        },
-        "hic引气丹": {
-            "id": null,
-            "type": "hic",
             "sales": "药铺老板 平一指",
             "place": "扬州城-药铺"
         },
