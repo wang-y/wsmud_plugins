@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.141
+// @version      0.0.32.142
 // @date         01/07/2018
-// @modified     22/12/2020
+// @modified     23/12/2020
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2103,7 +2103,7 @@
                             WG.smbuyNum = WG.smbuyNum + 1;
                         }
                     }
-                    setTimeout(WG.sm, 500);
+                    setTimeout(WG.sm, 1000);
                     break;
                 case 4:
                     var mysm_loser = GM_getValue(role + "_sm_loser", sm_loser);
@@ -2157,20 +2157,38 @@
             WG.Send("buy 1 " + good.id + " from " + tmp);
             return true;
         },
+        qu_hook:undefined,
         qu: function (good, callback) {
-            setTimeout(() => {
+          
                 let storestatus = false;
-                $(".obj-item").each(function () {
-                    if ($(this).html().toLowerCase().indexOf(good) != -1) {
-                        storestatus = true;
-                        var id = $(this).attr("obj")
-                        WG.Send("qu 1 " + id);
-                        return;
-                    }
-                })
-                callback(storestatus);
-            }, 1500);
+                // $(".obj-item").each(function () {
+                //     if ($(this).html().toLowerCase().indexOf(good) != -1) {
+                //         storestatus = true;
+                //         var id = $(this).attr("obj")
+                //         WG.Send("qu 1 " + id);
+                //         return;
+                //     }
+                // })
+                WG.qu_hook = WG.add_hook("dialog",async function(data){
+                    if (data.dialog != undefined & data.stores!=undefined){
+                        for (let item of data.stores){
+                            if (item.name.toLocaleLowerCase().indexOf(good)!=-1){
+                                storestatus = true;
+                                var id = item.id;
+                                WG.Send("qu 1 " + id);
+                                WG.sleep(200);
+                                callback(storestatus);
+                                
+                                WG.qu_hook = undefined;
+                                return;
+                            }
+                        }
+                    } 
+                    callback(storestatus);
+                    WG.qu_hook = undefined;
+                });
 
+               WG.SendCmd('store')
         },
         Give: function (items) {
             var tmp = npcs["店小二"];
