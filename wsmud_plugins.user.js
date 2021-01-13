@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.144
+// @version      0.0.32.145
 // @date         01/07/2018
-// @modified     24/12/2020
+// @modified     13/01/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1224,7 +1224,7 @@
     var log_line = 0;
 
     function imgShow(url,t=2000){
-       
+
         $('.container > .content-message').css('background', 'url('+url+') no-repeat center center')
         setTimeout(() => {
             $('.container > .content-message').css('background', '')
@@ -2147,7 +2147,7 @@
         },
         qu_hook:undefined,
         qu: function (good, callback) {
-          
+
                 let storestatus = false;
                 // $(".obj-item").each(function () {
                 //     if ($(this).html().toLowerCase().indexOf(good) != -1) {
@@ -2170,7 +2170,7 @@
                         callback(storestatus);
                         WG.remove_hook(WG.qu_hook)
                         WG.qu_hook = undefined;
-                    } 
+                    }
                 });
 
                WG.SendCmd('store')
@@ -2974,7 +2974,7 @@
                             messageAppend("请先安装Raid.js");
                         }
                     }, onelddh: function () {
-                        let mlh = `// 
+                        let mlh = `//
                         ($f_ss)={"name":"来点动画","source":"http://ii74.oss-cn-qingdao.aliyuncs.com/gif.txt","finder":"根文件夹"}
                         @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
                         @awiat 2000
@@ -3527,11 +3527,11 @@
                 skilllist = GM_getValue(role + "_skilllist", skilllist);
                 var p_cmds = "";
                 //  console.log(G.enable_skills)
-                let mySkills = "";
+                let mySkills = [];
                 let myEqs = "";
                 for (let ski of G.enable_skills) {
                     if (ski) {
-                        mySkills = mySkills + ski.name;
+                        mySkills.push(ski.name);
                     }
                 }
                 for (let ski of G.eqs) {
@@ -3552,8 +3552,10 @@
                 if (enaskill === 1) {
                     for (var key in skilllist[type]) {
                         //console.log(skilllist[type][key])
-                        if (mySkills.indexOf(skilllist[type][key]) < 0) {
-                            p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
+                        for(let itemskill of mySkills){
+                            if (itemskill.indexOf(skilllist[type][key]) < 0) {
+                                p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
+                            }
                         }
                     }
                 }
@@ -7095,7 +7097,7 @@
                             messageAppend("已屏蔽", 1, 1);
                         });
                     }
-                
+
                     if (dpssakada == '开') {
 
                         if (/.*造成<.*>.*<\/.*>点.*/.test(data.msg)) {
@@ -7106,11 +7108,11 @@
                                 if (b[0] == '暴击') {//判断关键字
                                     //critical = critical + parseInt(a[1]);
                                     lastcri = parseInt(a[1]);
-                                  
+
                                 } else {
                                     // pfmdps = pfmdps + parseInt(a[1]);
                                     lastpfm = parseInt(a[1]);
-                                   
+
                                 }
                                 dpslock = 1;
                                // messageAppend(`你造成了${addChineseUnit(pfmdps)}伤害,共计${pfmnum}次。`, 1, 1);
@@ -7342,7 +7344,7 @@
                 }catch(ex){
                     console.log('这个真没有.')
                 }
-           
+
             }
         }
     }
