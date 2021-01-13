@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.145
+// @version      0.0.32.146
 // @date         01/07/2018
 // @modified     13/01/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3553,12 +3553,14 @@
                     for (var key in skilllist[type]) {
                         //console.log(skilllist[type][key])
                         for(let itemskill of mySkills){
-                            if (itemskill.indexOf(skilllist[type][key]) < 0) {
+                            if (itemskill == (skilllist[type][key]) ) {
                                 p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
+                                break;
                             }
                         }
                     }
                 }
+
                 p_cmds = p_cmds + '$wait 40;look3 1';
 
                 WG.eqx = WG.add_hook('text', function (data) {
