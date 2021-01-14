@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.146
+// @version      0.0.32.147
 // @date         01/07/2018
-// @modified     13/01/2021
+// @modified     14/01/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3529,11 +3529,7 @@
                 //  console.log(G.enable_skills)
                 let mySkills = [];
                 let myEqs = "";
-                for (let ski of G.enable_skills) {
-                    if (ski) {
-                        mySkills.push(ski.name);
-                    }
-                }
+         
                 for (let ski of G.eqs) {
                     if (ski) {
                         myEqs = myEqs + ski.id;
@@ -3551,11 +3547,10 @@
                 }
                 if (enaskill === 1) {
                     for (var key in skilllist[type]) {
-                        //console.log(skilllist[type][key])
-                        for(let itemskill of mySkills){
-                            if (itemskill == (skilllist[type][key]) ) {
+                        for (let ski of G.enable_skills) {
+                            if (ski.name != skilllist[type][key] && ski.type == key) {
                                 p_cmds += (`$wait 40;enable ${key} ${skilllist[type][key]};`);
-                                break;
+                                break
                             }
                         }
                     }
@@ -6610,7 +6605,7 @@
                         if (data.enable) {
                             for (let item of G.enable_skills) {
                                 if (item.type == data.id) {
-                                    item.name = ""
+                                    item.name = data.enable
                                 }
                             }
                         } else {
