@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.147
+// @version      0.0.32.148
 // @date         01/07/2018
-// @modified     14/01/2021
+// @modified     15/01/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2973,7 +2973,8 @@
                         } else {
                             messageAppend("请先安装Raid.js");
                         }
-                    }, onelddh: function () {
+                    }, 
+                    onelddh: function () {
                         let mlh = `//
                         ($f_ss)={"name":"来点动画","source":"http://ii74.oss-cn-qingdao.aliyuncs.com/gif.txt","finder":"根文件夹"}
                         @js var time=Date.parse(new Date());var f=(f_ss);var n=f["name"];var s=f["source"];var fd=f["finder"];WorkflowConfig.removeWorkflow({"name":n,"type":"flow","finder":fd});$.get(s,{stamp:time},function(data,status){WorkflowConfig.createWorkflow(n,data,fd);});
@@ -3012,6 +3013,10 @@
                     },
                     zdybtnset: function () {
                         WG.zdy_btnset();
+                    },
+                    cleankksboss:function(){
+                        GM_setValue(role +"_autoKsBoss",null);
+                        GM_setValue(role +"_automarry",null);
                     }
                 }
             })
@@ -6372,6 +6377,7 @@
                 <span @click='sortbag'>排序背包</span>
                 <span @click='dsrw'>定时任务</span>
                 <span @click='cleandps'>清空伤害</span>
+                <span @click='cleankksboss'>不再提示婚宴及boss传送信息</span>
             </div></div>`,
         lxjsui: `
                        <div style="width:50%;float:left" class='StudyTimeCalc'>
@@ -6602,20 +6608,11 @@
                         }
                     }
                     if (data.enable != undefined) {
-                        if (data.enable) {
-                            for (let item of G.enable_skills) {
-                                if (item.type == data.id) {
-                                    item.name = data.enable
-                                }
-                            }
-                        } else {
-                            for (let item of G.enable_skills) {
-                                if (item.type == data.id) {
-                                    item.name = data.enable
-                                }
+                        for (let item of G.enable_skills) {
+                            if (item.type == data.id) {
+                                item.name = data.enable
                             }
                         }
-
                     }
                 }
 
@@ -7096,7 +7093,6 @@
                     }
 
                     if (dpssakada == '开') {
-
                         if (/.*造成<.*>.*<\/.*>点.*/.test(data.msg)) {
                             let pdata = data.msg;
                             let a = pdata.split(/.*造成<wht>|.*造成<hir>|<\/wht>点|<\/hir>点/);
@@ -7109,12 +7105,10 @@
                                 } else {
                                     // pfmdps = pfmdps + parseInt(a[1]);
                                     lastpfm = parseInt(a[1]);
-
                                 }
                                 dpslock = 1;
                                // messageAppend(`你造成了${addChineseUnit(pfmdps)}伤害,共计${pfmnum}次。`, 1, 1);
                             }
-
                         }
                         let dd = data.msg.split(/看起来充满活力，一点也不累。|似乎有些疲惫，但是仍然十分有活力。|看起来可能有些累了。|动作似乎开始有点不太灵光，但是仍然有条不紊。|已经一副头重脚轻的模样，正在勉力支撑著不倒下去。|看起来已经力不从心了。|已经陷入半昏迷状态，随时都可能摔倒晕去。|似乎十分疲惫，看来需要好好休息了。|气喘嘘嘘，看起来状况并不太好。|摇头晃脑、歪歪斜斜地站都站不稳，眼看就要倒在地上。/);
                         //console.log(dd);
