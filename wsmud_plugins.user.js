@@ -6603,8 +6603,12 @@
                     }
                     if (data.items) {
                         for (let item of data.items) {
-                            if (item.enable_skill) {
-                                G.enable_skills.push({ name: item.enable_skill, type: item.id })
+                            if (item.name.indexOf("基本")>=0) {
+                                if(item.enable_skill){
+                                    G.enable_skills.push({ name: item.enable_skill, type: item.id })
+                                }else{
+                                    G.enable_skills.push({ name: 'none', type: item.id })
+                                }
                             }
                         }
                     }
