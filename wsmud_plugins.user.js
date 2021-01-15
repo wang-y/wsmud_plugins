@@ -3017,6 +3017,7 @@
                     cleankksboss:function(){
                         GM_setValue(role +"_autoKsBoss",null);
                         GM_setValue(role +"_automarry",null);
+                        L.msg("操作成功");
                     }
                 }
             })
