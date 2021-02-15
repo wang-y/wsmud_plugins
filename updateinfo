@@ -1,4 +1,15 @@
+
+[![Github](https://img.shields.io/github/stars/knva/wsmud_plugins?label=Star&style=social)](https://github.com/knva/wsmud_plugins) [![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-wsmud-pluginss)](https://greasyfork.org/zh-CN/scripts/371372-wsmud-pluginss) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/knva/wsmud_plugins) ![GitHub](https://img.shields.io/github/license/knva/wsmud_plugins)
+
+文档地址:
+
+https://www.yuque.com/wsmud/doc/gm0b8i
+
 ### 脚本需要使用tampermonkey 插件
+
+[tampermonkey 下载](https://www.tampermonkey.net/)
+
+蓝奏云下载地址：https://www.lanzous.com/i8twh6h
 
 如果安装乱码,可以访问 ,请依次安装
 
@@ -26,7 +37,7 @@ wsmud_funny 趣味界面插件 https://greasyfork.org/zh-CN/scripts/380709-wsmud
 
 wsmud 插件分享码查询 https://wsmud.ii74.com
 
-wsmud 多开 http://aize.coding.me/wsmud/
+wsmud 多开 http://wsmud.aize.org/
 
 有问题请发帖,会修复
 
@@ -335,7 +346,7 @@ $sm;$wait 5000;$stop
 ```
 
 #### $music
-播放<<绿色>>的音乐盒
+播放<<沧海一声笑>>的音乐盒
 
 
 #### $tts
@@ -348,6 +359,12 @@ $tts 门派战开始
 根据设置中的自动购买信息，在当铺购买相应物品，注意 脚本未内置停止当前动作命令
 ```
 stopstate;$tnbuy
+```
+
+#### $atlx
+自动将练习代码添加到系统设置中.当触发系统事件就会开始练习
+```
+stopstate;$atlx;dazuo
 ```
 
 ### FAQ
