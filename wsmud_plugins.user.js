@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.160
+// @version      0.0.32.159
 // @date         01/07/2018
 // @modified     23/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3487,7 +3487,7 @@
             callback('');
         },
         eqx: null,
-
+		
         eqhelper(type, enaskill = 0) {
 		       var deepCopy = function (source) {
                 var result = {};
@@ -3544,8 +3544,7 @@
                     }
                 }
                 if (enaskill === 0) {
-                    console.log( eqlist[type].size)
-                    for (let i = 1; i < 11; i++) {
+                    for (let i = 1; i < eqlist[type].length; i++) {
                         if (eqlist[type][i] != null && myEqs.indexOf(eqlist[type][i].id) < 0) {
                             p_cmds += ("$wait 20;eq " + eqlist[type][i].id + ";");
                         }
@@ -3667,7 +3666,7 @@
                             this.save(name)
                         }
                     }
-
+                    
                 }
             });
         },
@@ -6352,24 +6351,31 @@
                     </select></div>
                 </div>
                 <br><br>
+				<div class="item-commands">
                 <span class="zdy-item"  v-for="(item, index) in eqlistdel" @click='deleq(index)'
                         style="width: 120px;">
                         <div class="eqsname" style="width: 100%;">删除{{index}}</div>
                 </span>
+				</div>
+				<div class="item-commands">
                 <span class="zdy-item"  v-for="(item, index) in eqlist" @click='eq(index)'
                         style="width: 120px;">
                         <div class="eqsname" style="width:100%;">装备套装:{{index}}</div>
                 </span>
-                <br><br>
+				
+				</div>
+                <br>
+				<div class="item-commands">
                     <span class="zdy-item"  v-for="(item, index) in eqlist" @click='eqs(index)'
                         style="width: 120px;">
                         <div class="eqsname" style="width: 100%;">装备技能:{{index}}</div>
                 </span>
-                 <br><br>
-
+				</div>
+                 <br>
+      
                 </div>
         `,
-
+        
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px' id="zmldialog">
     <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id="zml_name"
                 style='width:80px' type="text" name="zml_name" value="" v-model="singnalzml.name"></span></div>
