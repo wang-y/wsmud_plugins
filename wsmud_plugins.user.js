@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.159
+// @version      0.0.32.160
 // @date         01/07/2018
 // @modified     23/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3487,7 +3487,15 @@
             callback('');
         },
         eqx: null,
+
         eqhelper(type, enaskill = 0) {
+		       var deepCopy = function (source) {
+                var result = {};
+                for (var key in source) {
+                    result[key] = typeof source[key] === 'object' ? deepCopy(source[key]) : source[key];
+                }
+                return result;
+            }
             if (type == undefined || type == 0 || type > eqlist.length) {
                 return;
             }
@@ -3495,7 +3503,7 @@
                 messageAppend("套装未保存,保存当前装备作为套装" + type + "!", 1);
                 WG.eqx = WG.add_hook("dialog", (data) => {
                     if (data.dialog == "pack" && data.eqs != undefined) {
-                        eqlist[type] = data.eqs;
+                        eqlist[type] = deepCopy(data.eqs);
                         GM_setValue(role + "_eqlist", eqlist);
                         messageAppend("套装" + type + "保存成功!", 1);
                         WG.remove_hook(WG.eqx);
@@ -3536,7 +3544,8 @@
                     }
                 }
                 if (enaskill === 0) {
-                    for (let i = 1; i < eqlist[type].length; i++) {
+                    console.log( eqlist[type].size)
+                    for (let i = 1; i < 11; i++) {
                         if (eqlist[type][i] != null && myEqs.indexOf(eqlist[type][i].id) < 0) {
                             p_cmds += ("$wait 20;eq " + eqlist[type][i].id + ";");
                         }
@@ -3658,7 +3667,7 @@
                             this.save(name)
                         }
                     }
-                    
+
                 }
             });
         },
@@ -6357,10 +6366,10 @@
                         <div class="eqsname" style="width: 100%;">装备技能:{{index}}</div>
                 </span>
                  <br><br>
-      
+
                 </div>
         `,
-        
+
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px' id="zmldialog">
     <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id="zml_name"
                 style='width:80px' type="text" name="zml_name" value="" v-model="singnalzml.name"></span></div>
