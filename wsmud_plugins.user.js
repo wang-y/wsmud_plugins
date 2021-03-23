@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.159
+// @version      0.0.32.161
 // @date         01/07/2018
 // @modified     23/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
