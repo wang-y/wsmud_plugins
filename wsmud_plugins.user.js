@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.156
+// @version      0.0.32.157
 // @date         01/07/2018
 // @modified     23/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5619,6 +5619,12 @@
             } else {
                 WG.eqhelper(n, 1);
             }
+            await WG.sleep(100);
+            WG.SendCmd(cmds);
+        },
+        eqdel: async function (idx = 0, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            WG.eqhelperdel(n);
             await WG.sleep(100);
             WG.SendCmd(cmds);
         },
