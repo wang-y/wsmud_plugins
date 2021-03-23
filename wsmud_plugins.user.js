@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.157
+// @version      0.0.32.158
 // @date         01/07/2018
 // @modified     23/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -730,17 +730,9 @@
     //停止后动作
     var auto_command = null;
     //装备列表
-    var eqlist = {
-        1: [],
-        2: [],
-        3: []
-    };
+    var eqlist = {};
     //{'unarmed':'','force':'','dodge':'','sword':'','blade':'','club':'','staff':'','whip':'','parry':''}
-    var skilllist = {
-        1: {},
-        2: {},
-        3: {}
-    };
+    var skilllist = {};
     //自动施法黑名单
     var unauto_pfm = '';
     //自动施法开关
@@ -3581,8 +3573,8 @@
         eqhelperdel: function (type) {
             eqlist = GM_getValue(role + "_eqlist", eqlist);
             skilllist = GM_getValue(role + "_skilllist", skilllist);
-            eqlist[type] = [];
-            skilllist[type] = {};
+            delete eqlist[type];
+            delete skilllist[type];
             GM_setValue(role + "_eqlist", eqlist);
             GM_setValue(role + "_skilllist", skilllist);
             messageAppend("清除套装 技能" + type + "设置成功!", 1);
@@ -3600,6 +3592,72 @@
             });
             WG.Send("pack");
             messageAppend("取消所有装备成功!", 1);
+        },
+        eqhelperui:function(){
+            messageClear();
+            var a = UI.skillsPanel;
+            messageAppend(a);
+            new Vue({
+                el: "#skillsPanelUI",
+                data: {
+                    role: role,
+                    eqlist:{},
+                    eqlistdel:{},
+                },
+                created() {
+                    this.eqlist = GM_getValue(role+"_eqlist",{});
+                    console.log(this.eqlist)
+                },
+                mounted() {
+                    $('#eqskills-opts').val("none");
+                    var that = this;
+                    $("#eqskills-opts").change(function () {
+                        switch ($('#eqskills-opts').val()) {
+                            case "save":
+                                that.saveUI();
+                                break;
+                            case "delete":
+                                that.eqlist =  {};
+                                that.eqlistdel = GM_getValue(role + "_eqlist", {});
+                                that.role="<< 返回";
+                                break;
+                            case "none":
+                            default:
+                                break;
+                        };
+                    });
+                },
+                methods: {
+                    eq: function (name) {
+                        WG.eqhelper(name,0)
+                    },
+                    eqs: function (name) {
+                        WG.eqhelper(name,1)
+                    },
+                    save: function (name) {
+                        WG.eqhelper(name)
+                        setTimeout(() => {
+                            WG.eqhelperui()
+                        }, 200);
+                    },
+                    deleq:function(name){
+                        WG.eqhelperdel(name)
+                        setTimeout(() => {
+                            WG.eqhelperui()
+                        }, 200);
+                    },
+                    show:function(){
+                        WG.eqhelperui()
+                    },
+                    saveUI:function(){
+                        var name = prompt("请输入需要保存的名字", "套装名");
+                        if (name != null) {
+                            this.save(name)
+                        }
+                    }
+                    
+                }
+            });
         },
 
         fight_listener: undefined,
@@ -6269,6 +6327,36 @@
                 ` <h3>系统</h3>
             `
         },
+        skillsPanel:`<div class="item-commands" style="text-align:center" id='skillsPanelUI'>
+                <div style="margin-top:0.5em">
+                    <div style="width:8em;float:left;text-align:left;padding:0px 0px 0px 2em;height:1.23em" id="wsmud_raid_left" @click='show'><wht>{{role}}</wht></div>
+                    <div style="width:calc(100% - 16em);float:left;height:1.23em"><hig>套装列表</hig></div>
+                    <div style="width:8em;float:left;text-align:right;padding:0px 2em 0px 0px;height:1.23em" id="wsmud_raid_right">
+                    <select style="width:80px" id="eqskills-opts">
+                        <option value="none">选择操作</option>
+                        <option value="save">新建套装</option>
+                        <option value="delete">删除套装</option>
+                    </select></div>
+                </div>
+                <br><br>
+                <span class="zdy-item"  v-for="(item, index) in eqlistdel" @click='deleq(index)'
+                        style="width: 120px;">
+                        <div class="eqsname" style="width: 100%;">删除{{index}}</div>
+                </span>
+                <span class="zdy-item"  v-for="(item, index) in eqlist" @click='eq(index)'
+                        style="width: 120px;">
+                        <div class="eqsname" style="width:100%;">装备套装:{{index}}</div>
+                </span>
+                <br><br>
+                    <span class="zdy-item"  v-for="(item, index) in eqlist" @click='eqs(index)'
+                        style="width: 120px;">
+                        <div class="eqsname" style="width: 100%;">装备技能:{{index}}</div>
+                </span>
+                 <br><br>
+      
+                </div>
+        `,
+        
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px' id="zmldialog">
     <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id="zml_name"
                 style='width:80px' type="text" name="zml_name" value="" v-model="singnalzml.name"></span></div>
@@ -7638,55 +7726,9 @@
                     name: "换装设置",
                     "items": {
                         "xx0": {
-                            name: "套装1设或装",
+                            name: "套装列表",
                             callback: function (key, opt) {
-                                WG.eqhelper(1);
-                            },
-                        },
-                        "xxx0": {
-                            name: "技能1设或装",
-                            callback: function (key, opt) {
-                                WG.eqhelper(1, 1);
-                            },
-                        },
-                        "xx1": {
-                            name: "清除套装1设置",
-                            callback: function (key, opt) {
-                                WG.eqhelperdel(1);
-                            },
-                        },
-                        "yy0": {
-                            name: "套装2设或装",
-                            callback: function (key, opt) {
-                                WG.eqhelper(2);
-                            },
-                        }, "yyy1": {
-                            name: "技能2设或装",
-                            callback: function (key, opt) {
-                                WG.eqhelper(2, 1);
-                            },
-                        },
-                        "yy1": {
-                            name: "清除套装2设置",
-                            callback: function (key, opt) {
-                                WG.eqhelperdel(2);
-                            },
-                        },
-                        "zz0": {
-                            name: "套装3设或备",
-                            callback: function (key, opt) {
-                                WG.eqhelper(3);
-                            },
-                        }, "zzz1": {
-                            name: "技能3设或装",
-                            callback: function (key, opt) {
-                                WG.eqhelper(3, 1);
-                            },
-                        },
-                        "zz1": {
-                            name: "清除套装3设置",
-                            callback: function (key, opt) {
-                                WG.eqhelperdel(3);
+                                WG.eqhelperui();
                             },
                         },
                         "uneq": {
