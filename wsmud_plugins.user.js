@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.155
+// @version      0.0.32.156
 // @date         01/07/2018
-// @modified     12/03/2021
+// @modified     23/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3499,7 +3499,7 @@
             if (type == undefined || type == 0 || type > eqlist.length) {
                 return;
             }
-            if (eqlist == null || eqlist[type] == "") {
+            if (eqlist == null || eqlist[type]==null ||eqlist[type] == "") {
                 messageAppend("套装未保存,保存当前装备作为套装" + type + "!", 1);
                 WG.eqx = WG.add_hook("dialog", (data) => {
                     if (data.dialog == "pack" && data.eqs != undefined) {
