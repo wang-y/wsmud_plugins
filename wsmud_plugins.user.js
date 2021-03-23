@@ -3544,7 +3544,7 @@
                     }
                 }
                 if (enaskill === 0) {
-                    for (let i = 1; i < eqlist[type].length; i++) {
+                    for (let i = 1; i < 11; i++) {
                         if (eqlist[type][i] != null && myEqs.indexOf(eqlist[type][i].id) < 0) {
                             p_cmds += ("$wait 20;eq " + eqlist[type][i].id + ";");
                         }
