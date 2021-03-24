@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.163
+// @version      0.0.32.164
 // @date         01/07/2018
 // @modified     24/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -6684,7 +6684,17 @@
         score: undefined,
         jy: 0,
         qn: 0,
-        enable_skills: [],
+        enable_skills: [{ type:"unarmed",name:"none"},
+            { type: "force", name: "none" },
+            { type: "parry", name: "none" },
+            { type: "dodge", name: "none" },
+            { type: "sword", name: "none" },
+            { type: "throwing", name: "none" },
+            { type: "blade", name: "none" },
+            { type: "whip", name: "none" },
+            { type: "club", name: "none" },
+            { type: "staff", name: "none" },],
+            
         eqs: []
     };
 
@@ -6749,9 +6759,20 @@
                         for (let item of data.items) {
                             if (item.name.indexOf("基本") >= 0) {
                                 if (item.enable_skill) {
-                                    G.enable_skills.push({ name: item.enable_skill, type: item.id })
+                                    for (let eitem of G.enable_skills){
+                                        if (eitem.type == item.id){
+                                            eitem.name = item.enable_skill
+                                            break;
+                                        }
+                                    }
                                 } else {
-                                    G.enable_skills.push({ name: 'none', type: item.id })
+                                    for (let eitem of G.enable_skills) {
+                                        if (eitem.type == item.id) {
+                                            eitem.name = 'none'
+                                            break;
+                                        }
+                                    }
+                                    // G.enable_skills.push({ name: 'none', type: item.id })
                                 }
                             }
                         }
@@ -6760,6 +6781,7 @@
                         for (let item of G.enable_skills) {
                             if (item.type == data.id) {
                                 item.name = data.enable
+                                break;
                             }
                         }
                     }
