@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.161
+// @version      0.0.32.162
 // @date         01/07/2018
-// @modified     23/03/2021
+// @modified     24/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -745,7 +745,7 @@
     var auto_updateStore = "关";
     //自动重连
     var auto_relogin = "关";
-    var autoeq = 0;
+    var autoeq = "";
     //自命令数组  type 0 原生 1 自命令 2js
     //[{"name":"name","zmlRun":"zzzz","zmlShow":"1","zmlType":"0"}]
     var zml = [];
@@ -3351,7 +3351,9 @@
                     WG.findboss(data, boss_name, function (bid) {
                         if (bid != -1) {
                             next = 999;
-                            WG.eqhelper(autoeq);
+                            if (autoeq !=""){
+                                WG.eqhelper(autoeq);
+                            }
                             setTimeout(() => {
                                 WG.Send("kill " + bid);
                                 //WG.Send("select " + bid);
@@ -4917,10 +4919,9 @@
                 autoKsBoss = WG.switchReversal($(this));
                 GM_setValue(role + "_autoKsBoss", autoKsBoss);
             });
-            $('#auto_eq').change(function () {
+            $('#auto_eq').focusout(function () {
                 autoeq = $('#auto_eq').val();
                 GM_setValue(role + "_auto_eq", autoeq);
-
             });
             $('#autopfmswitch').click(function () {
                 auto_pfmswitch = WG.switchReversal($(this));
@@ -6287,15 +6288,8 @@
                 + UI.html_lninput("wudao_pfm", "武道自动攻击(用半角逗号分隔)：")
                 + UI.html_switch('getitemShow', '显示获得物品：', 'getitemShow')
                 + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
-                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") + `
-                <div class="setting-item" >
-                <span><label for="auto_eq">BOSS击杀时自动换装： </label><select id="auto_eq" style="width:80px">
-                        <option value="0">关</option>
-                        <option value="1">套装1</option>
-                        <option value="2">套装2</option>
-                        <option value="3">套装3</option>
-                    </select>
-                </span> </div> `
+                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") 
+                + UI.html_lninput("auto_eq", "BOSS击杀时自动换装：")
                 + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
