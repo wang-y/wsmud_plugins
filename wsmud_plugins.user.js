@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.162
+// @version      0.0.32.163
 // @date         01/07/2018
 // @modified     24/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -3564,19 +3564,23 @@
                             }
                         }
                     }
+                    $("span[command=skills]").click();
                 }
 
-                p_cmds = p_cmds + '$wait 40;look3 1';
+                p_cmds = p_cmds + '$wait 40;cha;look3 1';
 
                 WG.eqx = WG.add_hook('text', function (data) {
                     if (data.type == 'text') {
 
                         if (data.msg.indexOf('没有这个玩家') >= 0) {
                             messageAppend("套装或技能装备成功" + type + "!", 1);
+
+                            $("span[command=skills]").click();
                             WG.remove_hook(WG.eqx);
                         }
                     }
                 });
+            
                 WG.SendCmd(p_cmds);
             }
         },
