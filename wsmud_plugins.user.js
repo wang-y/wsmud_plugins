@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.164
+// @version      0.0.32.165
 // @date         01/07/2018
-// @modified     24/03/2021
+// @modified     27/03/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3545,6 +3545,7 @@
                         myEqs = myEqs + ski.id;
                     }
                 }
+                let tsMsg = "套装"
                 if (enaskill === 0) {
                     for (let i = 1; i < 11; i++) {
                         if (eqlist[type][i] != null && myEqs.indexOf(eqlist[type][i].id) < 0) {
@@ -3564,6 +3565,7 @@
                             }
                         }
                     }
+                    tsMsg="技能"
                     $("span[command=skills]").click();
                 }
 
@@ -3573,9 +3575,10 @@
                     if (data.type == 'text') {
 
                         if (data.msg.indexOf('没有这个玩家') >= 0) {
-                            messageAppend("套装或技能装备成功" + type + "!", 1);
-
-                            $("span[command=skills]").click();
+                            messageAppend(tsMsg+"装备成功" + type + "!", 1);
+                            if(enaskill==1){
+                                 $("span[command=skills]").click();
+                            }
                             WG.remove_hook(WG.eqx);
                         }
                     }
