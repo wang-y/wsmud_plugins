@@ -3612,16 +3612,16 @@
         },
         eqloader: function () {
             let tmp_eqlist = GM_getValue(role + "_eqlist", null);
-        
+
             var subItems = {
-               
+
             };
             for (let item in tmp_eqlist) {
-                subItems[item] ={ name: "装备"+item, icon: "fa-compress", callback:function(){WG.eqhelper(item,0)} }
-                subItems[item+"sk"] ={ name: "技能"+item, icon: "fa-magic", callback:function(){WG.eqhelper(item,1)} }
-                subItems[item+"del"] ={ name: "删除组"+item, icon: "fa-remove", callback:function(){WG.eqhelperdel(item)} }
+                subItems[item] = { name: "装备" + item, icon: "fa-compress", callback: function () { WG.eqhelper(item, 0) } }
+                subItems[item + "sk"] = { name: "技能" + item, icon: "fa-magic", callback: function () { WG.eqhelper(item, 1) } }
+                subItems[item + "del"] = { name: "删除组" + item, icon: "fa-remove", callback: function () { WG.eqhelperdel(item) } }
             }
-            subItems['setting'] = { name: "套装管理", icon: "edit", callback:function(){WG.eqhelperui()} }
+            subItems['setting'] = { name: "套装管理", icon: "edit", callback: function () { WG.eqhelperui() } }
             var dfd = jQuery.Deferred();
             setTimeout(function () {
                 dfd.resolve(subItems);
@@ -7696,6 +7696,56 @@
                 y: 1
             });
         });
+        function makeTp(mp = 0) {
+
+            var mptp = {
+                "豪宅": "住房",
+                "衙门": "扬州城-衙门正厅",
+                "镖局": "扬州城-镖局正厅",
+                "当铺": "扬州城-当铺",
+                "擂台": "扬州城-擂台",
+                "药铺": "扬州城-药铺"
+            }
+            if (mp == 1) {
+                mptp = {
+                    "武当": "武当派-广场",
+                    "少林": "少林派-广场",
+                    "华山": "华山派-镇岳宫",
+                    "峨眉": "峨眉派-金顶",
+                    "逍遥": "逍遥派-青草坪",
+                    "丐帮": "丐帮-树洞内部",
+                    "武馆": "扬州城-扬州武馆",
+                    "杀手楼": "杀手楼-大门"
+                }
+                let myDate = new Date();
+                if (myDate.getHours() >= 17) {
+                    mptp = {
+                        "武当": "武当派-后山小院",
+                        "少林": "少林派-方丈楼",
+                        "华山": "华山派-客厅",
+                        "峨眉": "峨眉派-清修洞",
+                        "逍遥": "逍遥派-地下石室",
+                        "丐帮": "丐帮-林间小屋",
+                        "武馆": "扬州城-扬州武馆",
+                        "杀手楼": "杀手楼-大门"
+                    }
+                }
+            }
+            var subItems = {};
+
+            for (let item in mptp) {
+                subItems[item] = { name: item, callback: function () { WG.go(mptp[item]); } }
+            }
+            if (mp == 0) {
+                subItems['wmls'] = { name: "武庙疗伤", callback: function () { WG.go("扬州城-武庙"); WG.Send("liaoshang"); } }
+            }
+            var dfd = jQuery.Deferred();
+            setTimeout(function () {
+                dfd.resolve(subItems);
+            }, 20);
+            return dfd.promise();
+        }
+
         function createSomeMenu() {
             return {
                 items: {
@@ -7814,135 +7864,11 @@
                     },
                     "快捷传送": {
                         name: "常用地点",
-                        "items": {
-                            "mp0": {
-                                name: "豪宅",
-                                callback: function (key, opt) {
-                                    WG.go("住房");
-                                },
-                            },
-                            "mp11": {
-                                name: "衙门",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-衙门正厅");
-                                },
-                            },
-                            "mp12": {
-                                name: "镖局",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-镖局正厅");
-                                },
-                            },
-                            "mp1": {
-                                name: "当铺",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-当铺");
-                                },
-                            },
-                            "mp2": {
-                                name: "擂台",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-擂台");
-                                },
-                            },
-                            "mp6": {
-                                name: "药铺",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-药铺");
-                                },
-                            },
-                            "mp7": {
-                                name: "武庙疗伤",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-武庙");
-                                    WG.Send("liaoshang");
-                                },
-                            }
-
-                        },
+                        "items": makeTp(0)
                     },
                     "门派传送": {
                         name: "门派传送",
-                        "items": {
-                            "mp0": {
-                                name: "武当",
-                                callback: function (key, opt) {
-                                    let myDate = new Date();
-                                    if (myDate.getHours() >= 17) {
-                                        WG.go("武当派-后山小院");
-                                    } else {
-                                        WG.go("武当派-广场");
-                                    }
-                                },
-                            },
-                            "mp1": {
-                                name: "少林",
-                                callback: function (key, opt) {
-                                    let myDate = new Date();
-                                    if (myDate.getHours() >= 17) {
-                                        WG.go("少林派-方丈楼");
-                                    } else {
-                                        WG.go("少林派-广场");
-                                    }
-                                },
-                            },
-                            "mp2": {
-                                name: "华山",
-                                callback: function (key, opt) {
-                                    let myDate = new Date();
-                                    if (myDate.getHours() >= 17) {
-                                        WG.go("华山派-客厅");
-                                    } else {
-                                        WG.go("华山派-镇岳宫");
-                                    }
-                                },
-                            },
-                            "mp3": {
-                                name: "峨眉",
-                                callback: function (key, opt) {
-                                    let myDate = new Date();
-                                    if (myDate.getHours() >= 17) {
-                                        WG.go("峨眉派-清修洞");
-                                    } else {
-                                        WG.go("峨眉派-金顶")
-                                    }
-                                },
-                            },
-                            "mp4": {
-                                name: "逍遥",
-                                callback: function (key, opt) {
-                                    let myDate = new Date();
-                                    if (myDate.getHours() >= 17) {
-                                        WG.go("逍遥派-地下石室");
-                                    } else {
-                                        WG.go("逍遥派-青草坪");
-                                    }
-                                },
-                            },
-                            "mp5": {
-                                name: "丐帮",
-                                callback: function (key, opt) {
-                                    let myDate = new Date();
-                                    if (myDate.getHours() >= 17) {
-                                        WG.go("丐帮-林间小屋");
-                                    } else {
-                                        WG.go("丐帮-树洞内部");
-                                    }
-                                },
-                            },
-                            "mp6": {
-                                name: "武馆",
-                                callback: function (key, opt) {
-                                    WG.go("扬州城-扬州武馆");
-                                },
-                            },
-                            "mp7": {
-                                name: "杀手楼",
-                                callback: function (key, opt) {
-                                    WG.go("杀手楼-大门");
-                                },
-                            }
-                        },
+                        "items": makeTp(1)
                     },
                     "打开仓库": {
                         name: "打开仓库",
@@ -8019,13 +7945,11 @@
         }
         $.contextMenu({
             selector: '.container',
-            build: function($trigger, e) {
+            build: function ($trigger, e) {
                 //从 trigger 中获取动态创建的菜单项及回掉
                 return createSomeMenu();
             }
 
         });
-
-       
     });
 })();
