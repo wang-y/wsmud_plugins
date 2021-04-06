@@ -5676,6 +5676,14 @@
             await WG.sleep(parseInt(n));
             WG.SendCmd(cmds);
         },
+	batwait: async function (idx = 0, n, cmds) {
+            if(G.in_fight){
+                cmds = T.recmd(idx, cmds);
+                console.log("延时:" + n + "ms,延时触发:" + cmds);
+                await WG.sleep(parseInt(n));
+                WG.SendCmd(cmds);
+            }
+        },
         killall: async function (idx = 0, n = null, cmds) {
             cmds = T.recmd(idx, cmds);
             console.log("叫杀");
