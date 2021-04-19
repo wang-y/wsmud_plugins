@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.168
+// @version      0.0.32.169
 // @date         01/07/2018
 // @modified     08/04/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1420,7 +1420,12 @@
                     var rolep = role;
                     if (G.level) {
                         rolep = G.level + role;
-                        if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                        if (G.level.indexOf('武帝') >= 0 ||
+			    G.level.indexOf('武神') >= 0||
+			    G.level.indexOf('剑神') >= 0|| 
+			    G.level.indexOf('刀皇') >= 0|| 
+			    G.level.indexOf('兵主') >= 0|| 
+			    G.level.indexOf('战神') >= 0) {
                             $('.zdy-item.zdwk').html("修炼(Y)");
                         }
                     }
