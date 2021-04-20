@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.167
+// @version      0.0.32.170
 // @date         01/07/2018
-// @modified     06/04/2021
+// @modified     19/04/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1420,7 +1420,7 @@
                     var rolep = role;
                     if (G.level) {
                         rolep = G.level + role;
-                        if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                        if (G.isGod()) {
                             $('.zdy-item.zdwk').html("修炼(Y)");
                         }
                     }
@@ -2627,7 +2627,7 @@
         zdwk: function (v, x = true) {
             if (x) {
                 if (G.level) {
-                    if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                    if (G.isGod()) {
                         WG.go("住房-练功房");
                         WG.Send("xiulian");
                         return;
@@ -5325,7 +5325,7 @@
                 $(".zdwk").on("click", WG.zdwk);
                 $(".auto_perform").on("click", WG.auto_preform_switch);
                 $(".cmd_echo").on("click", WG.cmd_echo_button);
-                if (G.level != null && (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0)) {
+                if ( G.isGod() ) {
                     $('.zdy-item.zdwk').html("修炼(Y)");
                 }
             }
@@ -5375,7 +5375,7 @@
                     var lianxiCode = "";
                     var lianxiCodeMin = "";
                     var lianxiCodeEnd = "wakuang";
-                    if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                    if (G.isGod()) {
                         lianxiCodeEnd = "xiulian";
                     }
                     var __skillNameList = [];
@@ -6395,7 +6395,7 @@
                         style="width: 120px;">
                         <div class="eqsname" style="width:100%;">装备套装:{{index}}</div>
                 </span>
-				
+
 				</div>
                 <br>
 				<div class="item-commands">
@@ -6405,7 +6405,7 @@
                 </span>
 				</div>
                  <br>
-      
+
                 </div>
         `,
 
@@ -6730,7 +6730,23 @@
         { type: "club", name: "none" },
         { type: "staff", name: "none" },],
 
-        eqs: []
+        eqs: [],
+        isGod:function(){
+            if (G.level!=null){
+                if (G.level.indexOf('武帝') >= 0 ||
+                    G.level.indexOf('武神') >= 0 ||
+                    G.level.indexOf('剑神') >= 0 ||
+                    G.level.indexOf('刀皇') >= 0 ||
+                    G.level.indexOf('兵主') >= 0 ||
+                    G.level.indexOf('战神') >= 0) {
+                    return true
+                }else{
+                    return false
+                    }
+            }else{
+                return false
+            }
+        }
     };
 
     //GlobalInit
@@ -7102,6 +7118,26 @@
                         count: data.count
                     }
                     packData.push(item)
+                } else if (data.dialog == 'pack' && data.jldesc != undefined) {
+                    let jl = data.jldesc.match(/<(.*)>(.*)<\/.*><br\/>精炼<(hig|hic|hiy|hiz|hio|ord)>＋(.*)\s</i);
+                    //console.log(jl)
+                    if (jl) {
+                        let l = jl[1];
+                        let n = `<${l}>` + jl[2] + `</${l}>`;
+                        let j = parseInt(jl[4]);
+                        let c = 13 - j;
+                        //let cmd = `jinglian ${data.id} ok[${c}]`
+                        let cmd = [];
+                        for (let i =0; i < c; i++) {
+                            cmd.push(`jinglian ${data.id} ok;`);
+                        }
+                        var htmlj = `<div class="item-commands"><span class="jinglian">精炼6星 => ${n}</span></div>`;
+                        messageAppend(htmlj);
+                        $(".jinglian").off("click");
+                        $(".jinglian").on('click', () => {
+                            WG.SendCmd(cmd);
+                        });
+                    }
                 }
                 if (data.dialog == 'score') {
 
