@@ -33,5 +33,5 @@ jobs:
           region: oss-cn-qingdao
           bucket: ii74
           asset-path: ./wsmud_plugins.user.js
-          target-path: /test/wsmud_plugins.user.js
+          target-path: /wsmud_pluginss.user.js
           
