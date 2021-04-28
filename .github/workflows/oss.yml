@@ -30,8 +30,8 @@ jobs:
         with:
           key-id: ${{ secrets.OSS_KEY_ID }}
           key-secret: ${{ secrets.OSS_KEY_SECRET }}
-          region: oss-cn-shenzhen
-          bucket: tvrcgo
+          region: oss-cn-qingdao
+          bucket: ii74
           asset-path: ./wsmud_plugins.user.js
-          target-path: /ii74/test/wsmud_plugins.user.js
+          target-path: /test/wsmud_plugins.user.js
           
