@@ -33,5 +33,5 @@ jobs:
           region: oss-cn-shenzhen
           bucket: tvrcgo
           asset-path: ./wsmud_plugins.user.js
-          target-path: /test/wsmud_plugins.user.js
+          target-path: /ii74/test/wsmud_plugins.user.js
           
