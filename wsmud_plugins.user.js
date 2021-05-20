@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.172
+// @version      0.0.32.173
 // @date         01/07/2018
-// @modified     28/04/2021
+// @modified     20/05/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -2944,6 +2944,9 @@
                     },
                     khjs_btn: function () {
                         WG.khjs();
+                    }, 
+                    zcjs_btn: function () {
+                        WG.zcjs();
                     },
                     getskilljson: function () {
                         WG.getPlayerSkill();
@@ -3211,6 +3214,25 @@
                             this.khsx[key] = Number(value);
                         })
                         messageAppend("你的分值:" + WG.gen(this.khsx.nl, this.khsx.xg, this.khsx.hg));
+                    }
+                }
+            })
+        }, zcjs: function () {
+            messageClear();
+            var html = UI.zcjsui;
+            messageAppend(html);
+            const khvue = new Vue({
+                el: ".ZiChuangCalc",
+                data: {
+                    zcsx: {
+                        level: 0,
+                        percentage: 0
+                    }
+                },
+                methods: {
+                    zcjscalc: function () {
+                        messageAppend("自创" + this.zcsx.level + "级,词条百分比:" + this.zcsx.percentage + " 需要词条等级:" +
+                            Math.ceil((this.zcsx.percentage - 4 - 2.5e-3 * this.zcsx.level) / this.zcsx.level / 2.5e-5));
                     }
                 }
             })
@@ -6534,6 +6556,7 @@
                 <span @click='qnjs_btn'>潜能计算</span>
                 <span @click='lxjs_btn'>练习时间及潜能计算</span>
                 <span @click='khjs_btn'>开花计算</span>
+                <span @click='zcjs_btn'>自创等级计算</span>
                 <span  @click='getskilljson'>提取技能属性(可用于苏轻模拟器)</span>
                 <span  @click='autoAddLianxi'>自动将最低等级技能添加到离线练习</span>
             </div>
@@ -6615,6 +6638,16 @@
         v-model="khsx.hg"></div>
     <div class="setting-item">      <div class="item-commands"><span @click="khjscalc" >计算</span></div></div>
     <div class="setting-item"> <label>人花分值：5000 地花分值：6500 天花分值：8000</label></div>
+</div>`, 
+    zcjsui: `<div style="width:50%;float:left" class="ZiChuangCalc">
+    <div class="setting-item"><span>自创等级计算器</span></div>
+    <div class="setting-item"> 自创等级:<input type="number" placeholder="自创等级" style="width:50%"
+            class="mui-input-speech" v-model="zcsx.level"></div>
+    <div class="setting-item"> 目标属性百分比:<input type="number" placeholder="目标属性百分比" style="width:50%"
+        v-model="zcsx.percentage"></div>
+   
+    <div class="setting-item">      <div class="item-commands"><span @click="zcjscalc" >计算</span></div></div>
+
 </div>`,
         lyui: `<div class='zdy_dialog' id="LianYao" style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank"
         href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank"
