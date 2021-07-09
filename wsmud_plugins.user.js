@@ -19,6 +19,7 @@
 // @grant        GM_setValue
 // @grant        GM_listValues
 // @grant        GM_setClipboard
+// @grant        GM_deleteValue
 // @grant        GM_registerMenuCommand
 
 // ==/UserScript==
@@ -1339,6 +1340,7 @@
                    var tmpVal = key.split(role+"_")[1];
                    console.log(tmpVal)
                    GM_setValue(roleid + "_"+tmpVal, GM_getValue(key, null))
+                   GM_deleteValue(key)
                 }
             });
 		
@@ -4850,7 +4852,7 @@
             let _config = {};
             let keys = GM_listValues();
             keys.forEach(key => {
-                if (key.indexOf(role) >= 0) {
+                if (key.indexOf(roleid) >= 0) {
                     _config[key] = GM_getValue(key);
                 }
             });
