@@ -187,7 +187,7 @@
             },
             set onclose(fn) {
                 ws.onclose = (e) => {
-                    auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
+                    auto_relogin = GM_getValue(roleid + "_auto_relogin", auto_relogin);
                     fn(e);
                     if (auto_relogin == "开") {
                         setTimeout(() => {
@@ -701,6 +701,7 @@
     var blackpfm = [];
     //角色
     var role;
+    var roleid;
     //门派
     var family = null;
     //师门自动放弃
@@ -1332,6 +1333,53 @@
         },
         login: function () {
             role = $('.role-list .select').text().split(/[\s\n]/).pop();
+            roleid = $('.role-list .select').attr('roleid')
+			if (GM_getValue(role + "_equip", null)!=null) {GM_setValue(roleid + "_equip", GM_getValue(role + "_equip", null))}
+			if (GM_getValue(role + "_ks_pfm", null)!=null) {GM_setValue(roleid + "_ks_pfm", GM_getValue(role + "_ks_pfm", null))}
+			if (GM_getValue(role + "_zmlshowsetting", null)!=null) {GM_setValue(roleid + "_zmlshowsetting", GM_getValue(role + "_zmlshowsetting", null))}
+			if (GM_getValue(role + "_zdy_btnlist", null)!=null) {GM_setValue(roleid + "_zdy_btnlist", GM_getValue(role + "_zdy_btnlist", null))}
+			if (GM_getValue(role + "_inzdy_btn", null)!=null) {GM_setValue(roleid + "_inzdy_btn", GM_getValue(role + "_inzdy_btn", null))}
+			if (GM_getValue(role + "_automarry", null)!=null) {GM_setValue(roleid + "_automarry", GM_getValue(role + "_automarry", null))}
+			if (GM_getValue(role + "_family", null)!=null) {GM_setValue(roleid + "_family", GM_getValue(role + "_family", null))}
+			if (GM_getValue(role + "_autoKsBoss", null)!=null) {GM_setValue(roleid + "_autoKsBoss", GM_getValue(role + "_autoKsBoss", null))}
+			if (GM_getValue(role + "_ks_wait", null)!=null) {GM_setValue(roleid + "_ks_wait", GM_getValue(role + "_ks_wait", null))}
+			if (GM_getValue(role + "_eqlist", null)!=null) {GM_setValue(roleid + "_eqlist", GM_getValue(role + "_eqlist", null))}
+			if (GM_getValue(role + "_skilllist", null)!=null) {GM_setValue(roleid + "_skilllist", GM_getValue(role + "_skilllist", null))}
+			if (GM_getValue(role + "_auto_eq", null)!=null) {GM_setValue(roleid + "_auto_eq", GM_getValue(role + "_auto_eq", null))}
+			if (GM_getValue(role + "_wudao_pfm", null)!=null) {GM_setValue(roleid + "_wudao_pfm", GM_getValue(role + "_wudao_pfm", null))}
+			if (GM_getValue(role + "_sm_loser", null)!=null) {GM_setValue(roleid + "_sm_loser", GM_getValue(role + "_sm_loser", null))}
+			if (GM_getValue(role + "_sm_any", null)!=null) {GM_setValue(roleid + "_sm_any", GM_getValue(role + "_sm_any", null))}
+			if (GM_getValue(role + "_sm_price", null)!=null) {GM_setValue(roleid + "_sm_price", GM_getValue(role + "_sm_price", null))}
+			if (GM_getValue(role + "_sm_getstore", null)!=null) {GM_setValue(roleid + "_sm_getstore", GM_getValue(role + "_sm_getstore", null))}
+			if (GM_getValue(role + "_unauto_pfm", null)!=null) {GM_setValue(roleid + "_unauto_pfm", GM_getValue(role + "_unauto_pfm", null))}
+			if (GM_getValue(role + "_auto_pfmswitch", null)!=null) {GM_setValue(roleid + "_auto_pfmswitch", GM_getValue(role + "_auto_pfmswitch", null))}
+			if (GM_getValue(role + "_auto_rewardgoto", null)!=null) {GM_setValue(roleid + "_auto_rewardgoto", GM_getValue(role + "_auto_rewardgoto", null))}
+			if (GM_getValue(role + "_busy_info", null)!=null) {GM_setValue(roleid + "_busy_info", GM_getValue(role + "_busy_info", null))}
+			if (GM_getValue(role + "_saveAddr", null)!=null) {GM_setValue(roleid + "_saveAddr", GM_getValue(role + "_saveAddr", null))}
+			if (GM_getValue(role + "_auto_updateStore", null)!=null) {GM_setValue(roleid + "_auto_updateStore", GM_getValue(role + "_auto_updateStore", null))}
+			if (GM_getValue(role + "_auto_relogin", null)!=null) {GM_setValue(roleid + "_auto_relogin", GM_getValue(role + "_auto_relogin", null))}
+			if (GM_getValue(role + "_blacklist", null)!=null) {GM_setValue(roleid + "_blacklist", GM_getValue(role + "_blacklist", null))}
+			if (GM_getValue(role + "_getitemShow", null)!=null) {GM_setValue(roleid + "_getitemShow", GM_getValue(role + "_getitemShow", null))}
+			if (GM_getValue(role + "_zml", null)!=null) {GM_setValue(roleid + "_zml", GM_getValue(role + "_zml", null))}
+			if (GM_getValue(role + "_zdy_item_store", null)!=null) {GM_setValue(roleid + "_zdy_item_store", GM_getValue(role + "_zdy_item_store", null))}
+			if (GM_getValue(role + "_zdy_item_store2", null)!=null) {GM_setValue(roleid + "_zdy_item_store2", GM_getValue(role + "_zdy_item_store2", null))}
+			if (GM_getValue(role + "_zdy_item_lock", null)!=null) {GM_setValue(roleid + "_zdy_item_lock", GM_getValue(role + "_zdy_item_lock", null))}
+			if (GM_getValue(role + "_zdy_item_drop", null)!=null) {GM_setValue(roleid + "_zdy_item_drop", GM_getValue(role + "_zdy_item_drop", null))}
+			if (GM_getValue(role + "_zdy_item_fenjie", null)!=null) {GM_setValue(roleid + "_zdy_item_fenjie", GM_getValue(role + "_zdy_item_fenjie", null))}
+			if (GM_getValue(role + "_ztjk", null)!=null) {GM_setValue(roleid + "_ztjk", GM_getValue(role + "_ztjk", null))}
+			if (GM_getValue(role + "_auto_command", null)!=null) {GM_setValue(roleid + "_auto_command", GM_getValue(role + "_auto_command", null))}
+			if (GM_getValue(role + "_welcome", null)!=null) {GM_setValue(roleid + "_welcome", GM_getValue(role + "_welcome", null))}
+			if (GM_getValue(role + "_statehml", null)!=null) {GM_setValue(roleid + "_statehml", GM_getValue(role + "_statehml", null))}
+			if (GM_getValue(role + "_backimageurl", null)!=null) {GM_setValue(roleid + "_backimageurl", GM_getValue(role + "_backimageurl", null))}
+			if (GM_getValue(role + "_loginhml", null)!=null) {GM_setValue(roleid + "_loginhml", GM_getValue(role + "_loginhml", null))}
+			if (GM_getValue(role + "_timequestion", null)!=null) {GM_setValue(roleid + "_timequestion", GM_getValue(role + "_timequestion", null))}
+			if (GM_getValue(role + "_silence", null)!=null) {GM_setValue(roleid + "_silence", GM_getValue(role + "_silence", null))}
+			if (GM_getValue(role + "_dpssakada", null)!=null) {GM_setValue(roleid + "_dpssakada", GM_getValue(role + "_dpssakada", null))}
+			if (GM_getValue(role + "_funnycalc", null)!=null) {GM_setValue(roleid + "_funnycalc", GM_getValue(role + "_funnycalc", null))}
+			if (GM_getValue(role + "_auto_buylist", null)!=null) {GM_setValue(roleid + "_auto_buylist", GM_getValue(role + "_auto_buylist", null))}
+			if (GM_getValue(role + "_zdyskilllist", null)!=null) {GM_setValue(roleid + "_zdyskilllist", GM_getValue(role + "_zdyskilllist", null))}
+			if (GM_getValue(role + "_zdyskills", null)!=null) {GM_setValue(roleid + "_zdyskills", GM_getValue(role + "_zdyskills", null))}
+			if (GM_getValue(role + "_bagFull", null)!=null) {GM_setValue(roleid + "_bagFull", GM_getValue(role + "_bagFull", null))}
             $(".bottom-bar").append("<span class='item-commands' style='display:none'><span WG='WG' cmd=''></span></span>"); //命令行模块
             var html = UI.wgui();
             $(".content-message").after(html);
@@ -1386,7 +1434,7 @@
             GM_addStyle(css);
             npcs = GM_getValue("npcs", npcs);
             pgoods = GM_getValue("goods", goods);
-            equip = GM_getValue(role + "_equip", equip);
+            equip = GM_getValue(roleid + "_equip", equip);
             //初始化角色配置
             GI.configInit();
             if (backimageurl != '') {
@@ -1411,6 +1459,7 @@
                 catch (e) {
                 }
                 role = role;
+                roleid = roleid;
                 var logintext = '';
                 document.title = role + "-MUD游戏-武神传说";
                 L.msg(`欢迎使用 ${welcome} 版本号${GM_info.script.version}`);
@@ -1609,7 +1658,7 @@
                     }
                     zdy_item_store = store_list.join(',');
                     $('#store_info').val(zdy_item_store);
-                    GM_setValue(role + "_zdy_item_store", zdy_item_store);
+                    GM_setValue(roleid + "_zdy_item_store", zdy_item_store);
                 } else if (data.type == 'text' && data.msg == '没有这个玩家。') {
                     messageAppend("<hio>仓库信息获取</hio>完成");
 
@@ -1858,7 +1907,7 @@
                     setTimeout(WG.sm, 500);
                     break;
                 case 2:
-                    var mysm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+                    var mysm_loser = GM_getValue(roleid + "_sm_loser", sm_loser);
                     //获取师门任务物品
                     var item = $("span[cmd$='giveup']:last").parent().prev();
                     if (item.length == 0) {
@@ -1906,7 +1955,7 @@
 
                     if (item != undefined && WG.inArray(item, store_list) && sm_getstore == "开") {
                         if (item.indexOf("hiz") >= 0 || item.indexOf("hio") >= 0) {
-                            sm_any = GM_getValue(role + "_sm_any", sm_any);
+                            sm_any = GM_getValue(roleid + "_sm_any", sm_any);
                             if (sm_any == "开") {
                                 messageAppend("自动仓库取" + item);
                                 WG.sm_store = item;
@@ -2090,7 +2139,7 @@
                     setTimeout(WG.sm, 1000);
                     break;
                 case 4:
-                    var mysm_loser = GM_getValue(role + "_sm_loser", sm_loser);
+                    var mysm_loser = GM_getValue(roleid + "_sm_loser", sm_loser);
                     WG.go("扬州城-钱庄");
                     WG.qu(WG.sm_store, (res) => {
                         if (res) {
@@ -2558,7 +2607,7 @@
             } else {
                 zdy_item_store2 = zdy_item_store2 + "," + itemname;
             }
-            GM_setValue(role + "_zdy_item_store2", zdy_item_store2);
+            GM_setValue(roleid + "_zdy_item_store2", zdy_item_store2);
 
             $('#store_info2').val(zdy_item_store2);
 
@@ -2574,7 +2623,7 @@
             } else {
                 zdy_item_lock = zdy_item_lock + "," + itemname;
             }
-            GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
+            GM_setValue(roleid + "_zdy_item_lock", zdy_item_lock);
 
             $('#lock_info').val(zdy_item_lock);
 
@@ -2587,7 +2636,7 @@
         dellock: (itemname) => {
             lock_list.remove(itemname);
             zdy_item_lock = lock_list.join(',');
-            GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
+            GM_setValue(roleid + "_zdy_item_lock", zdy_item_lock);
 
             $('#lock_info').val(zdy_item_lock);
 
@@ -2599,7 +2648,7 @@
             } else {
                 zdy_item_fenjie = zdy_item_fenjie + "," + itemname;
             }
-            GM_setValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
+            GM_setValue(roleid + "_zdy_item_fenjie", zdy_item_fenjie);
 
 
             if (zdy_item_fenjie) {
@@ -2619,7 +2668,7 @@
             } else {
                 zdy_item_drop = zdy_item_drop + "," + itemname;
             }
-            GM_setValue(role + "_zdy_item_drop", zdy_item_drop);
+            GM_setValue(roleid + "_zdy_item_drop", zdy_item_drop);
             if (zdy_item_drop) {
                 drop_list = zdy_item_drop.split(",");
             }
@@ -2768,7 +2817,7 @@
                                 break;
                             }
                         }
-                        GM_setValue(role + "_equip", equip);
+                        GM_setValue(roleid + "_equip", equip);
                         WG.go("扬州城-矿山");
                         WG.Send("wa");
                     }
@@ -3016,8 +3065,8 @@
                         WG.zdy_btnset();
                     },
                     cleankksboss: function () {
-                        GM_setValue(role + "_autoKsBoss", null);
-                        GM_setValue(role + "_automarry", null);
+                        GM_setValue(roleid + "_autoKsBoss", null);
+                        GM_setValue(roleid + "_automarry", null);
                         L.msg("操作成功");
                     }
                 }
@@ -3030,7 +3079,7 @@
                 WG.remove_hook(WG.dsj_hook);
             }
             messageAppend("已注入定时任务", 0, 1);
-            timequestion = GM_getValue(role + "_timequestion", timequestion);
+            timequestion = GM_getValue(roleid + "_timequestion", timequestion);
             WG.dsj_hook = WG.add_hook("time", (data) => {
                 if (data.type == 'time') {
                     let i = 0;
@@ -3043,7 +3092,7 @@
                             if (p.type == 1) {
                                 messageAppend("一次性任务,已移除" + p.name, 1, 0);
                                 timequestion.baoremove(i);
-                                GM_setValue(role + "_timequestion", timequestion);
+                                GM_setValue(roleid + "_timequestion", timequestion);
                             }
                         }
                         i = i + 1;
@@ -3059,7 +3108,7 @@
             $(".startQuest").off('click');
             $(".removeQuest").off('click');
             //[{"name":"","type":"0","send":"","h":"","s":"","m":""}]
-            timequestion = GM_getValue(role + "_timequestion", timequestion);
+            timequestion = GM_getValue(roleid + "_timequestion", timequestion);
             for (let q of timequestion) {
                 let phtml = `<span class='addrun${q.name}'>编辑${q.name}</span>
                 <span class='stoprun${q.name}'>删除${q.name}</span>
@@ -3083,7 +3132,7 @@
                         }
                         i = i + 1;
                     }
-                    GM_setValue(role + "_timequestion", timequestion);
+                    GM_setValue(roleid + "_timequestion", timequestion);
                     WG.dsj();
                 });
             }
@@ -3106,7 +3155,7 @@
                 for (let p of timequestion) {
                     if (questname == p.name) {
                         timequestion[i] = item;
-                        GM_setValue(role + "_timequestion", timequestion);
+                        GM_setValue(roleid + "_timequestion", timequestion);
                         WG.dsj();
                         return;
                     }
@@ -3114,7 +3163,7 @@
                 }
 
                 timequestion.push(item);
-                GM_setValue(role + "_timequestion", timequestion);
+                GM_setValue(roleid + "_timequestion", timequestion);
                 WG.dsj();
             });
             $(".removeQuest").on("click", () => {
@@ -3127,7 +3176,7 @@
                     }
                     i = i + 1;
                 }
-                GM_setValue(role + "_timequestion", timequestion);
+                GM_setValue(roleid + "_timequestion", timequestion);
                 WG.dsj();
             });
 
@@ -3269,7 +3318,7 @@
             if (G.preform_timer || G.auto_preform == false) return;
             $(".auto_perform").css("background", "#3E0000");
             //出招时重新获取黑名单
-            unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
+            unauto_pfm = GM_getValue(roleid + "_unauto_pfm", unauto_pfm);
             var unpfm = unauto_pfm.split(',');
             for (var pfmname of unpfm) {
                 if (!WG.inArray(pfmname, blackpfm))
@@ -3343,16 +3392,16 @@
             if (boss_name == null || boss_place == null) {
                 return;
             }
-            blacklist = GM_getValue(role + "_blacklist", blacklist);
+            blacklist = GM_getValue(roleid + "_blacklist", blacklist);
             blacklist = blacklist instanceof Array ? blacklist : blacklist.split(",");
             if (WG.inArray(boss_name.replace("/<(.*?)>/g", ""), blacklist)) {
                 messageAppend("黑名单boss,忽略!");
                 return;
             }
-            autoKsBoss = GM_getValue(role + "_autoKsBoss", autoKsBoss);
-            ks_pfm = GM_getValue(role + "_ks_pfm", ks_pfm);
-            ks_wait = GM_getValue(role + "_ks_wait", ks_wait);
-            autoeq = GM_getValue(role + "_auto_eq", autoeq);
+            autoKsBoss = GM_getValue(roleid + "_autoKsBoss", autoKsBoss);
+            ks_pfm = GM_getValue(roleid + "_ks_pfm", ks_pfm);
+            ks_wait = GM_getValue(roleid + "_ks_wait", ks_wait);
+            autoeq = GM_getValue(roleid + "_auto_eq", autoeq);
             console.log("boss");
             console.log(boss_place);
             var c = "<div class=\"item-commands\"><span id = 'closeauto'>关闭自动执行后命令</span></div>";
@@ -3425,7 +3474,7 @@
                 console.log("复活挖矿");
                 WG.Send('relive');
                 WG.remove_hook(this.ksboss);
-                auto_command = GM_getValue(role + "_auto_command", auto_command);
+                auto_command = GM_getValue(roleid + "_auto_command", auto_command);
                 if (auto_command && auto_command != null && auto_command != "" && auto_command != "null") {
                     WG.SendCmd(auto_command);
                 } else {
@@ -3532,7 +3581,7 @@
                 WG.eqx = WG.add_hook("dialog", (data) => {
                     if (data.dialog == "pack" && data.eqs != undefined) {
                         eqlist[type] = deepCopy(data.eqs);
-                        GM_setValue(role + "_eqlist", eqlist);
+                        GM_setValue(roleid + "_eqlist", eqlist);
                         messageAppend("套装" + type + "保存成功!", 1);
                         WG.remove_hook(WG.eqx);
                     }
@@ -3548,7 +3597,7 @@
                             }
                         }
                         skilllist[type] = nowskill;
-                        GM_setValue(role + "_skilllist", skilllist);
+                        GM_setValue(roleid + "_skilllist", skilllist);
                         messageAppend("技能" + type + "保存成功!", 1);
                     }
                 });
@@ -3559,8 +3608,8 @@
                     WG.remove_hook(WG.eqx);
                     WG.eqx = null;
                 }
-                eqlist = GM_getValue(role + "_eqlist", eqlist);
-                skilllist = GM_getValue(role + "_skilllist", skilllist);
+                eqlist = GM_getValue(roleid + "_eqlist", eqlist);
+                skilllist = GM_getValue(roleid + "_skilllist", skilllist);
                 var p_cmds = "";
                 //  console.log(G.enable_skills)
                 let mySkills = [];
@@ -3614,12 +3663,12 @@
             }
         },
         eqhelperdel: function (type) {
-            eqlist = GM_getValue(role + "_eqlist", eqlist);
-            skilllist = GM_getValue(role + "_skilllist", skilllist);
+            eqlist = GM_getValue(roleid + "_eqlist", eqlist);
+            skilllist = GM_getValue(roleid + "_skilllist", skilllist);
             delete eqlist[type];
             delete skilllist[type];
-            GM_setValue(role + "_eqlist", eqlist);
-            GM_setValue(role + "_skilllist", skilllist);
+            GM_setValue(roleid + "_eqlist", eqlist);
+            GM_setValue(roleid + "_skilllist", skilllist);
             messageAppend("清除套装 技能" + type + "设置成功!", 1);
         },
         uneqall: function () {
@@ -3637,7 +3686,7 @@
             messageAppend("取消所有装备成功!", 1);
         },
         eqloader: function () {
-            let tmp_eqlist = GM_getValue(role + "_eqlist", null);
+            let tmp_eqlist = GM_getValue(roleid + "_eqlist", null);
 
             var subItems = {
 
@@ -3667,11 +3716,12 @@
                 el: "#skillsPanelUI",
                 data: {
                     role: role,
+					roleid: roleid,
                     eqlist: {},
                     eqlistdel: {},
                 },
                 created() {
-                    this.eqlist = GM_getValue(role + "_eqlist", {});
+                    this.eqlist = GM_getValue(roleid + "_eqlist", {});
                     console.log(this.eqlist)
                 },
                 mounted() {
@@ -3684,7 +3734,7 @@
                                 break;
                             case "delete":
                                 that.eqlist = {};
-                                that.eqlistdel = GM_getValue(role + "_eqlist", {});
+                                that.eqlistdel = GM_getValue(roleid + "_eqlist", {});
                                 that.role = "<< 返回";
                                 break;
                             case "uneqall":
@@ -3706,7 +3756,7 @@
                     save: function (name) {
                         WG.eqhelper(name)
                         setTimeout(() => {
-                            this.eqlist = GM_getValue(role + "_eqlist", {});
+                            this.eqlist = GM_getValue(roleid + "_eqlist", {});
                             WG.eqhelperui()
                         }, 300);
                     },
@@ -4000,7 +4050,7 @@
             }
         },
         zmlztjk: function () {
-            zml = GM_getValue(role + "_zml", zml);
+            zml = GM_getValue(roleid + "_zml", zml);
             if (! typeof zml instanceof Array) {
                 zml = [];
             }
@@ -4041,7 +4091,7 @@
             })
         },
         zml_edit: function () {
-            zml = GM_getValue(role + "_zml", zml);
+            zml = GM_getValue(roleid + "_zml", zml);
             if (! typeof zml instanceof Array) {
                 zml = [];
             }
@@ -4081,14 +4131,14 @@
                         if (_flag) {
                             this.zmldata.push(zmljson);
                         }
-                        GM_setValue(role + "_zml", this.zmldata);
+                        GM_setValue(roleid + "_zml", this.zmldata);
                         L.msg("保存成功");
                     },
                     del: function () {
                         this.zmldata.forEach((v, k) => {
                             if (v.name == this.singnalzml.name) {
                                 this.zmldata.baoremove(k);
-                                GM_setValue(role + "_zml", this.zmldata);
+                                GM_setValue(roleid + "_zml", this.zmldata);
                                 L.msg("删除成功");
                             }
                         });
@@ -4108,7 +4158,7 @@
                         this.singnalzml = v;
                     },
                     showp: function (v) {
-                        zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
+                        zmlshowsetting = GM_getValue(roleid + "_zmlshowsetting", zmlshowsetting);
                         //<span class="zdy-item act-item-zdy" zml="use j8ea35f34ce">大还丹</span>
                         let a = $(".room-commands");
 
@@ -4120,14 +4170,14 @@
                             if (item.textContent == v.name) {
                                 item.remove();
                                 v.zmlShow = 0;
-                                GM_setValue(role + "_zml", zml);
+                                GM_setValue(roleid + "_zml", zml);
                                 messageAppend("删除快速使用" + v.name, 1);
                                 return;
                             }
                         }
                         a.append("<span class=\"zdy-item act-item-zdy act-item\">" + v.name + "</span>")
                         v.zmlShow = 1;
-                        GM_setValue(role + "_zml", zml);
+                        GM_setValue(roleid + "_zml", zml);
                         messageAppend("设置快速使用" + v.name, 0, 1);
                         //绑定事件
                         $('.act-item-zdy').off('click');
@@ -4146,7 +4196,7 @@
         zml_showp: function () {
             $(".zdy-commands").empty();
             $('.act-item-zdy').remove();
-            zmlshowsetting = GM_getValue(role + "_zmlshowsetting", zmlshowsetting);
+            zmlshowsetting = GM_getValue(roleid + "_zmlshowsetting", zmlshowsetting);
             for (let zmlitem of zml) {
                 let a = $(".room-commands");
                 if (zmlshowsetting == 1) {
@@ -4188,7 +4238,7 @@
         ztjk_edit: function () {
 
             //[{"name":"","type":"state","action":"remove","keyword":"busy","ishave":"0","send":""}]
-            ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
+            ztjk_item = GM_getValue(roleid + "_ztjk", ztjk_item);
             messageClear();
             var edithtml = UI.ztjksetting;
             messageAppend(edithtml);
@@ -4234,7 +4284,7 @@
                 if (_flag) {
                     ztjk_item.push(ztjk);
                 }
-                GM_setValue(role + "_ztjk", ztjk_item);
+                GM_setValue(roleid + "_ztjk", ztjk_item);
 
                 WG.ztjk_edit();
                 messageAppend("保存成功", 2);
@@ -4245,7 +4295,7 @@
                 ztjk_item.forEach(function (v, k) {
                     if (v.name == name) {
                         ztjk_item.baoremove(k);
-                        GM_setValue(role + "_ztjk", ztjk_item);
+                        GM_setValue(roleid + "_ztjk", ztjk_item);
                         WG.ztjk_edit();
                         messageAppend("删除成功", 2);
                         WG.ztjk_func();
@@ -4286,7 +4336,7 @@
                     } else {
                         ztjk_item[k].isactive = 1;
                     }
-                    GM_setValue(role + "_ztjk", ztjk_item);
+                    GM_setValue(roleid + "_ztjk", ztjk_item);
                     WG.ztjk_func();
                     WG.ztjk_edit();
                 });
@@ -4302,7 +4352,7 @@
                 WG.remove_hook(WG.ztjk_hook);
             }
             WG.ztjk_hook = undefined;
-            ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
+            ztjk_item = GM_getValue(roleid + "_ztjk", ztjk_item);
             WG.ztjk_hook = WG.add_hook(["dispfm", "enapfm", "dialog", "room", "itemadd", "itemremove", "status", "text", "msg", "die", "combat", "sc"], function (data) {
                 ztjk_item.forEach(function (v, k) {
                     if (v.isactive != 1) {
@@ -4818,6 +4868,7 @@
                         var dds = dd.replace(/ /g, "");
                         var copydata = {
                             player: role,
+							roleid: roleid,
                             level: dds,
                             family: G.pfamily,
                             items: data.items
@@ -4938,51 +4989,51 @@
             $(".dialog-custom").on("click", ".switch2", UI.switchClick);
             $("#family").change(function () {
                 family = $("#family").val();
-                GM_setValue(role + "_family", family);
+                GM_setValue(roleid + "_family", family);
             });
             $('#wudao_pfm').focusout(function () {
                 wudao_pfm = $('#wudao_pfm').val();
-                GM_setValue(role + "_wudao_pfm", wudao_pfm);
+                GM_setValue(roleid + "_wudao_pfm", wudao_pfm);
             });
             $('#sm_loser').click(function () {
                 sm_loser = WG.switchReversal($(this));
-                GM_setValue(role + "_sm_loser", sm_loser);
+                GM_setValue(roleid + "_sm_loser", sm_loser);
             });
             $('#sm_any').click(function () {
                 sm_any = WG.switchReversal($(this));
-                GM_setValue(role + "_sm_any", sm_any);
+                GM_setValue(roleid + "_sm_any", sm_any);
             });
             $('#sm_price').click(function () {
                 sm_price = WG.switchReversal($(this));
-                GM_setValue(role + "_sm_price", sm_price);
+                GM_setValue(roleid + "_sm_price", sm_price);
             });
             $('#sm_getstore').click(function () {
                 sm_getstore = WG.switchReversal($(this));
-                GM_setValue(role + "_sm_getstore", sm_getstore);
+                GM_setValue(roleid + "_sm_getstore", sm_getstore);
             });
             $('#ks_pfm').focusout(function () {
                 ks_pfm = $('#ks_pfm').val();
-                GM_setValue(role + "_ks_pfm", ks_pfm);
+                GM_setValue(roleid + "_ks_pfm", ks_pfm);
             });
             $('#ks_wait').focusout(function () {
                 ks_wait = $('#ks_wait').val();
-                GM_setValue(role + "_ks_wait", ks_wait);
+                GM_setValue(roleid + "_ks_wait", ks_wait);
             });
             $('#marry_kiss').click(function () {
                 automarry = WG.switchReversal($(this));
-                GM_setValue(role + "_automarry", automarry);
+                GM_setValue(roleid + "_automarry", automarry);
             });
             $('#ks_Boss').click(function () {
                 autoKsBoss = WG.switchReversal($(this));
-                GM_setValue(role + "_autoKsBoss", autoKsBoss);
+                GM_setValue(roleid + "_autoKsBoss", autoKsBoss);
             });
             $('#auto_eq').focusout(function () {
                 autoeq = $('#auto_eq').val();
-                GM_setValue(role + "_auto_eq", autoeq);
+                GM_setValue(roleid + "_auto_eq", autoeq);
             });
             $('#autopfmswitch').click(function () {
                 auto_pfmswitch = WG.switchReversal($(this));
-                GM_setValue(role + "_auto_pfmswitch", auto_pfmswitch);
+                GM_setValue(roleid + "_auto_pfmswitch", auto_pfmswitch);
                 if (auto_pfmswitch == "开") {
                     G.auto_preform = true;
                 } else {
@@ -4991,38 +5042,38 @@
             });
             $('#autorewardgoto').click(function () {
                 auto_rewardgoto = WG.switchReversal($(this));
-                GM_setValue(role + "_auto_rewardgoto", auto_rewardgoto);
+                GM_setValue(roleid + "_auto_rewardgoto", auto_rewardgoto);
             });
 
             $('#busyinfo').click(function () {
                 busy_info = WG.switchReversal($(this));
-                GM_setValue(role + "_busy_info", busy_info);
+                GM_setValue(roleid + "_busy_info", busy_info);
             });
             $('#saveAddr').click(function () {
                 saveAddr = WG.switchReversal($(this));
-                GM_setValue(role + "_saveAddr", saveAddr);
+                GM_setValue(roleid + "_saveAddr", saveAddr);
             });
 
             $('#autoupdateStore').click(function () {
                 auto_updateStore = WG.switchReversal($(this));
-                GM_setValue(role + "_auto_updateStore", auto_updateStore);
+                GM_setValue(roleid + "_auto_updateStore", auto_updateStore);
             });
             $('#autorelogin').click(function () {
                 auto_relogin = WG.switchReversal($(this));
-                GM_setValue(role + "_auto_relogin", auto_relogin);
+                GM_setValue(roleid + "_auto_relogin", auto_relogin);
             });
             $("#zmlshowsetting").change(function () {
                 zmlshowsetting = $('#zmlshowsetting').val();
-                GM_setValue(role + "_zmlshowsetting", zmlshowsetting);
+                GM_setValue(roleid + "_zmlshowsetting", zmlshowsetting);
                 WG.zml_showp();
             });
             $("#bagFull").change(function () {
                 bagFull = $('#bagFull').val();
-                GM_setValue(role + "_bagFull", bagFull);
+                GM_setValue(roleid + "_bagFull", bagFull);
             });
             $('#getitemShow').click(function () {
                 getitemShow = WG.switchReversal($(this));
-                GM_setValue(role + "_getitemShow", getitemShow);
+                GM_setValue(roleid + "_getitemShow", getitemShow);
 
                 if (getitemShow == "开") {
                     G.getitemShow = true;
@@ -5032,7 +5083,7 @@
             });
             $('#unauto_pfm').change(function () {
                 unauto_pfm = $('#unauto_pfm').val();
-                GM_setValue(role + "_unauto_pfm", unauto_pfm);
+                GM_setValue(roleid + "_unauto_pfm", unauto_pfm);
                 var unpfm = unauto_pfm.split(',');
                 blackpfm = [];
                 for (var pfmname of unpfm) {
@@ -5042,42 +5093,42 @@
             });
             $('#store_info').change(function () {
                 zdy_item_store = $('#store_info').val();
-                GM_setValue(role + "_zdy_item_store", zdy_item_store);
+                GM_setValue(roleid + "_zdy_item_store", zdy_item_store);
                 store_list = zdy_item_store.split(",");
                 store_list = store_list.concat(zdy_item_store2.split(","));
             });
             $('#store_info2').change(function () {
                 zdy_item_store2 = $('#store_info2').val();
-                GM_setValue(role + "_zdy_item_store2", zdy_item_store2);
+                GM_setValue(roleid + "_zdy_item_store2", zdy_item_store2);
                 store_list = zdy_item_store2.split(",");
                 store_list = store_list.concat(zdy_item_store.split(","));
             });
             $('#lock_info').change(function () {
                 zdy_item_lock = $('#lock_info').val();
-                GM_setValue(role + "_zdy_item_lock", zdy_item_lock);
+                GM_setValue(roleid + "_zdy_item_lock", zdy_item_lock);
                 lock_list = zdy_item_lock.split(",");
             });
             $('#store_drop_info').change(function () {
                 zdy_item_drop = $('#store_drop_info').val();
-                GM_setValue(role + "_zdy_item_drop", zdy_item_drop);
+                GM_setValue(roleid + "_zdy_item_drop", zdy_item_drop);
                 drop_list = zdy_item_drop.split(",");
             });
             $('#store_fenjie_info').change(function () {
                 zdy_item_fenjie = $('#store_fenjie_info').val();
-                GM_setValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
+                GM_setValue(roleid + "_zdy_item_fenjie", zdy_item_fenjie);
                 fenjie_list = zdy_item_fenjie.split(",");
             });
             $('#auto_command').change(function () {
                 auto_command = $('#auto_command').val();
-                GM_setValue(role + "_auto_command", auto_command);
+                GM_setValue(roleid + "_auto_command", auto_command);
             });
             $('#blacklist').change(function () {
                 blacklist = $('#blacklist').val();
-                GM_setValue(role + "_blacklist", blacklist);
+                GM_setValue(roleid + "_blacklist", blacklist);
             });
             $('#welcome').focusout(function () {
                 welcome = $('#welcome').val();
-                GM_setValue(role + "_welcome", welcome);
+                GM_setValue(roleid + "_welcome", welcome);
             });
 
             $('#shieldswitch').click(function () {
@@ -5091,7 +5142,7 @@
             $('#zdyskillsswitch').click(function () {
 
                 zdyskills = WG.switchReversal($(this));
-                GM_setValue(role + "_zdyskills", zdyskills);
+                GM_setValue(roleid + "_zdyskills", zdyskills);
                 if (zdyskills == "开") {
                     messageAppend('已开启自定义技能顺序，填写顺序后，请刷新游戏生效', 0, 1);
                 }
@@ -5105,13 +5156,13 @@
                     return false;
                 } else {
                     zdyskilllist = $("#zdyskilllist").val();
-                    GM_setValue(role + "_zdyskilllist", zdyskilllist);
+                    GM_setValue(roleid + "_zdyskilllist", zdyskilllist);
                 }
             });
             $('#silence').click(function () {
 
                 silence = WG.switchReversal($(this));
-                GM_setValue(role + "_silence", silence);
+                GM_setValue(roleid + "_silence", silence);
                 if (silence == "开") {
                     messageAppend('已开启安静模式', 0, 1);
                 }
@@ -5119,7 +5170,7 @@
             $('#dpssakada').click(function () {
 
                 dpssakada = WG.switchReversal($(this));
-                GM_setValue(role + "_dpssakada", dpssakada);
+                GM_setValue(roleid + "_dpssakada", dpssakada);
                 if (dpssakada == "开") {
                     messageAppend('已开启战斗统计', 0, 1);
                 }
@@ -5127,7 +5178,7 @@
             $('#funnycalc').click(function () {
 
                 funnycalc = WG.switchReversal($(this));
-                GM_setValue(role + "_funnycalc", funnycalc);
+                GM_setValue(roleid + "_funnycalc", funnycalc);
                 if (funnycalc == "开") {
                     messageAppend('已开启FUNNY计算', 0, 1);
                 }
@@ -5143,11 +5194,11 @@
 
             $('#statehml').change(function () {
                 statehml = $('#statehml').val();
-                GM_setValue(role + "_statehml", statehml);
+                GM_setValue(roleid + "_statehml", statehml);
             });
             $('#backimageurl').change(function () {
                 backimageurl = $('#backimageurl').val();
-                GM_setValue(role + "_backimageurl", backimageurl);
+                GM_setValue(roleid + "_backimageurl", backimageurl);
                 if (backimageurl != '') {
                     WG.SendCmd("setting backcolor none");
                     GM_addStyle(`body{
@@ -5168,11 +5219,11 @@
             });
             $('#loginhml').change(function () {
                 loginhml = $('#loginhml').val();
-                GM_setValue(role + "_loginhml", loginhml);
+                GM_setValue(roleid + "_loginhml", loginhml);
             });
             $('#autobuy').change(function () {
                 auto_buylist = $('#autobuy').val();
-                GM_setValue(role + "_auto_buylist", auto_buylist);
+                GM_setValue(roleid + "_auto_buylist", auto_buylist);
             });
             $(".update_id_all").on("click", WG.update_id_all);
             $(".clean_id_all").on("click", WG.clean_id_all);
@@ -5185,8 +5236,8 @@
                 zdyskilllist == "";
                 messageAppend("已关闭自定义，请刷新重新获取技能数据!");
                 zdyskills = "关";
-                GM_setValue(role + "_zdyskilllist", "");
-                GM_setValue(role + "_zdyskills", zdyskills);
+                GM_setValue(roleid + "_zdyskilllist", "");
+                GM_setValue(roleid + "_zdyskills", zdyskills);
             });
 
 
@@ -5207,7 +5258,7 @@
                     tmp.push(zdybtnitem);
                 }
                 zdy_btnlist = tmp;
-                GM_setValue(role + "_zdy_btnlist", zdy_btnlist);
+                GM_setValue(roleid + "_zdy_btnlist", zdy_btnlist);
                 messageAppend("保存自定义按钮成功");
                 WG.zdy_btnListInit();
             });
@@ -5280,7 +5331,7 @@
             WG.SendCmd(zdy_btnlist[type].send);
         },
         zdy_btnset: function () {
-            zdy_btnlist = GM_getValue(role + "_zdy_btnlist", zdy_btnlist);
+            zdy_btnlist = GM_getValue(roleid + "_zdy_btnlist", zdy_btnlist);
             messageClear();
             let html = UI.zdyBtnsetui();
             messageAppend(html);
@@ -5309,14 +5360,14 @@
                     tmp.push(zdybtnitem);
                 }
                 zdy_btnlist = tmp;
-                GM_setValue(role + "_zdy_btnlist", zdy_btnlist);
+                GM_setValue(roleid + "_zdy_btnlist", zdy_btnlist);
                 messageAppend("保存成功");
                 WG.zdy_btnListInit();
             });
         },
         zdy_btnListInit: function () {
-            zdy_btnlist = GM_getValue(role + "_zdy_btnlist", zdy_btnlist);
-            inzdy_btn = GM_getValue(role + "_inzdy_btn", inzdy_btn);
+            zdy_btnlist = GM_getValue(roleid + "_zdy_btnlist", zdy_btnlist);
+            inzdy_btn = GM_getValue(roleid + "_inzdy_btn", inzdy_btn);
             if (zdy_btnlist.length == 0) {
                 for (var i = 0; i < 6; i++) {
                     zdy_btnlist.push({
@@ -5324,7 +5375,7 @@
                         "send": ""
                     });
                 }
-                GM_setValue(role + "_zdy_btnlist", zdy_btnlist);
+                GM_setValue(roleid + "_zdy_btnlist", zdy_btnlist);
             }
             if (inzdy_btn) {
                 WG.zdy_btnshow();
@@ -5367,7 +5418,7 @@
                 }
             }
 
-            GM_setValue(role + "_inzdy_btn", inzdy_btn);
+            GM_setValue(roleid + "_inzdy_btn", inzdy_btn);
         },
         runLoginhml: function () {
             WG.SendCmd(loginhml);
@@ -5601,7 +5652,7 @@
             }
             if (data.type == "perform") {
                 if (zdyskills == "开") {
-                    zdyskilllist = GM_getValue(role + "_zdyskilllist", zdyskilllist);
+                    zdyskilllist = GM_getValue(roleid + "_zdyskilllist", zdyskilllist);
                     data.skills = JSON.parse(zdyskilllist);
                     let p = deepCopy(msg);
                     p.data = JSON.stringify(data);
@@ -5866,7 +5917,7 @@
         },
         usezml: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            zml = GM_getValue(role + "_zml", zml);
+            zml = GM_getValue(roleid + "_zml", zml);
             for (var zmlitem of zml) {
                 if (zmlitem.name == n) {
                     await WG.zmlfire(zmlitem);
@@ -5904,11 +5955,11 @@
         },
         startjk: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
+            ztjk_item = GM_getValue(roleid + "_ztjk", ztjk_item);
             for (var item of ztjk_item) {
                 if (item.name == n) {
                     item.isactive = 1;
-                    GM_setValue(role + "_ztjk", ztjk_item);
+                    GM_setValue(roleid + "_ztjk", ztjk_item);
                     WG.ztjk_func();
                     messageAppend("已注入" + item.name, 0, 1);
                     break;
@@ -5919,11 +5970,11 @@
         },
         stopjk: async function (idx = 0, n, cmds) {
             cmds = T.recmd(idx, cmds);
-            ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
+            ztjk_item = GM_getValue(roleid + "_ztjk", ztjk_item);
             for (var item of ztjk_item) {
                 if (item.name == n) {
                     item.isactive = 0;
-                    GM_setValue(role + "_ztjk", ztjk_item);
+                    GM_setValue(roleid + "_ztjk", ztjk_item);
                     WG.ztjk_func();
                     messageAppend("已暂停" + item.name);
                     break;
@@ -6833,12 +6884,12 @@
                         }
                         zdy_item_store = store_list.join(',');
                         $('#store_info').val(zdy_item_store);
-                        GM_setValue(role + "_zdy_item_store", zdy_item_store);
+                        GM_setValue(roleid + "_zdy_item_store", zdy_item_store);
                         store_list = store_list.concat(zdy_item_store2.split(","));
                     }
                 }
                 else {
-                    auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
+                    auto_updateStore = GM_getValue(roleid + "_auto_updateStore", auto_updateStore);
                     if (WG.sort_hook == null && auto_updateStore == "开" && data.msg.indexOf("书架") < 0 &&
                         (/^你把(.+)存入仓库。$/.test(data.msg) || /^你从仓库里取出(.+)。$/.test(data.msg))) {
                         sendStore = true;
@@ -6864,8 +6915,8 @@
                         zdyskilllist == "";
                         messageAppend("检测到更换技能,请刷新重新获取技能数据!");
                         zdyskills = "关";
-                        GM_setValue(role + "_zdyskilllist", "");
-                        GM_setValue(role + "_zdyskills", zdyskills);
+                        GM_setValue(roleid + "_zdyskilllist", "");
+                        GM_setValue(roleid + "_zdyskills", zdyskills);
                     }
                     if (data.items) {
                         for (let item of data.items) {
@@ -7081,7 +7132,7 @@
                     G.skills = data.skills;
                     if (zdyskilllist == "") {
                         zdyskilllist = JSON.stringify(data.skills);
-                        GM_setValue(role + "_zdyskilllist", zdyskilllist);
+                        GM_setValue(roleid + "_zdyskilllist", zdyskilllist);
                     }
                 } else if (data.type == 'dispfm') {
                     if (data.id) {
@@ -7155,7 +7206,7 @@
                         G.room_name.indexOf('矿山') >= 0 || G.room_name.indexOf('练功房') >= 0) {
                         return;
                     }
-                    statehml = GM_getValue(role + '_statehml', statehml);
+                    statehml = GM_getValue(roleid + '_statehml', statehml);
                     WG.SendCmd(statehml);
                 }
             });
@@ -7236,7 +7287,7 @@
                         }
                         family = G.family;
                         G.score = data;
-                        GM_setValue(role + "_family", G.family);
+                        GM_setValue(roleid + "_family", G.family);
                     } else if (data.study_per != null) {
                         G.score2 = data;
                     }
@@ -7286,7 +7337,7 @@
             WG.add_hook("msg", function (data) {
 
                 if (data.ch == "sys") {
-                    var automarry = GM_getValue(role + "_automarry", automarry);
+                    var automarry = GM_getValue(roleid + "_automarry", automarry);
                     if (data.content.indexOf("，婚礼将在一分钟后开始。") >= 0) {
                         console.dir(data);
                         if (automarry == "开" && G.in_fight == false) {
@@ -7498,45 +7549,45 @@
             });
         },
         configInit: function () {
-            family = GM_getValue(role + "_family", family);
-            automarry = GM_getValue(role + "_automarry", automarry);
-            autoKsBoss = GM_getValue(role + "_autoKsBoss", autoKsBoss);
-            ks_pfm = GM_getValue(role + "_ks_pfm", ks_pfm);
-            ks_wait = GM_getValue(role + "_ks_wait", ks_wait);
-            eqlist = GM_getValue(role + "_eqlist", eqlist);
-            skilllist = GM_getValue(role + "_skilllist", skilllist);
-            autoeq = GM_getValue(role + "_auto_eq", autoeq);
+            family = GM_getValue(roleid + "_family", family);
+            automarry = GM_getValue(roleid + "_automarry", automarry);
+            autoKsBoss = GM_getValue(roleid + "_autoKsBoss", autoKsBoss);
+            ks_pfm = GM_getValue(roleid + "_ks_pfm", ks_pfm);
+            ks_wait = GM_getValue(roleid + "_ks_wait", ks_wait);
+            eqlist = GM_getValue(roleid + "_eqlist", eqlist);
+            skilllist = GM_getValue(roleid + "_skilllist", skilllist);
+            autoeq = GM_getValue(roleid + "_auto_eq", autoeq);
             if (family == null) {
                 family = $('.role-list .select').text().substr(0, 2)
             }
-            wudao_pfm = GM_getValue(role + "_wudao_pfm", wudao_pfm);
-            sm_loser = GM_getValue(role + "_sm_loser", sm_loser);
-            sm_any = GM_getValue(role + "_sm_any", sm_any);
-            sm_price = GM_getValue(role + "_sm_price", sm_price);
-            sm_getstore = GM_getValue(role + "_sm_getstore", sm_getstore);
-            unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
-            auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
-            auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
-            busy_info = GM_getValue(role + "_busy_info", busy_info);
-            saveAddr = GM_getValue(role + "_saveAddr", saveAddr);
-            auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
-            auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
-            blacklist = GM_getValue(role + "_blacklist", blacklist);
+            wudao_pfm = GM_getValue(roleid + "_wudao_pfm", wudao_pfm);
+            sm_loser = GM_getValue(roleid + "_sm_loser", sm_loser);
+            sm_any = GM_getValue(roleid + "_sm_any", sm_any);
+            sm_price = GM_getValue(roleid + "_sm_price", sm_price);
+            sm_getstore = GM_getValue(roleid + "_sm_getstore", sm_getstore);
+            unauto_pfm = GM_getValue(roleid + "_unauto_pfm", unauto_pfm);
+            auto_pfmswitch = GM_getValue(roleid + "_auto_pfmswitch", auto_pfmswitch);
+            auto_rewardgoto = GM_getValue(roleid + "_auto_rewardgoto", auto_rewardgoto);
+            busy_info = GM_getValue(roleid + "_busy_info", busy_info);
+            saveAddr = GM_getValue(roleid + "_saveAddr", saveAddr);
+            auto_updateStore = GM_getValue(roleid + "_auto_updateStore", auto_updateStore);
+            auto_relogin = GM_getValue(roleid + "_auto_relogin", auto_relogin);
+            blacklist = GM_getValue(roleid + "_blacklist", blacklist);
             if (!blacklist instanceof Array) {
                 blacklist = blacklist.split(",")
             }
-            getitemShow = GM_getValue(role + "_getitemShow", getitemShow);
+            getitemShow = GM_getValue(roleid + "_getitemShow", getitemShow);
             if (getitemShow == "开") {
                 G.getitemShow = true
             } else {
                 G.getitemShow = false
             }
-            zml = GM_getValue(role + "_zml", zml);
-            zdy_item_store = GM_getValue(role + "_zdy_item_store", zdy_item_store);
-            zdy_item_store2 = GM_getValue(role + "_zdy_item_store2", zdy_item_store2);
-            zdy_item_lock = GM_getValue(role + "_zdy_item_lock", zdy_item_lock);
-            zdy_item_drop = GM_getValue(role + "_zdy_item_drop", zdy_item_drop);
-            zdy_item_fenjie = GM_getValue(role + "_zdy_item_fenjie", zdy_item_fenjie);
+            zml = GM_getValue(roleid + "_zml", zml);
+            zdy_item_store = GM_getValue(roleid + "_zdy_item_store", zdy_item_store);
+            zdy_item_store2 = GM_getValue(roleid + "_zdy_item_store2", zdy_item_store2);
+            zdy_item_lock = GM_getValue(roleid + "_zdy_item_lock", zdy_item_lock);
+            zdy_item_drop = GM_getValue(roleid + "_zdy_item_drop", zdy_item_drop);
+            zdy_item_fenjie = GM_getValue(roleid + "_zdy_item_fenjie", zdy_item_fenjie);
             if (zdy_item_store) {
                 store_list = store_list.concat(zdy_item_store.split(","))
             }
@@ -7552,32 +7603,32 @@
             if (zdy_item_fenjie) {
                 fenjie_list = fenjie_list.concat(zdy_item_fenjie.split(","))
             }
-            ztjk_item = GM_getValue(role + "_ztjk", ztjk_item);
+            ztjk_item = GM_getValue(roleid + "_ztjk", ztjk_item);
             if (auto_pfmswitch == "开") {
                 G.auto_preform = true
             }
-            auto_command = GM_getValue(role + "_auto_command", auto_command);
+            auto_command = GM_getValue(roleid + "_auto_command", auto_command);
             var unpfm = unauto_pfm.split(',');
             for (var pfmname of unpfm) {
                 if (pfmname) blackpfm.push(pfmname)
             }
-            welcome = GM_getValue(role + "_welcome", welcome);
+            welcome = GM_getValue(roleid + "_welcome", welcome);
             shieldswitch = GM_getValue("_shieldswitch", shieldswitch);
             shield = GM_getValue("_shield", shield);
             shieldkey = GM_getValue("_shieldkey", shieldkey);
-            statehml = GM_getValue(role + "_statehml", statehml);
-            backimageurl = GM_getValue(role + "_backimageurl", backimageurl);
-            loginhml = GM_getValue(role + "_loginhml", loginhml);
-            timequestion = GM_getValue(role + "_timequestion", timequestion);
-            silence = GM_getValue(role + "_silence", silence);
-            dpssakada = GM_getValue(role + "_dpssakada", dpssakada);
-            funnycalc = GM_getValue(role + "_funnycalc", funnycalc);
+            statehml = GM_getValue(roleid + "_statehml", statehml);
+            backimageurl = GM_getValue(roleid + "_backimageurl", backimageurl);
+            loginhml = GM_getValue(roleid + "_loginhml", loginhml);
+            timequestion = GM_getValue(roleid + "_timequestion", timequestion);
+            silence = GM_getValue(roleid + "_silence", silence);
+            dpssakada = GM_getValue(roleid + "_dpssakada", dpssakada);
+            funnycalc = GM_getValue(roleid + "_funnycalc", funnycalc);
 
-            auto_buylist = GM_getValue(role + "_auto_buylist", auto_buylist);
+            auto_buylist = GM_getValue(roleid + "_auto_buylist", auto_buylist);
 
-            zdyskilllist = GM_getValue(role + "_zdyskilllist", zdyskilllist);
-            zdyskills = GM_getValue(role + "_zdyskills", zdyskills);
-            bagFull = GM_getValue(role + "_bagFull", bagFull);
+            zdyskilllist = GM_getValue(roleid + "_zdyskilllist", zdyskilllist);
+            zdyskills = GM_getValue(roleid + "_zdyskills", zdyskills);
+            bagFull = GM_getValue(roleid + "_bagFull", bagFull);
             WG.zdy_btnListInit();
 
         }
