@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.166
+// @version      0.0.32.173
 // @date         01/07/2018
-// @modified     30/03/2021
+// @modified     20/05/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -727,6 +727,8 @@
     var getitemShow = null;
     //自命令展示方式
     var zmlshowsetting = 0;
+    //背包已满提示方式
+    var bagFull = 0;
     //停止后动作
     var auto_command = null;
     //装备列表
@@ -739,6 +741,8 @@
     var auto_pfmswitch = "开";
     //自动转发路径
     var auto_rewardgoto = "关";
+    //显示昏迷信息
+    var busy_info = "关";
     //仓库位置
     var saveAddr = "关";
     //自动更新仓库数据
@@ -1420,7 +1424,7 @@
                     var rolep = role;
                     if (G.level) {
                         rolep = G.level + role;
-                        if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                        if (G.isGod()) {
                             $('.zdy-item.zdwk').html("修炼(Y)");
                         }
                     }
@@ -2627,7 +2631,7 @@
         zdwk: function (v, x = true) {
             if (x) {
                 if (G.level) {
-                    if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                    if (G.isGod()) {
                         WG.go("住房-练功房");
                         WG.Send("xiulian");
                         return;
@@ -2940,6 +2944,9 @@
                     },
                     khjs_btn: function () {
                         WG.khjs();
+                    }, 
+                    zcjs_btn: function () {
+                        WG.zcjs();
                     },
                     getskilljson: function () {
                         WG.getPlayerSkill();
@@ -3207,6 +3214,25 @@
                             this.khsx[key] = Number(value);
                         })
                         messageAppend("你的分值:" + WG.gen(this.khsx.nl, this.khsx.xg, this.khsx.hg));
+                    }
+                }
+            })
+        }, zcjs: function () {
+            messageClear();
+            var html = UI.zcjsui;
+            messageAppend(html);
+            const khvue = new Vue({
+                el: ".ZiChuangCalc",
+                data: {
+                    zcsx: {
+                        level: 0,
+                        percentage: 0
+                    }
+                },
+                methods: {
+                    zcjscalc: function () {
+                        messageAppend("自创" + this.zcsx.level + "级,词条百分比:" + this.zcsx.percentage + " 需要词条等级:" +
+                            Math.ceil((this.zcsx.percentage - 4 - 2.5e-3 * this.zcsx.level) / this.zcsx.level / 2.5e-5));
                     }
                 }
             })
@@ -4889,7 +4915,7 @@
             $('#unauto_pfm').off('change')
             $('#getitemShow').off('click')
             $("#zmlshowsetting").off('change')
-
+            $("#bagFull").off('change')
             $('#autorelogin').off('click')
             $('#autoupdateStore').off('click')
             $('#saveAddr').off('click')
@@ -4967,6 +4993,11 @@
                 auto_rewardgoto = WG.switchReversal($(this));
                 GM_setValue(role + "_auto_rewardgoto", auto_rewardgoto);
             });
+
+            $('#busyinfo').click(function () {
+                busy_info = WG.switchReversal($(this));
+                GM_setValue(role + "_busy_info", busy_info);
+            });
             $('#saveAddr').click(function () {
                 saveAddr = WG.switchReversal($(this));
                 GM_setValue(role + "_saveAddr", saveAddr);
@@ -4984,6 +5015,10 @@
                 zmlshowsetting = $('#zmlshowsetting').val();
                 GM_setValue(role + "_zmlshowsetting", zmlshowsetting);
                 WG.zml_showp();
+            });
+            $("#bagFull").change(function () {
+                bagFull = $('#bagFull').val();
+                GM_setValue(role + "_bagFull", bagFull);
             });
             $('#getitemShow').click(function () {
                 getitemShow = WG.switchReversal($(this));
@@ -5191,10 +5226,12 @@
             $('#auto_eq').val(autoeq);
             $('#autopfmswitch').val(auto_pfmswitch);
             $('#autorewardgoto').val(auto_rewardgoto);
+            $('#busyinfo').val(busy_info);
             $('#saveAddr').val(saveAddr);
             $('#autoupdateStore').val(auto_updateStore);
             $('#autorelogin').val(auto_relogin);
             $("#zmlshowsetting").val(zmlshowsetting);
+            $("#bagFull").val(bagFull);
             $('#getitemShow').val(getitemShow);
             $('#unauto_pfm').val(unauto_pfm);
             $('#store_info').val(zdy_item_store);
@@ -5325,7 +5362,7 @@
                 $(".zdwk").on("click", WG.zdwk);
                 $(".auto_perform").on("click", WG.auto_preform_switch);
                 $(".cmd_echo").on("click", WG.cmd_echo_button);
-                if (G.level != null && (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0)) {
+                if ( G.isGod() ) {
                     $('.zdy-item.zdwk').html("修炼(Y)");
                 }
             }
@@ -5375,7 +5412,7 @@
                     var lianxiCode = "";
                     var lianxiCodeMin = "";
                     var lianxiCodeEnd = "wakuang";
-                    if (G.level.indexOf('武帝') >= 0 || G.level.indexOf('武神') >= 0) {
+                    if (G.isGod()) {
                         lianxiCodeEnd = "xiulian";
                     }
                     var __skillNameList = [];
@@ -6132,6 +6169,11 @@
             FakerTTS.playtts(n);
             WG.SendCmd(cmds);
         },
+        beep: async function(idx, n, cmds) {
+            cmds = T.recmd(idx, cmds);
+            Beep();
+            WG.SendCmd(cmds);
+        },
         music: function (idx, n, cmds) {
             cmds = T.recmd(idx, cmds);
             var music = new MusicBox({
@@ -6327,12 +6369,20 @@
                 + UI.html_lninput("wudao_pfm", "武道自动攻击(用半角逗号分隔)：")
                 + UI.html_switch('getitemShow', '显示获得物品：', 'getitemShow')
                 + UI.html_switch('marry_kiss', '自动喜宴：', "automarry")
-                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss")
+                + UI.html_switch('ks_Boss', '自动传到boss：', "autoKsBoss") + `
+                <div class="setting-item">
+                <span> <label for="bagFull"> 背包已满提示： </label><select id="bagFull" style="width:80px">
+                    <option value="0"> 文字提醒 </option>
+                    <option value="1"> 提示音 </option>
+                    <option value="2"> 语音提醒 </option>
+                </select>
+                </span></div> `
                 + UI.html_lninput("auto_eq", "BOSS击杀时自动换装：")
                 + UI.html_lninput("ks_pfm", "BOSS叫杀延时(ms)： ")
                 + UI.html_lninput("ks_wait", "BOSS击杀等待延迟(s)： ")
                 + UI.html_switch('autopfmswitch', '自动施法开关：', 'auto_pfmswitch')
                 + UI.html_switch('autorewardgoto', '开启转发路径：', 'auto_rewardgoto')
+                + UI.html_switch('busyinfo', '显示昏迷信息：', 'busy_info')
                 + UI.html_switch('saveAddr', '使用豪宅仓库：', "saveAddr")
                 + UI.html_input("unauto_pfm", "自动施法黑名单(填技能代码，使用半角逗号分隔)：")
 
@@ -6395,7 +6445,7 @@
                         style="width: 120px;">
                         <div class="eqsname" style="width:100%;">装备套装:{{index}}</div>
                 </span>
-				
+
 				</div>
                 <br>
 				<div class="item-commands">
@@ -6405,7 +6455,7 @@
                 </span>
 				</div>
                  <br>
-      
+
                 </div>
         `,
 
@@ -6506,6 +6556,7 @@
                 <span @click='qnjs_btn'>潜能计算</span>
                 <span @click='lxjs_btn'>练习时间及潜能计算</span>
                 <span @click='khjs_btn'>开花计算</span>
+                <span @click='zcjs_btn'>自创等级计算</span>
                 <span  @click='getskilljson'>提取技能属性(可用于苏轻模拟器)</span>
                 <span  @click='autoAddLianxi'>自动将最低等级技能添加到离线练习</span>
             </div>
@@ -6587,6 +6638,16 @@
         v-model="khsx.hg"></div>
     <div class="setting-item">      <div class="item-commands"><span @click="khjscalc" >计算</span></div></div>
     <div class="setting-item"> <label>人花分值：5000 地花分值：6500 天花分值：8000</label></div>
+</div>`, 
+    zcjsui: `<div style="width:50%;float:left" class="ZiChuangCalc">
+    <div class="setting-item"><span>自创等级计算器</span></div>
+    <div class="setting-item"> 自创等级:<input type="number" placeholder="自创等级" style="width:50%"
+            class="mui-input-speech" v-model="zcsx.level"></div>
+    <div class="setting-item"> 目标属性百分比:<input type="number" placeholder="目标属性百分比" style="width:50%"
+        v-model="zcsx.percentage"></div>
+   
+    <div class="setting-item">      <div class="item-commands"><span @click="zcjscalc" >计算</span></div></div>
+
 </div>`,
         lyui: `<div class='zdy_dialog' id="LianYao" style='text-align:right;width:280px'> 有空的话请点个star,您的支持是我最大的动力 <a target="_blank"
         href="https://github.com/knva/wsmud_plugins">https://github.com/knva/wsmud_plugins</a> 药方链接:<a target="_blank"
@@ -6730,7 +6791,23 @@
         { type: "club", name: "none" },
         { type: "staff", name: "none" },],
 
-        eqs: []
+        eqs: [],
+        isGod:function(){
+            if (G.level!=null){
+                if (G.level.indexOf('武帝') >= 0 ||
+                    G.level.indexOf('武神') >= 0 ||
+                    G.level.indexOf('剑神') >= 0 ||
+                    G.level.indexOf('刀皇') >= 0 ||
+                    G.level.indexOf('兵主') >= 0 ||
+                    G.level.indexOf('战神') >= 0) {
+                    return true
+                }else{
+                    return false
+                    }
+            }else{
+                return false
+            }
+        }
     };
 
     //GlobalInit
@@ -7049,6 +7126,26 @@
                             "count": data.count
                         });
                     }
+                    if(busy_info==='开'){
+                        if (data.id == G.id) {
+                            if (data.action == 'add') {
+                                if (data.sid == 'busy' || data.sid == 'faint') {
+                                    var _id = data.id;
+                                    messageAppend(`你被${data.name}了${data.duration / 1000}秒`,2,0);
+                                    if (data.name == '绊字诀') return; 
+                                }
+                            }
+                        } else {
+                            if (data.action == 'add') {
+                                if (data.sid == 'busy' || data.sid == 'faint' || data.sid == 'chidun' || data.sid == 'unarmed') {
+                                    let npc = G.items.get(data.id)
+                                    messageAppend(`${npc.name}被${data.name}了${data.duration / 1000}秒`,2,0);
+                                }
+                            }
+                        }
+                    }
+
+
                 }
             });
             WG.add_hook("state", function (data) {
@@ -7102,6 +7199,26 @@
                         count: data.count
                     }
                     packData.push(item)
+                } else if (data.dialog == 'pack' && data.jldesc != undefined) {
+                    let jl = data.jldesc.match(/<(.*)>(.*)<\/.*><br\/>精炼<(hig|hic|hiy|hiz|hio|ord)>＋(.*)\s</i);
+                    //console.log(jl)
+                    if (jl) {
+                        let l = jl[1];
+                        let n = `<${l}>` + jl[2] + `</${l}>`;
+                        let j = parseInt(jl[4]);
+                        let c = 13 - j;
+                        //let cmd = `jinglian ${data.id} ok[${c}]`
+                        let cmd = [];
+                        for (let i =0; i < c; i++) {
+                            cmd.push(`jinglian ${data.id} ok;`);
+                        }
+                        var htmlj = `<div class="item-commands"><span class="jinglian">精炼6星 => ${n}</span></div>`;
+                        messageAppend(htmlj);
+                        $(".jinglian").off("click");
+                        $(".jinglian").on('click', () => {
+                            WG.SendCmd(cmd);
+                        });
+                    }
                 }
                 if (data.dialog == 'score') {
 
@@ -7262,6 +7379,15 @@
                     }
                 }
                 if (data.type == 'text') {
+                    if (data.msg.indexOf(`${role}身上东西太多了`) >= 0 || data.msg.indexOf("你身上东西太多了") >= 0 || data.msg.indexOf("你拿不下那么多东西。") >= 0) {
+                        WG.Send("tm 友情提示：请检查是否背包已满！");
+                        messageAppend("友情提示：请检查是否背包已满！", 1);
+                        if (bagFull == 1) {
+                            Beep();
+                        } else if (bagFull == 2) {
+                            FakerTTS.playtts(`${role}，请检查是否背包已满！`);
+                        }
+                    }
                     if (data.msg.indexOf("长得") >= 0 && data.msg.indexOf("看起来") >= 0) {
                         let s = data.msg.split("\n")[0].split(" ");
                         let name = s[s.length - 1];
@@ -7391,6 +7517,7 @@
             unauto_pfm = GM_getValue(role + "_unauto_pfm", unauto_pfm);
             auto_pfmswitch = GM_getValue(role + "_auto_pfmswitch", auto_pfmswitch);
             auto_rewardgoto = GM_getValue(role + "_auto_rewardgoto", auto_rewardgoto);
+            busy_info = GM_getValue(role + "_busy_info", busy_info);
             saveAddr = GM_getValue(role + "_saveAddr", saveAddr);
             auto_updateStore = GM_getValue(role + "_auto_updateStore", auto_updateStore);
             auto_relogin = GM_getValue(role + "_auto_relogin", auto_relogin);
@@ -7450,6 +7577,7 @@
 
             zdyskilllist = GM_getValue(role + "_zdyskilllist", zdyskilllist);
             zdyskills = GM_getValue(role + "_zdyskills", zdyskills);
+            bagFull = GM_getValue(role + "_bagFull", bagFull);
             WG.zdy_btnListInit();
 
         }
@@ -7531,6 +7659,9 @@
             }
         }
     }
+    function Beep() {
+        document.getElementById("beep-alert").play();
+    }
     class MusicBox {
         constructor(options) {
             let defaults = {
@@ -7595,6 +7726,9 @@
         $('head').append('<link href="https://cdn.staticfile.org/layer/2.3/skin/layer.css" rel="stylesheet">');
         $('head').append('<link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">');
         $('body').append(UI.codeInput);
+        $("body").append(
+            $(`<audio id="beep-alert" preload="auto"></audio>`).append(`<source src="https://cdn.jsdelivr.net/gh/mapleobserver/wsmud-script/plugins/complete.mp3" type="audio/mpeg">`)
+        );
 
         setTimeout(() => {
             var server = document.createElement('script');
@@ -7643,6 +7777,7 @@
         unsafeWindow.roomData = roomData;
         unsafeWindow.MusicBox = MusicBox;
         unsafeWindow.FakerTTS = FakerTTS;
+        unsafeWindow.Beep = Beep;
         unsafeWindow.WSStore = store;
         unsafeWindow.imgShow = imgShow;
 
