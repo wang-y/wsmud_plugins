@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.173
+// @version      0.0.32.174
 // @date         01/07/2018
-// @modified     20/05/2021
+// @modified     09/07/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1334,52 +1334,14 @@
         login: function () {
             role = $('.role-list .select').text().split(/[\s\n]/).pop();
             roleid = $('.role-list .select').attr('roleid')
-			if (GM_getValue(role + "_equip", null)!=null) {GM_setValue(roleid + "_equip", GM_getValue(role + "_equip", null))}
-			if (GM_getValue(role + "_ks_pfm", null)!=null) {GM_setValue(roleid + "_ks_pfm", GM_getValue(role + "_ks_pfm", null))}
-			if (GM_getValue(role + "_zmlshowsetting", null)!=null) {GM_setValue(roleid + "_zmlshowsetting", GM_getValue(role + "_zmlshowsetting", null))}
-			if (GM_getValue(role + "_zdy_btnlist", null)!=null) {GM_setValue(roleid + "_zdy_btnlist", GM_getValue(role + "_zdy_btnlist", null))}
-			if (GM_getValue(role + "_inzdy_btn", null)!=null) {GM_setValue(roleid + "_inzdy_btn", GM_getValue(role + "_inzdy_btn", null))}
-			if (GM_getValue(role + "_automarry", null)!=null) {GM_setValue(roleid + "_automarry", GM_getValue(role + "_automarry", null))}
-			if (GM_getValue(role + "_family", null)!=null) {GM_setValue(roleid + "_family", GM_getValue(role + "_family", null))}
-			if (GM_getValue(role + "_autoKsBoss", null)!=null) {GM_setValue(roleid + "_autoKsBoss", GM_getValue(role + "_autoKsBoss", null))}
-			if (GM_getValue(role + "_ks_wait", null)!=null) {GM_setValue(roleid + "_ks_wait", GM_getValue(role + "_ks_wait", null))}
-			if (GM_getValue(role + "_eqlist", null)!=null) {GM_setValue(roleid + "_eqlist", GM_getValue(role + "_eqlist", null))}
-			if (GM_getValue(role + "_skilllist", null)!=null) {GM_setValue(roleid + "_skilllist", GM_getValue(role + "_skilllist", null))}
-			if (GM_getValue(role + "_auto_eq", null)!=null) {GM_setValue(roleid + "_auto_eq", GM_getValue(role + "_auto_eq", null))}
-			if (GM_getValue(role + "_wudao_pfm", null)!=null) {GM_setValue(roleid + "_wudao_pfm", GM_getValue(role + "_wudao_pfm", null))}
-			if (GM_getValue(role + "_sm_loser", null)!=null) {GM_setValue(roleid + "_sm_loser", GM_getValue(role + "_sm_loser", null))}
-			if (GM_getValue(role + "_sm_any", null)!=null) {GM_setValue(roleid + "_sm_any", GM_getValue(role + "_sm_any", null))}
-			if (GM_getValue(role + "_sm_price", null)!=null) {GM_setValue(roleid + "_sm_price", GM_getValue(role + "_sm_price", null))}
-			if (GM_getValue(role + "_sm_getstore", null)!=null) {GM_setValue(roleid + "_sm_getstore", GM_getValue(role + "_sm_getstore", null))}
-			if (GM_getValue(role + "_unauto_pfm", null)!=null) {GM_setValue(roleid + "_unauto_pfm", GM_getValue(role + "_unauto_pfm", null))}
-			if (GM_getValue(role + "_auto_pfmswitch", null)!=null) {GM_setValue(roleid + "_auto_pfmswitch", GM_getValue(role + "_auto_pfmswitch", null))}
-			if (GM_getValue(role + "_auto_rewardgoto", null)!=null) {GM_setValue(roleid + "_auto_rewardgoto", GM_getValue(role + "_auto_rewardgoto", null))}
-			if (GM_getValue(role + "_busy_info", null)!=null) {GM_setValue(roleid + "_busy_info", GM_getValue(role + "_busy_info", null))}
-			if (GM_getValue(role + "_saveAddr", null)!=null) {GM_setValue(roleid + "_saveAddr", GM_getValue(role + "_saveAddr", null))}
-			if (GM_getValue(role + "_auto_updateStore", null)!=null) {GM_setValue(roleid + "_auto_updateStore", GM_getValue(role + "_auto_updateStore", null))}
-			if (GM_getValue(role + "_auto_relogin", null)!=null) {GM_setValue(roleid + "_auto_relogin", GM_getValue(role + "_auto_relogin", null))}
-			if (GM_getValue(role + "_blacklist", null)!=null) {GM_setValue(roleid + "_blacklist", GM_getValue(role + "_blacklist", null))}
-			if (GM_getValue(role + "_getitemShow", null)!=null) {GM_setValue(roleid + "_getitemShow", GM_getValue(role + "_getitemShow", null))}
-			if (GM_getValue(role + "_zml", null)!=null) {GM_setValue(roleid + "_zml", GM_getValue(role + "_zml", null))}
-			if (GM_getValue(role + "_zdy_item_store", null)!=null) {GM_setValue(roleid + "_zdy_item_store", GM_getValue(role + "_zdy_item_store", null))}
-			if (GM_getValue(role + "_zdy_item_store2", null)!=null) {GM_setValue(roleid + "_zdy_item_store2", GM_getValue(role + "_zdy_item_store2", null))}
-			if (GM_getValue(role + "_zdy_item_lock", null)!=null) {GM_setValue(roleid + "_zdy_item_lock", GM_getValue(role + "_zdy_item_lock", null))}
-			if (GM_getValue(role + "_zdy_item_drop", null)!=null) {GM_setValue(roleid + "_zdy_item_drop", GM_getValue(role + "_zdy_item_drop", null))}
-			if (GM_getValue(role + "_zdy_item_fenjie", null)!=null) {GM_setValue(roleid + "_zdy_item_fenjie", GM_getValue(role + "_zdy_item_fenjie", null))}
-			if (GM_getValue(role + "_ztjk", null)!=null) {GM_setValue(roleid + "_ztjk", GM_getValue(role + "_ztjk", null))}
-			if (GM_getValue(role + "_auto_command", null)!=null) {GM_setValue(roleid + "_auto_command", GM_getValue(role + "_auto_command", null))}
-			if (GM_getValue(role + "_welcome", null)!=null) {GM_setValue(roleid + "_welcome", GM_getValue(role + "_welcome", null))}
-			if (GM_getValue(role + "_statehml", null)!=null) {GM_setValue(roleid + "_statehml", GM_getValue(role + "_statehml", null))}
-			if (GM_getValue(role + "_backimageurl", null)!=null) {GM_setValue(roleid + "_backimageurl", GM_getValue(role + "_backimageurl", null))}
-			if (GM_getValue(role + "_loginhml", null)!=null) {GM_setValue(roleid + "_loginhml", GM_getValue(role + "_loginhml", null))}
-			if (GM_getValue(role + "_timequestion", null)!=null) {GM_setValue(roleid + "_timequestion", GM_getValue(role + "_timequestion", null))}
-			if (GM_getValue(role + "_silence", null)!=null) {GM_setValue(roleid + "_silence", GM_getValue(role + "_silence", null))}
-			if (GM_getValue(role + "_dpssakada", null)!=null) {GM_setValue(roleid + "_dpssakada", GM_getValue(role + "_dpssakada", null))}
-			if (GM_getValue(role + "_funnycalc", null)!=null) {GM_setValue(roleid + "_funnycalc", GM_getValue(role + "_funnycalc", null))}
-			if (GM_getValue(role + "_auto_buylist", null)!=null) {GM_setValue(roleid + "_auto_buylist", GM_getValue(role + "_auto_buylist", null))}
-			if (GM_getValue(role + "_zdyskilllist", null)!=null) {GM_setValue(roleid + "_zdyskilllist", GM_getValue(role + "_zdyskilllist", null))}
-			if (GM_getValue(role + "_zdyskills", null)!=null) {GM_setValue(roleid + "_zdyskills", GM_getValue(role + "_zdyskills", null))}
-			if (GM_getValue(role + "_bagFull", null)!=null) {GM_setValue(roleid + "_bagFull", GM_getValue(role + "_bagFull", null))}
+            GM_listValues().map(function (key) {
+                if (key.indexOf(role+"_") == 0) {
+                   var tmpVal = key.split(role+"_")[1];
+                   console.log(tmpVal)
+                   GM_setValue(roleid + "_"+tmpVal, GM_getValue(key, null))
+                }
+            });
+		
             $(".bottom-bar").append("<span class='item-commands' style='display:none'><span WG='WG' cmd=''></span></span>"); //命令行模块
             var html = UI.wgui();
             $(".content-message").after(html);
@@ -7839,7 +7801,7 @@
             originWindow = event;
             var origin = event.origin;
             var data = event.data;
-            if (data.indexOf("denglu") >= 0) {
+            if (String(data).indexOf("denglu") >= 0) {
                 if (role != undefined) { return; }
                 console.log(data);
                 let userName = data.split(" ")[1];
