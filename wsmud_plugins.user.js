@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.174
+// @version      0.0.32.175
 // @date         01/07/2018
-// @modified     09/07/2021
+// @modified     15/07/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1816,6 +1816,7 @@
             return null;
         },
         smhook: undefined,
+        ythook: undefined,
         ungetStore: false,
         sm: function () {
             if (!WG.smhook) {
@@ -3032,6 +3033,34 @@
                         GM_setValue(roleid + "_autoKsBoss", null);
                         GM_setValue(roleid + "_automarry", null);
                         L.msg("操作成功");
+                    },
+                    onekeyyaota: function () {
+                        WG.SendCmd("jh fam 9 start;$wait 250;go enter;$wait 250;go up;")
+
+                        setTimeout( function(){
+                            var ltId="";
+                            for (let i = 0; i < roomData.length; i++) {
+                                if (roomData[i].name && roomData[i].name.indexOf("疯癫的老头") >= 0) {
+                                    ltId=roomData[i].id
+                                }
+                            }
+                            WG.SendCmd("ggdl "+ltId+";$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;look shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao2 shi;$wait 250;go north;$wait 3000;")
+                            $(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
+                            WG.ythook=WG.add_hook("room", (data) => {
+                                if (G.yaotaFlag&&data.path == 'zc/muyuan'){
+                                    WG.SendCmd("tm 本次妖塔共获得 "+G.yaoyuan +" 点妖元")
+                                    G.yaotaFlag=false;
+                                    G.yaoyuan = 0;
+                                    $('#yt_prog').remove()
+                                    WG.remove_hook(WG.ythook)
+                                }
+                            })
+                            setTimeout( function(){
+                                WG.SendCmd("flyto muyuan")
+                                G.yaoyuan = 0;
+                                G.yaotaFlag=true;
+                            }, 3 * 1000 )
+                        }, 1 * 1000 )
                     }
                 }
             })
@@ -5529,7 +5558,13 @@
             if (G.cmd_echo && data.type != 'time') {
                 console.log(data);
             }
-
+            if (G.yaotaFlag&&typeof(data.msg)=='string'){
+                let ytdata = data.msg;
+                if (ytdata.indexOf("一股奇异的能量涌入你的体内，你获得")>= 0){
+                    G.yaoyuan=G.yaoyuan+parseInt(ytdata.replace(/[^0-9]/ig,""))
+                    $('#yt_prog').html("<hiy>目前已获得 "+G.yaoyuan+" 妖元</hiy>")
+                }
+            }
             if (silence == "开") {
                 if (data.type == 'state') {
                     if (data.silence == undefined) {
@@ -6593,7 +6628,11 @@
                 <span @click='dsrw'>定时任务</span>
                 <span @click='cleandps'>清空伤害</span>
                 <span @click='cleankksboss'>不再提示婚宴及boss传送信息</span>
-            </div></div>`,
+            </div>
+            <div class="item-commands">
+                <span @click='onekeyyaota'>一键妖塔</span>
+            </div>
+            </div>`,
         lxjsui: `
                        <div style="width:50%;float:left" class='StudyTimeCalc'>
      <div class="setting-item"> <span>练习时间计算器</span></div>
@@ -6793,6 +6832,8 @@
         wk_listener: undefined,
         status: new Map(),
         score: undefined,
+        yaoyuan:0,
+        yaotaFlag:false,
         jy: 0,
         qn: 0,
         enable_skills: [{ type: "unarmed", name: "none" },
