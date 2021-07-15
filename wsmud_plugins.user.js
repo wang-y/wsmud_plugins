@@ -4351,10 +4351,11 @@
         ytjk_func: function (){
             WG.add_hook("room", (data) => {
                 if (G.yaotaFlag&&data.path == 'zc/muyuan'){
-                    WG.SendCmd("tm 本次妖塔共获得 "+G.yaoyuan +" 点妖元,结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date()))
+                    alert("本次妖塔共获得 "+G.yaoyuan +" 点妖元,结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date()))
+                    $('#yt_prog').remove()
                     G.yaotaFlag=false;
                     G.yaoyuan = 0;
-                    $('#yt_prog').remove()
+
                 }
                 if (data.path == 'zc/mu/shishenta'){
                     $(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
