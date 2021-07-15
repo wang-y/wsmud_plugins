@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.175
+// @version      0.0.32.176
 // @date         01/07/2018
 // @modified     15/07/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -50,6 +50,25 @@
         document.execCommand("Copy");
         textarea.parentNode.removeChild(textarea);
     };
+    function dateFormat(fmt, date) {
+        let ret;
+        const opt = {
+            "Y+": date.getFullYear().toString(),        // 年
+            "m+": (date.getMonth() + 1).toString(),     // 月
+            "d+": date.getDate().toString(),            // 日
+            "H+": date.getHours().toString(),           // 时
+            "M+": date.getMinutes().toString(),         // 分
+            "S+": date.getSeconds().toString()          // 秒
+            // 有其他格式化字符需求可以继续添加，必须转化成字符串
+        };
+        for (let k in opt) {
+            ret = new RegExp("(" + k + ")").exec(fmt);
+            if (ret) {
+                fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+            };
+        };
+        return fmt;
+    }
 
 
     /**
@@ -1465,6 +1484,9 @@
                         WG.ztjk_func();
                         WG.zml_showp();
                         WG.dsj_func();
+                        if (G.level&&G.isGod()) {
+                            WG.ytjk_func()
+                        }
                     } else {
                         logintext = `
                             <hiy>欢迎${role},插件未正常加载！
@@ -3036,7 +3058,6 @@
                     },
                     onekeyyaota: function () {
                         WG.SendCmd("jh fam 9 start;$wait 250;go enter;$wait 250;go up;")
-
                         setTimeout( function(){
                             var ltId="";
                             for (let i = 0; i < roomData.length; i++) {
@@ -3044,22 +3065,10 @@
                                     ltId=roomData[i].id
                                 }
                             }
-                            WG.SendCmd("ggdl "+ltId+";$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;look shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao2 shi;$wait 250;go north;$wait 3000;")
-                            WG.ythook=WG.add_hook("room", (data) => {
-                                if (G.yaotaFlag&&data.path == 'zc/muyuan'){
-                                    WG.SendCmd("tm 本次妖塔共获得 "+G.yaoyuan +" 点妖元")
-                                    G.yaotaFlag=false;
-                                    G.yaoyuan = 0;
-                                    $('#yt_prog').remove()
-                                    WG.remove_hook(WG.ythook)
-                                }
-                            })
-                            setTimeout( function(){
-                                WG.SendCmd("flyto muyuan")
-                                G.yaoyuan = 0;
-                                G.yaotaFlag=true;
-				$(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
-                            }, 3 * 1000 )
+                            WG.SendCmd("ggdl "+ltId+";$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;look shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao2 shi;$wait 250;go north;")
+                            //setTimeout( function(){
+                                //WG.SendCmd("flyto muyuan")
+                            //}, 3 * 1000 )
                         }, 1 * 1000 )
                     }
                 }
@@ -4338,6 +4347,23 @@
                 });
             });
 
+        },
+        ytjk_func: function (){
+            WG.add_hook("room", (data) => {
+                if (G.yaotaFlag&&data.path == 'zc/muyuan'){
+                    alert("本次妖塔共获得 "+G.yaoyuan +" 点妖元,结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date()))
+                    $('#yt_prog').remove()
+                    G.yaotaFlag=false;
+                    G.yaoyuan = 0;
+
+                }
+                if (data.path == 'zc/mu/shishenta'){
+                    $(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
+                    WG.SendCmd("tm 开始攻略妖塔，现在时间是:"+ dateFormat("YYYY-mm-dd HH:MM", new Date()))
+                    G.yaoyuan = 0;
+                    G.yaotaFlag=true;
+                }
+            })
         },
         ztjk_hook: undefined,
         ztjk_func: function () {
