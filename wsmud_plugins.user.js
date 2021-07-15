@@ -3045,7 +3045,6 @@
                                 }
                             }
                             WG.SendCmd("ggdl "+ltId+";$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;go north;$wait 250;look shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao1 shi;tiao3 shi;$wait 250;tiao2 shi;$wait 250;go north;$wait 3000;")
-                            $(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
                             WG.ythook=WG.add_hook("room", (data) => {
                                 if (G.yaotaFlag&&data.path == 'zc/muyuan'){
                                     WG.SendCmd("tm 本次妖塔共获得 "+G.yaoyuan +" 点妖元")
@@ -3059,6 +3058,7 @@
                                 WG.SendCmd("flyto muyuan")
                                 G.yaoyuan = 0;
                                 G.yaotaFlag=true;
+				$(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
                             }, 3 * 1000 )
                         }, 1 * 1000 )
                     }
