@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.176
+// @version      0.0.32.177
 // @date         01/07/2018
-// @modified     15/07/2021
+// @modified     16/07/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -4350,7 +4350,7 @@
         },
         ytjk_func: function (){
             WG.add_hook("room", (data) => {
-                if (G.yaotaFlag&&data.path == 'zc/muyuan'){
+                if (G.yaotaFlag&&data.path != 'zc/mu/shishenta'){
                     alert("本次妖塔共获得 "+G.yaoyuan +" 点妖元,结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date()))
                     $('#yt_prog').remove()
                     G.yaotaFlag=false;
