@@ -6867,7 +6867,7 @@
         yaotaCount:0,
         jy: 0,
         qn: 0,
-        selfStatus:[]
+        selfStatus:[],
         enable_skills: [{ type: "unarmed", name: "none" },
         { type: "force", name: "none" },
         { type: "parry", name: "none" },
