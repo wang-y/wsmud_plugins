@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name            wsmud_Trigger
 // @namespace       cqv3
-// @version         0.0.38
+// @version         0.0.41
 // @date            03/03/2019
-// @modified        05/06/2020
+// @modified        13/01/2021
 // @homepage        https://greasyfork.org/zh-CN/scripts/378984
 // @description     武神传说 MUD
-// @author          Bob.cn, 白三三
+// @author          Bob.cn, 初心, 白三三
 // @match           http://*.wsmud.com/*
 // @run-at          document-end
 // @require         https://cdn.staticfile.org/vue/2.2.2/vue.min.js
@@ -113,6 +113,12 @@
         if (/^\s*\*?\s*$/.test(lh)) return true;
         const list = lh.split("|");
         return list.indexOf(rh) != -1;
+    };
+    const ContainReverseAssert = function (lh, rh) {
+        console.log(lh,rh);
+        if (/^\s*\*?\s*$/.test(lh)) return true;
+        const list = lh.split("|");
+        return list.indexOf(rh) == -1;
     };
 
     const KeyAssert = function(lh, rh) {
@@ -358,6 +364,10 @@
         _loadTrigger: function(name) {
             const data = this._getData(name);
             if (data == null) return;
+            // patch new trigger
+            if (data['event'] === '新聊天信息' &&  data['conditions']['忽略发言人']===undefined){
+                data['conditions']['忽略发言人']=''
+            }
             const trigger = this._toTrigger(data);
             this._triggers[name] = trigger;
             if (data.active) {
@@ -464,11 +474,13 @@
             }
         );
         const talker = new InputFilter("发言人", InputFilterFormat.text, "", ContainAssert);
+        const pass_talker = new InputFilter("忽略发言人", InputFilterFormat.text, "", ContainReverseAssert);
         const key = new InputFilter("关键字", InputFilterFormat.text, "", KeyAssert);
-        let filters = [channel, talker, key];
+        let filters = [channel, talker, pass_talker, key];
         const intro = `// 新聊天信息触发器
 // 聊天信息内容：(content)
 // 发言人：(name)
+// 发言人id：(id)
 // 频道：(channel)`;
         const t = new TriggerTemplate("新聊天信息", filters, intro);
         TriggerTemplateCenter.add(t);
@@ -488,13 +500,17 @@
                 const channel = types[data.ch];
                 if (channel == null) return;
                 const name = data.name == null ? "无" : data.name;
+                const id = data.uid == null ? null : data.uid;
+                const datacontent  = data.content.replace(/\n/g,"")
                 let params = {
                     "频道": channel,
                     "发言人": name,
-                    "关键字": data.content
+                    "关键字": data.content,
+                    "忽略发言人": name
                 };
-                params["content"] = data.content;
+                params["content"] = datacontent;
                 params["name"] = name;
+                params["id"] = id;
                 params["channel"] = channel;
                 const n = new Notification("新聊天信息", params);
                 NotificationCenter.post(n);
