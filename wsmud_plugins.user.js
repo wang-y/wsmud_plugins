@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.180
+// @version      0.0.32.181
 // @date         01/07/2018
-// @modified     21/07/2021
+// @modified     22/07/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -1641,7 +1641,7 @@
                         G.wsdelaySetTime=new Date().getTime();
                         G.wsdelaySetCount=1;
                         G.wsdelay=undefined;
-                        WG.SendCmd("score");
+                        WG.SendCmd("test");
         },
         update_store: async function () {
             WG.update_store_hook = WG.add_hook(['dialog', 'text'], (data) => {
@@ -5675,7 +5675,7 @@
                 }
             }
 
-            if (data.type == 'dialog' && data.dialog == 'score' && G.wsdelaySetTime != undefined){
+            if (data.type == 'text' && data.msg == '什么？' && G.wsdelaySetTime != undefined){
                 if (G.wsdelaySetCount<=3){
                     G.wsdelaySetCount+=1;
                     if(G.wsdelay == undefined){
@@ -5684,13 +5684,12 @@
                         G.wsdelay= (new Date().getTime()-G.wsdelaySetTime+G.wsdelay)/2
                     }
                     G.wsdelaySetTime=new Date().getTime()
-                    WG.SendCmd("score")
+                    WG.SendCmd("test")
                 }else{
                     G.wsdelay= (new Date().getTime()-G.wsdelaySetTime+G.wsdelay)/2
                     WG.SendCmd("tm 服务器到本地来回延迟约 "+ G.wsdelay +" 毫秒")
                     G.wsdelaySetTime = undefined;
                     G.wsdelaySetCount = undefined;
-                    setTimeout(()=>{$(".dialog-close").click()},1000)
                 }
             }
 
