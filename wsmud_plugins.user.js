@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.182
+// @version      0.0.32.183
 // @date         01/07/2018
 // @modified     26/07/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -1362,7 +1362,7 @@
                    GM_deleteValue(key)
                 }
             });
-		
+
             $(".bottom-bar").append("<span class='item-commands' style='display:none'><span WG='WG' cmd=''></span></span>"); //命令行模块
             var html = UI.wgui();
             $(".content-message").after(html);
@@ -2990,7 +2990,7 @@
                     },
                     khjs_btn: function () {
                         WG.khjs();
-                    }, 
+                    },
                     zcjs_btn: function () {
                         WG.zcjs();
                     },
@@ -3731,35 +3731,16 @@
                 el: "#skillsPanelUI",
                 data: {
                     role: role,
-					roleid: roleid,
+                    roleid:roleid,
                     eqlist: {},
                     eqlistdel: {},
+                    eqskills_id: "none"
                 },
                 created() {
-                    this.eqlist = GM_getValue(roleid + "_eqlist", {});
-                    console.log(this.eqlist)
+
                 },
                 mounted() {
-                    $('#eqskills-opts').val("none");
-                    var that = this;
-                    $("#eqskills-opts").change(function () {
-                        switch ($('#eqskills-opts').val()) {
-                            case "save":
-                                that.saveUI();
-                                break;
-                            case "delete":
-                                that.eqlist = {};
-                                that.eqlistdel = GM_getValue(roleid + "_eqlist", {});
-                                that.role = "<< 返回";
-                                break;
-                            case "uneqall":
-                                WG.uneqall();
-                                break;
-                            case "none":
-                            default:
-                                break;
-                        };
-                    });
+                    this.eqlist = GM_getValue(this.roleid + "_eqlist", {});
                 },
                 methods: {
                     eq: function (name) {
@@ -3771,7 +3752,7 @@
                     save: function (name) {
                         WG.eqhelper(name)
                         setTimeout(() => {
-                            this.eqlist = GM_getValue(roleid + "_eqlist", {});
+                            this.eqlist = GM_getValue(this.roleid + "_eqlist", {});
                             WG.eqhelperui()
                         }, 300);
                     },
@@ -3785,15 +3766,38 @@
                         WG.eqhelperui()
                     },
                     saveUI: function () {
-                        var name = prompt("请输入需要保存的名字", "套装名");
-                        if (name != null) {
-                            this.save(name)
-                        }
-                    }
+                        var that = this
+                        layer.prompt({ title: '请输入套装名...', formType: 2 }, function (text, index) {
+                            layer.close(index);
+                            if (text != null) {
+                                that.save(text)
+                            }
+                        });
+
+                    },
+                    eqskills_opts_change: function (eqskills_id) {
+                        switch (eqskills_id) {
+                            case "save":
+                                this.saveUI();
+                                break;
+                            case "delete":
+                                this.eqlist = {};
+                                this.eqlistdel = GM_getValue(role + "_eqlist", {});
+                                this.role = "<< 返回";
+                                break;
+                            case "uneqall":
+                                WG.uneqall();
+                                break;
+                            case "none":
+                            default:
+                                break;
+                        };
+                    },
 
                 }
             });
         },
+
 
         fight_listener: undefined,
         auto_fight: function () {
@@ -6536,12 +6540,13 @@
                 ` <h3>系统</h3>
             `
         },
+
         skillsPanel: `<div class="item-commands" style="text-align:center" id='skillsPanelUI'>
                 <div style="margin-top:0.5em">
                     <div style="width:8em;float:left;text-align:left;padding:0px 0px 0px 2em;height:1.23em" id="wsmud_raid_left" @click='show'><wht>{{role}}</wht></div>
                     <div style="width:calc(100% - 16em);float:left;height:1.23em"><hig>套装列表</hig></div>
                     <div style="width:8em;float:left;text-align:right;padding:0px 2em 0px 0px;height:1.23em" id="wsmud_raid_right">
-                    <select style="width:80px" id="eqskills-opts">
+                    <select style="width:80px" id="eqskills-opts" @change="eqskills_opts_change(eqskills_id)" v-model="eqskills_id">
                         <option value="none">选择操作</option>
                         <option value="save">新建套装</option>
                         <option value="delete">删除套装</option>
@@ -6573,6 +6578,7 @@
 
                 </div>
         `,
+
 
         zmlsetting: `<div class='zdy_dialog' style='text-align:right;width:280px' id="zmldialog">
     <div class="setting-item"><span><label for="zml_name"> 输入自定义命令名称:</label></span><span><input id="zml_name"
@@ -6758,14 +6764,14 @@
         v-model="khsx.hg"></div>
     <div class="setting-item">      <div class="item-commands"><span @click="khjscalc" >计算</span></div></div>
     <div class="setting-item"> <label>人花分值：5000 地花分值：6500 天花分值：8000</label></div>
-</div>`, 
+</div>`,
     zcjsui: `<div style="width:50%;float:left" class="ZiChuangCalc">
     <div class="setting-item"><span>自创等级计算器</span></div>
     <div class="setting-item"> 自创等级:<input type="number" placeholder="自创等级" style="width:50%"
             class="mui-input-speech" v-model="zcsx.level"></div>
     <div class="setting-item"> 目标属性百分比:<input type="number" placeholder="目标属性百分比" style="width:50%"
         v-model="zcsx.percentage"></div>
-   
+
     <div class="setting-item">      <div class="item-commands"><span @click="zcjscalc" >计算</span></div></div>
 
 </div>`,
@@ -7266,7 +7272,7 @@
                                 if (data.sid == 'busy' || data.sid == 'faint') {
                                     var _id = data.id;
                                     messageAppend(`你被${data.name}了${data.duration / 1000}秒`,2,0);
-                                    if (data.name == '绊字诀') return; 
+                                    if (data.name == '绊字诀') return;
                                 }
                             }
                         } else {
