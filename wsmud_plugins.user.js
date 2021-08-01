@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.183
+// @version      0.0.32.184
 // @date         01/07/2018
-// @modified     26/07/2021
+// @modified     01/08/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -3782,7 +3782,7 @@
                                 break;
                             case "delete":
                                 this.eqlist = {};
-                                this.eqlistdel = GM_getValue(role + "_eqlist", {});
+                                this.eqlistdel = GM_getValue(this.roleid  + "_eqlist", {});
                                 this.role = "<< 返回";
                                 break;
                             case "uneqall":
