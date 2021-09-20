@@ -4357,6 +4357,7 @@
             WG.add_hook("room",async function (data) {
                 if (G.yaotaFlag&&data.path != 'zc/mu/shishenta'){
                     $('.channel pre').append("<hig>【插件】"+"第 "+G.yaotaCount+" 次妖塔共获得 "+G.yaoyuan +" 点妖元，结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date())+"。<br><hig>")
+                    $('.tm').append("<hig>【插件】"+"第 "+G.yaotaCount+" 次妖塔共获得 "+G.yaoyuan +" 点妖元，结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date())+"。<br><hig>")
                     while(G.selfStatus.indexOf("faint")>=0 || G.selfStatus.indexOf("busy")>=0 || G.selfStatus.indexOf("rash")>=0){
                         await WG.sleep(1000)
                     }
@@ -4374,6 +4375,7 @@
                     $(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
                     G.yaotaCount=G.yaotaCount+1;
                     $('.channel pre').append("<hig>【插件】"+"开始第 "+G.yaotaCount+" 次攻略妖塔，现在时间是:"+ dateFormat("YYYY-mm-dd HH:MM", new Date())+"。<br><hig>")
+                    $('.tm').append("<hig>【插件】"+"开始第 "+G.yaotaCount+" 次攻略妖塔，现在时间是:"+ dateFormat("YYYY-mm-dd HH:MM", new Date())+"。<br><hig>")
                     G.yaoyuan = 0;
                     G.yaotaFlag=true;
                 }
