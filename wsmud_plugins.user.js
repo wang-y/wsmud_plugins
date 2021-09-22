@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.185
+// @version      0.0.32.186
 // @date         01/07/2018
-// @modified     20/09/2021
+// @modified     22/09/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -4358,18 +4358,20 @@
                 if (G.yaotaFlag&&data.path != 'zc/mu/shishenta'){
                     $('.channel pre').append("<hig>【插件】"+"第 "+G.yaotaCount+" 次妖塔共获得 "+G.yaoyuan +" 点妖元，结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date())+"。<br><hig>")
                     $('.tm').append("<hig>【插件】"+"第 "+G.yaotaCount+" 次妖塔共获得 "+G.yaoyuan +" 点妖元，结束时间: "+ dateFormat("YYYY-mm-dd HH:MM", new Date())+"。<br><hig>")
-                    while(G.selfStatus.indexOf("faint")>=0 || G.selfStatus.indexOf("busy")>=0 || G.selfStatus.indexOf("rash")>=0){
-                        await WG.sleep(1000)
-                    }
-                    if (G.yaoyuan == 261){
-                        WG.SendCmd("tm 第 "+G.yaotaCount+" 次妖塔圆满完成，撒花~~~~~")
-                    }else{
-                        WG.SendCmd("tm 第 "+G.yaotaCount+" 次妖塔遗憾收场，撒花~~~~~")
-                    }
-                    $('#yt_prog').remove()
-                    G.yaotaFlag=false;
-                    G.yaoyuan = 0;
+                    setTimeout(async function(){
+                        while(G.selfStatus.indexOf("faint")>=0 || G.selfStatus.indexOf("busy")>=0 || G.selfStatus.indexOf("rash")>=0){
+                            await WG.sleep(1000)
+                        }
+                        if (G.yaoyuan == 261){
+                            WG.SendCmd("tm 第 "+G.yaotaCount+" 次妖塔圆满完成，撒花~~~~~")
+                        }else{
+                            WG.SendCmd("tm 第 "+G.yaotaCount+" 次妖塔遗憾收场，撒花~~~~~")
+                        }
+                        $('#yt_prog').remove()
+                        G.yaotaFlag=false;
+                        G.yaoyuan = 0;
 
+                    },0)
                 }
                 if (data.path == 'zc/mu/shishenta'){
                     $(`.state-bar`).before(`<div id=yt_prog>开始攻略妖塔</div>`)
