@@ -13,6 +13,10 @@
 
 开发文档 https://www.yuque.com/kmb6af/fhlcr9/gm0b8i
 
+
+脚本首页 https://greasyfork.org/zh-CN/scripts/371372-wsmud-pluginss
+
+
 推荐使用JetBrains 软件进行开发
 
 https://www.jetbrains.com/?from=wsmud_pluginss
