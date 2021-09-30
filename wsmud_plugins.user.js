@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.187
+// @version      0.0.32.188
 // @date         01/07/2018
 // @modified     30/09/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
@@ -5616,9 +5616,9 @@
                 if (ytdata.indexOf("一股奇异的能量涌入你的体内，你获得")>= 0){
                     G.yaoyuan=G.yaoyuan+parseInt(ytdata.replace(/[^0-9]/ig,""))
                     $('#yt_prog').html("<hiy>目前已获得 "+G.yaoyuan+" 妖元</hiy>")
-                    if (G.yaoyuan >= 261){
-                        WG.SendCmd("$wait 500;lkfb ok;")
-                    }
+                    //if (G.yaoyuan >= 261){
+                        //WG.SendCmd("$wait 500;lkfb ok;")
+                    //}
                 }
             }
             if (silence == "开") {
