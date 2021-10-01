@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         wsmud_pluginss
 // @namespace    cqv1
-// @version      0.0.32.188
+// @version      0.0.32.189
 // @date         01/07/2018
-// @modified     30/09/2021
+// @modified     01/10/2021
 // @homepage     https://greasyfork.org/zh-CN/scripts/371372
 // @description  武神传说 MUD 武神脚本 武神传说 脚本 qq群367657589
 // @author       fjcqv(源程序) & zhzhwcn(提供websocket监听)& knva(做了一些微小的贡献) &Bob.cn(raid.js作者)
@@ -5616,9 +5616,9 @@
                 if (ytdata.indexOf("一股奇异的能量涌入你的体内，你获得")>= 0){
                     G.yaoyuan=G.yaoyuan+parseInt(ytdata.replace(/[^0-9]/ig,""))
                     $('#yt_prog').html("<hiy>目前已获得 "+G.yaoyuan+" 妖元</hiy>")
-                    //if (G.yaoyuan >= 261){
-                        //WG.SendCmd("$wait 500;lkfb ok;")
-                    //}
+                    if (G.yaoyuan == 261){
+                        $('#yt_prog').html("<hiy>目前已获得 "+G.yaoyuan+" 妖元，boss出现！</hiy>")
+                    }
                 }
             }
             if (silence == "开") {
